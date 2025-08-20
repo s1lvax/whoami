@@ -1,0 +1,33 @@
+<% if resource.errors.any? %>
+  <div id="error_explanation"
+       data-turbo-cache="false"
+       role="alert"
+       aria-live="assertive"
+       class="mb-6 rounded-lg bg-[color-mix(in_srgb,var(--danger)_12%,transparent)] ring-1 ring-[var(--danger)] text-[var(--text)]">
+
+    <!-- Header -->
+    <div class="flex items-start gap-3 px-4 py-3 border-b border-[var(--danger)]/30">
+      <!-- icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="shrink-0 w-5 h-5" viewBox="0 0 20 20" fill="currentColor" style="color: var(--danger)">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16Zm.75-11.5a.75.75 0 00-1.5 0v5a.75.75 0 001.5 0v-5Zm0 8a.75.75 0 10-1.5 0 .75.75 0 001.5 0Z" clip-rule="evenodd"/>
+      </svg>
+
+      <h2 class="text-sm font-semibold leading-5">
+        <%= I18n.t("errors.messages.not_saved",
+          count: resource.errors.count,
+          resource: resource.class.model_name.human.downcase) %>
+      </h2>
+    </div>
+
+    <!-- List -->
+    <ul class="px-4 py-3 text-sm leading-6 space-y-1.5">
+      <% resource.errors.full_messages.each do |message| %>
+        <li class="flex gap-2">
+          <span class="mt-[6px] inline-block size-1.5 rounded-full" style="background: var(--danger)"></span>
+          <span><%= message %></span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+

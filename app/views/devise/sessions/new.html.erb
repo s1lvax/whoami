@@ -1,0 +1,29 @@
+
+<div class="min-h-screen flex items-center justify-center bg-[var(--bg)] px-4">
+  <div class="w-full max-w-md bg-[var(--card)] rounded-xl shadow-md p-8">
+    <h2 class="text-2xl font-semibold mb-6 text-center text-[var(--text)]">Log in</h2>
+
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <%= render InputComponent.new(form: f, field: :email, type: :email,
+                                    label: "Email", autocomplete: "email", autofocus: true) %>
+
+      <%= render InputComponent.new(form: f, field: :password, type: :password,
+                                    label: "Password", autocomplete: "current-password") %>
+
+      <% if devise_mapping.rememberable? %>
+        <div class="mb-4 flex items-center">
+          <%= f.check_box :remember_me, class: "mr-2 rounded border-[var(--border)] bg-[var(--input-bg)]" %>
+          <%= f.label :remember_me, class: "text-sm text-[var(--muted)]" %>
+        </div>
+      <% end %>
+
+      <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
+        Log in
+      <% end %>
+    <% end %>
+
+    <div class="mt-6 text-center">
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</div>

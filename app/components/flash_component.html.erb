@@ -1,0 +1,17 @@
+<% if @notice.present? %>
+  <div class="w-full fixed top-0 left-0 z-50">
+    <div class="mx-auto max-w-2xl bg-[color-mix(in_srgb,var(--success)_12%,transparent)] text-[var(--success)] border border-[var(--success)] rounded-b-lg shadow-md px-4 py-3 text-center">
+      <%= @notice %>
+    </div>
+  </div>
+<% end %>
+
+<% if @alert.present? %>
+  <div class="w-full fixed top-0 left-0 z-50">
+    <div class="mx-auto max-w-2xl bg-[color-mix(in_srgb,var(--danger)_12%,transparent)] text-[var(--danger)] border border-[var(--danger)] rounded-b-lg shadow-md px-4 py-3 text-center">
+      <%= @alert %>
+    </div>
+  </div>
+<% end %>
+
+

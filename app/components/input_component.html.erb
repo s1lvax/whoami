@@ -1,0 +1,28 @@
+
+<% error_text = errors_for(@field) %>
+
+<div class="mb-4">
+  <%= @form.label @field, @label, class: "block text-sm font-medium text-[var(--muted)] mb-1" %>
+
+  <%= @form.send(
+        "#{@type}_field",
+        @field,
+        autocomplete: @autocomplete,
+        autofocus: @autofocus,
+        value: @value,
+        class: [
+          "w-full rounded-md px-3 py-2 focus:outline-none",
+          "bg-[var(--input-bg)] text-[var(--input-text)] placeholder-[var(--input-placeholder)]",
+          "ring-1",
+          error_text.present? ? "ring-[var(--danger)] focus:ring-2 focus:ring-[var(--danger)]" : "ring-[var(--input-border)] focus:ring-2 focus:ring-[var(--btn-ring)]"
+        ].join(" ")
+      ) %>
+
+  <% if @hint.present? %>
+    <p class="mt-1 text-xs text-[var(--muted)]"><%= @hint %></p>
+  <% end %>
+
+  <% if error_text.present? %>
+    <p class="mt-1 text-xs text-[var(--danger)]"><%= error_text %></p>
+  <% end %>
+</div>

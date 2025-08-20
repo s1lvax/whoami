@@ -1,0 +1,182 @@
+
+/* theme_defaults.css — Monochrome (Vercel-inspired)
+   Use with Tailwind arbitrary values: bg-[var(--bg)] text-[var(--text)] ring-[var(--border)]
+*/
+
+/* ===== Dark (default) ===== */
+:root,
+[data-theme="dark"] {
+  /* Greyscale palette */
+  --bg:            #0B0B0B; /* page */
+  --surface:       #0F0F10; /* cards */
+  --surface-2:     #131315; /* hover/elevated */
+  --surface-3:     #1A1A1C; /* modals/sheets */
+
+  --text:          #FAFAFA; /* primary */
+  --muted:         #A1A1AA; /* secondary (≈ zinc-400) */
+  --subtle:        #8A8A91; /* tertiary/meta */
+
+  --border:        #232325; /* 1px rules */
+  --divider:       #1E1E20; /* separators */
+
+  /* Actions / links (monochrome) */
+  --accent:        #FFFFFF; /* high-contrast CTA */
+  --accent-contrast:#0A0A0A;
+  --accent-hover:  #EDEDED;
+
+  --link:          #E5E5E5; /* links are neutral + underline */
+  --link-hover:    #FFFFFF;
+  --link-visited:  #D4D4D8;
+
+  /* States (neutralized greys) */
+  --success:       #D9F99D; /* optional badges on dark (still neutral-ish) */
+  --warning:       #FDE68A;
+  --danger:        #FCA5A5;
+  --info:          #E5E7EB;
+
+  /* Components */
+  --card-bg:       var(--surface);
+  --card-border:   var(--border);
+
+  --btn-bg:        var(--accent);
+  --btn-text:      var(--accent-contrast);
+  --btn-hover-bg:  var(--accent-hover);
+  --btn-ring:      rgba(255,255,255,0.25);
+
+  --link-underline:rgba(255,255,255,0.2);
+
+  --input-bg:      #0E0E10;
+  --input-border:  #252527;
+  --input-text:    var(--text);
+  --input-placeholder:#9CA3AF;
+
+  --tag-bg:        #141416;
+  --tag-text:      #E5E7EB;
+
+  --code-bg:       #0D0D0F;
+  --code-border:   #222326;
+  --code-text:     #F4F4F5;
+
+  --kbd-bg:        #101013;
+  --kbd-text:      #EAEAEA;
+  --kbd-border:    #262628;
+
+  /* Prose (blog) */
+  --prose-head:    #FFFFFF;
+  --prose-body:    var(--text);
+  --prose-muted:   var(--muted);
+  --prose-hr:      var(--divider);
+  --prose-quote:   #D4D4D8;
+
+  /* Focus & selection */
+  --focus-ring:    rgba(255,255,255,0.28);
+  --selection-bg:  rgba(255,255,255,0.14);
+  --selection-fg:  var(--text);
+
+  /* Radii & shadows */
+  --radius-sm:     0.375rem;
+  --radius-md:     0.5rem;
+  --radius-lg:     0.75rem;
+  --radius-xl:     1rem;
+  --radius-round:  9999px;
+
+  --shadow-1:      0 1px 0 rgba(0,0,0,0.4);
+  --shadow-2:      0 12px 32px rgba(0,0,0,0.5);
+  --shadow-focus:  0 0 0 3px var(--focus-ring);
+
+  /* Z-index */
+  --z-nav:         50;
+  --z-dropdown:    60;
+  --z-modal:       70;
+  --z-toast:       80;
+}
+
+/* ===== Light (optional, still monochrome) ===== */
+[data-theme="light"] {
+  --bg:            #FFFFFF;
+  --surface:       #FAFAFA;
+  --surface-2:     #F5F5F5;
+  --surface-3:     #F0F0F0;
+
+  --text:          #0A0A0A;
+  --muted:         #52525B;  /* zinc-600 */
+  --subtle:        #73737A;
+
+  --border:        #E5E5E5;
+  --divider:       #EAEAEA;
+
+  --accent:        #0A0A0A;
+  --accent-contrast:#FFFFFF;
+  --accent-hover:  #1A1A1A;
+
+  --link:          #111111;
+  --link-hover:    #000000;
+  --link-visited:  #262626;
+
+  --btn-bg:        var(--accent);
+  --btn-text:      var(--accent-contrast);
+  --btn-hover-bg:  var(--accent-hover);
+  --btn-ring:      rgba(0,0,0,0.15);
+
+  --link-underline:rgba(0,0,0,0.2);
+
+  --input-bg:      #FFFFFF;
+  --input-border:  #D4D4D4;
+  --input-text:    var(--text);
+  --input-placeholder:#9CA3AF;
+
+  --tag-bg:        #F5F5F5;
+  --tag-text:      #111111;
+
+  --code-bg:       #F6F6F6;
+  --code-border:   #E5E5E5;
+  --code-text:     #0F0F10;
+
+  --kbd-bg:        #F3F3F3;
+  --kbd-text:      #111111;
+  --kbd-border:    #D4D4D4;
+
+  --prose-head:    #0A0A0A;
+  --prose-body:    var(--text);
+  --prose-muted:   var(--muted);
+  --prose-hr:      var(--divider);
+  --prose-quote:   #404044;
+
+  --focus-ring:    rgba(0,0,0,0.18);
+  --selection-bg:  rgba(0,0,0,0.08);
+  --selection-fg:  var(--text);
+}
+
+/* ===== Minimal base bindings ===== */
+html { color-scheme: dark; }
+[data-theme="light"] { color-scheme: light; }
+
+body { background: var(--bg); color: var(--text); }
+
+::selection { background: var(--selection-bg); color: var(--selection-fg); }
+
+:where(a,button,input,textarea,select,summary):focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+  border-radius: var(--radius-md);
+}
+
+/* Blog/CV code & kbd defaults */
+code, pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius-sm);
+}
+kbd {
+  background: var(--kbd-bg);
+  color: var(--kbd-text);
+  border: 1px solid var(--kbd-border);
+  border-radius: var(--radius-sm);
+  padding: 0.125rem 0.375rem;
+  font-size: 0.8125rem;
+}
+
+/* Utility helpers (optional) */
+.hr { height: 1px; background: var(--divider); border: 0; }
+.card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-lg); }
