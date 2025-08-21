@@ -1,0 +1,17 @@
+<div class="rounded-xl bg-[var(--surface)] ring-1 ring-[var(--border)] p-4">
+  <p class="text-xs text-[var(--muted)]"><%= @label %></p>
+  <p class="mt-2 text-2xl font-semibold"><%= @value %></p>
+  <div class="mt-2 text-xs">
+    <% case @up %>
+    <% when true %>
+      <span class="text-[var(--text)]">▲</span>
+    <% when false %>
+      <span class="text-[var(--text)]">▼</span>
+    <% else %>
+      <span class="text-[var(--muted)]">•</span>
+    <% end %>
+    <span
+      class="<%= @up.nil? ? 'text-[var(--muted)]' : (@up ? 'text-[var(--text)]' : 'text-[var(--text)]') %>"
+    ><%= @delta %></span>
+  </div>
+</div>

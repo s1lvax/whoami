@@ -1,0 +1,96 @@
+<div class="min-h-screen bg-[var(--bg)] text-[var(--text)]">
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <header class="mb-8 flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-semibold">Dashboard</h1>
+        <p class="text-sm text-[var(--muted)]">Welcome back,
+          <%= current_user.email %></p>
+      </div>
+      <div class="flex gap-2">
+        <%= render ButtonComponent.new(type: :button, style: :primary, full_width: false) do %>
+          New Post
+        <% end %>
+        <%= link_to "View Profile",
+        "/@silva",
+        class:
+          "inline-flex items-center rounded-md px-4 py-2 ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] text-sm" %>
+      </div>
+    </header>
+    <div class="mb-4">
+      <%= render Dashboard::ProfileHeaderComponent.new(
+        profile: @profile,
+        edit_href: edit_user_registration_path,
+      ) %>
+    </div>
+    <!-- Grid: stats -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <% @stats.each do |s| %>
+        <%= render Dashboard::StatCardComponent.new(**s) %>
+      <% end %>
+    </section>
+    <!-- Grid: left main column + right sidebar -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Left (2 cols) -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Quick Links -->
+        <%= render Dashboard::SectionComponent.new(title: "Quick Links", action_label: "Manage", action_href: "/links") do %>
+          <ul class="grid sm:grid-cols-2 gap-3">
+            <% @links.each do |link| %>
+              <li
+                class="
+                  rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)]
+                  hover:bg-[var(--surface-2)] p-3
+                "
+              >
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-sm"><%= link[:label] %></p>
+                    <p class="text-xs text-[var(--muted)] truncate max-w-[20ch]"><%= link[:url] %></p>
+                  </div>
+                  <span class="text-xs text-[var(--muted)]"><%= link[:clicks] %>
+                    clicks</span>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+        <!-- Latest Posts -->
+        <%= render Dashboard::SectionComponent.new(title: "Latest Posts", action_label: "Write", action_href: "/posts/new") do %>
+          <div class="overflow-hidden rounded-lg ring-1 ring-[var(--border)]">
+            <table class="w-full text-sm">
+              <thead class="bg-[var(--surface-2)] text-left">
+                <tr>
+                  <th class="px-4 py-2">Title</th>
+                  <th class="px-4 py-2 w-32">Date</th>
+                  <th class="px-4 py-2 w-24">Views</th>
+                  <th class="px-4 py-2 w-24">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[var(--border)]">
+                <% @posts.each do |p| %>
+                  <tr class="hover:bg-[var(--surface-2)]">
+                    <td class="px-4 py-2"><%= p[:title] %></td>
+                    <td class="px-4 py-2 text-[var(--muted)]"><%= p[:date].to_fs(:long) %></td>
+                    <td class="px-4 py-2"><%= p[:views] %></td>
+                    <td class="px-4 py-2">
+                      <span class="text-xs px-2 py-1 rounded ring-1 ring-[var(--border)]">
+                        <%= p[:status] %>
+                      </span>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% end %>
+      </div>
+      <!-- Right (1 col) -->
+      <div class="space-y-6">
+        <%= render Dashboard::ExperienceSectionComponent.new(
+          experiences: @experiences,
+          action_href: "/experience/new",
+        ) %>
+      </div>
+    </div>
+  </div>

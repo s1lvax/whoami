@@ -1,0 +1,25 @@
+<section class="rounded-xl bg-[var(--surface)] ring-1 ring-[var(--border)]">
+  <header
+    class="
+      flex items-center justify-between px-4 py-3 border-b border-[var(--border)]
+    "
+  >
+    <h3 class="text-sm font-medium">Curriculum Vitæ — Experience</h3>
+    <%= link_to "Manage CV",
+    @action_href,
+    class:
+      "text-xs underline underline-offset-2 text-[var(--link)] hover:text-[var(--link-hover)]" %>
+  </header>
+
+  <div class="p-4">
+    <% if @experiences.blank? %>
+      <p class="text-sm text-[var(--muted)]">No experience yet. Start by adding your first role.</p>
+    <% else %>
+      <ul class="relative">
+        <% @experiences.each do |exp| %>
+          <%= render Dashboard::ExperienceItemComponent.new(**exp) %>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</section>
