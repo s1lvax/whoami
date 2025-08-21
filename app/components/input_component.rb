@@ -1,19 +1,22 @@
 class InputComponent < ViewComponent::Base
-  def initialize(form:, field:, type: :text, label: nil, autocomplete: nil, autofocus: false, hint: nil, value: nil)
+  def initialize(form:, field:, type:, label: nil, autocomplete: nil, autofocus: false, value: nil, hint: nil, input_options: {})
     @form = form
     @field = field
     @type = type
-    @label = label || field.to_s.humanize
+    @label = label
     @autocomplete = autocomplete
     @autofocus = autofocus
-    @hint = hint
     @value = value
+    @hint = hint
+    @input_options = input_options || {}
   end
 
   private
 
-  def errors_for(field)
-    errs = @form.object.errors[field]
-    errs.present? ? errs.join(", ") : nil
+  def error_text_for(field)
+    obj = @form&.object
+    return nil unless obj.respond_to?(:errors)
+    msgs = obj.errors.full_messages_for(field)
+    msgs.first
   end
 end

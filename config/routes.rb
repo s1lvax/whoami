@@ -1,9 +1,21 @@
 Rails.application.routes.draw do
-  devise_for :users
-  get "pages/index"
+  devise_for :users,
+  controllers: {
+    registrations: "users/registrations",
+    confirmations: "users/confirmations"
+  }
+
   authenticate :user do
     get "/dashboard", to: "dashboard#index"
   end
+
+  resource :onboarding, only: [ :show, :update ] do
+    get :check_username, on: :collection
+  end
+
+  # public confirm email page
+  get "/confirmation-sent", to: "static#confirmation_sent", as: :confirmation_sent
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

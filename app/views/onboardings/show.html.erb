@@ -1,0 +1,36 @@
+
+<!-- app/views/onboardings/show.html.erb -->
+<div class="min-h-screen flex items-center justify-center bg-[var(--bg)] px-4">
+  <div class="w-full max-w-md bg-[var(--card)] rounded-xl shadow-md p-8">
+    <h2 class="text-2xl font-semibold mb-6 text-center text-[var(--text)]">
+      <%= case @step
+          when "name"     then "Welcome"
+          when "username" then "Choose a username"
+          when "links" then "Add your favorite links"
+          when "avatar"   then "Add a profile picture"
+          end %>
+    </h2>
+
+    <!-- Simple progress (keep your component if you prefer) -->
+    <div class="mb-6">
+      <div class="w-full h-2 bg-[var(--border)] rounded-full overflow-hidden">
+        <div class="h-full bg-[var(--primary)] transition-all duration-300"
+             style="width: <%= @progress %>%;">
+        </div>
+      </div>
+      <div class="mt-2 text-xs text-[var(--muted)] text-center">
+          Step <%= { "name" => 1, "username" => 2, "links" => 3, "avatar" => 4 }[@step] %> of 4
+      </div>
+    </div>
+
+    <% if @step == "name" %>
+      <%= render partial: "onboardings/step_name", locals: { user: @user } %>
+    <% elsif @step == "username" %>
+      <%= render partial: "onboardings/step_username", locals: { user: @user } %>
+    <% elsif @step == "links" %>
+      <%= render "onboardings/step_links", user: @user %>
+    <% else %>
+      <%= render partial: "onboardings/step_avatar", locals: { user: @user } %>
+    <% end %>
+  </div>
+</div>

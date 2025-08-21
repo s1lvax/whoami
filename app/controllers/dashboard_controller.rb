@@ -1,5 +1,6 @@
 class DashboardController < ApplicationController
   before_action :authenticate_user!
+  before_action :require_onboarded!
 
   def index
     @stats = [
@@ -67,5 +68,13 @@ class DashboardController < ApplicationController
       status: "Active",
       card_last4: "4242"
     }
+  end
+
+  private
+
+  def require_onboarded!
+    return if current_user.onboarded?
+
+    redirect_to onboarding_path, notice: "Let’s finish setting up your profile first."
   end
 end

@@ -1,22 +1,35 @@
 
-<% error_text = errors_for(@field) %>
+<% error_text = error_text_for(@field) %>
 
 <div class="mb-4">
   <%= @form.label @field, @label, class: "block text-sm font-medium text-[var(--muted)] mb-1" %>
 
-  <%= @form.send(
-        "#{@type}_field",
-        @field,
-        autocomplete: @autocomplete,
-        autofocus: @autofocus,
-        value: @value,
-        class: [
-          "w-full rounded-md px-3 py-2 focus:outline-none",
-          "bg-[var(--input-bg)] text-[var(--input-text)] placeholder-[var(--input-placeholder)]",
-          "ring-1",
-          error_text.present? ? "ring-[var(--danger)] focus:ring-2 focus:ring-[var(--danger)]" : "ring-[var(--input-border)] focus:ring-2 focus:ring-[var(--btn-ring)]"
-        ].join(" ")
-      ) %>
+  <% base_class = [
+       "w-full rounded-md px-3 py-2 focus:outline-none",
+       "bg-[var(--input-bg)] text-[var(--input-text)] placeholder-[var(--input-placeholder)]",
+       "ring-1"
+     ].join(" ") %>
+
+  <% ring_class = error_text.present? ?
+       "ring-[var(--danger)] focus:ring-2 focus:ring-[var(--danger)]" :
+       "ring-[var(--input-border)] focus:ring-2 focus:ring-[var(--btn-ring)]"
+  %>
+
+  <% extra_class = @input_options.delete(:class) %>
+  <% merged_class = [base_class, ring_class, extra_class].compact.join(" ") %>
+
+  <% extra_data = @input_options.delete(:data) || {} %>
+  <% merged_data = {}.merge(extra_data) %>
+
+  <% opts = {
+       autocomplete: @autocomplete,
+       autofocus: @autofocus,
+       value: @value,
+       class: merged_class,
+       data: merged_data
+     }.merge(@input_options) %>
+
+  <%= @form.send("#{@type}_field", @field, **opts) %>
 
   <% if @hint.present? %>
     <p class="mt-1 text-xs text-[var(--muted)]"><%= @hint %></p>

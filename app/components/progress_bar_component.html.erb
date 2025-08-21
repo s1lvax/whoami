@@ -1,0 +1,24 @@
+
+<div id="<%= uid %>"
+     class="mb-6"
+     data-controller="progress"
+     data-progress-value-value="<%= percent %>">
+  <div class="w-full h-2 bg-[var(--border)] rounded-full overflow-hidden">
+    <div id="<%= uid %>-bar"
+         data-progress-target="bar"
+         class="h-full bg-[var(--primary)] rounded-full transition-all duration-300 ease-out"
+         style="width: 0%;">
+    </div>
+  </div>
+
+  <div class="mt-2 text-xs text-[var(--muted)] text-center">
+    <%= caption %>
+  </div>
+
+  <%# Optional non-JS fallback. Safe now because we use our own id. %>
+  <noscript>
+    <style>
+      ##{uid}-bar { width: <%= percent %>% }
+    </style>
+  </noscript>
+</div>

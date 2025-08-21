@@ -1,0 +1,78 @@
+
+<!-- app/views/onboardings/_step_links.html.erb -->
+<div data-controller="links">
+  <%= form_with model: user,
+                url: onboarding_path(step: "links"),
+                method: :patch,
+                data: { turbo: true } do |f| %>
+
+    <div id="links-list" data-links-target="list" class="space-y-3">
+      <%= f.fields_for :favorite_links do |ff| %>
+        <div class="p-3 rounded-md bg-[var(--input-bg)] ring-1 ring-[var(--input-border)] relative" data-links-target="item">
+          <%= ff.hidden_field :position, value: ff.index || 0 %>
+
+          <div class="grid grid-cols-1 gap-3">
+            <%= render InputComponent.new(form: ff, field: :label, type: :text,
+                                          label: "Label (e.g., GitHub, Blog)") %>
+            <%= render InputComponent.new(form: ff, field: :url, type: :text,
+                                          label: "URL (https://...)") %>
+          </div>
+
+          <button type="button"
+                  data-action="links#remove"
+                  class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-[var(--card)] ring-1 ring-[var(--input-border)] text-[var(--muted)] hover:text-[var(--text)]">
+            Remove
+          </button>
+
+          <%= ff.hidden_field :_destroy, value: "false", data: { links_target: "destroy" } %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Template for new link rows -->
+    <template data-links-target="template">
+      <div class="p-3 rounded-md bg-[var(--input-bg)] ring-1 ring-[var(--input-border)] relative" data-links-target="item">
+        <input type="hidden" name="user[favorite_links_attributes][__INDEX__][position]" value="0">
+        <div class="grid grid-cols-1 gap-3">
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-[var(--muted)] mb-1">Label (e.g., GitHub, Blog)</label>
+            <input type="text" name="user[favorite_links_attributes][__INDEX__][label]"
+                   class="w-full rounded-md px-3 py-2 focus:outline-none bg-[var(--input-bg)] text-[var(--input-text)] placeholder-[var(--input-placeholder)] ring-1 ring-[var(--input-border)] focus:ring-2 focus:ring-[var(--btn-ring)]">
+          </div>
+          <div class="mb-1">
+            <label class="block text-sm font-medium text-[var(--muted)] mb-1">URL (https://...)</label>
+            <input type="text" name="user[favorite_links_attributes][__INDEX__][url]"
+                   class="w-full rounded-md px-3 py-2 focus:outline-none bg-[var(--input-bg)] text-[var(--input-text)] placeholder-[var(--input-placeholder)] ring-1 ring-[var(--input-border)] focus:ring-2 focus:ring-[var(--btn-ring)]">
+          </div>
+        </div>
+        <input type="hidden" name="user[favorite_links_attributes][__INDEX__][_destroy]" value="false">
+        <button type="button"
+                data-action="links#remove"
+                class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-[var(--card)] ring-1 ring-[var(--input-border)] text-[var(--muted)] hover:text-[var(--text)]">
+          Remove
+        </button>
+      </div>
+    </template>
+
+    <div class="flex items-center justify-between mt-4">
+      <button type="button"
+              data-action="links#add"
+              class="text-sm px-3 py-2 rounded-md ring-1 ring-[var(--input-border)] text-[var(--text)] bg-[var(--input-bg)] hover:bg-[var(--bg)]">
+        + Add link
+      </button>
+      <span class="text-xs text-[var(--muted)]">Up to 10 links</span>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 mt-6">
+      <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
+        Continue
+      <% end %>
+
+      <button type="submit" name="skip" value="1"
+              class="w-full rounded-md px-3 py-2 ring-1 ring-[var(--input-border)]
+                     text-[var(--text)] bg-[var(--input-bg)] hover:bg-[var(--bg)]">
+        Skip for now
+      </button>
+    </div>
+  <% end %>
+</div>
