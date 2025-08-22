@@ -1,0 +1,41 @@
+
+<section class="rounded-2xl bg-[var(--card)] ring-1 ring-[var(--border)] p-6">
+  <div class="mb-3 flex items-center justify-between">
+    <h2 class="text-sm uppercase tracking-wide text-[var(--muted)]">Experience</h2>
+    <span class="text-xs text-[var(--muted)]"><%= experiences.size %></span>
+  </div>
+
+  <% if experiences.any? %>
+    <ul class="space-y-3">
+      <% experiences.each do |exp| %>
+        <li class="rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] transition">
+          <div class="px-4 py-3">
+            <div class="flex items-center justify-between gap-3">
+              <p class="text-base font-medium truncate"><%= exp[:role] %> · <%= exp[:company] %></p>
+              <span class="shrink-0 text-xs text-[var(--muted)]">
+                <%= exp[:start_date].to_fs(:month_and_year) %> –
+                <%= exp[:end_date].present? ? exp[:end_date].to_fs(:month_and_year) : "Present" %>
+              </span>
+            </div>
+
+            <p class="mt-1 text-sm text-[var(--muted)] truncate"><%= exp[:location] %></p>
+
+            <% if exp[:highlights].present? %>
+              <p class="mt-1 text-sm text-[var(--muted-contrast)]"><%= exp[:highlights].first %></p>
+            <% end %>
+
+            <% if exp[:tech].present? %>
+              <div class="mt-2 flex flex-wrap gap-1">
+                <% exp[:tech].first(4).each do |t| %>
+                  <span class="text-[10px] px-2 py-0.5 rounded ring-1 ring-[var(--border)] bg-[var(--surface-2)]"><%= t %></span>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="text-sm text-[var(--muted)]">No experience yet.</p>
+  <% end %>
+</section>

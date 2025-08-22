@@ -29,7 +29,7 @@
        data: merged_data
      }.merge(@input_options) %>
 
-  <%= @form.send("#{@type}_field", @field, **opts) %>
+  <%= @form.send(form_method_name, @field, **opts) %>
 
   <% if @hint.present? %>
     <p class="mt-1 text-xs text-[var(--muted)]"><%= @hint %></p>

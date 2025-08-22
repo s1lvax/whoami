@@ -1,0 +1,15 @@
+
+<div class="min-h-screen bg-[var(--bg)] text-[var(--text)]">
+  <div class="max-w-5xl mx-auto px-6 pt-10 pb-16">
+    <%= render PublicProfile::HeaderComponent.new(user: @user) %>
+
+    <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+      <div class="lg:col-span-2 space-y-6">
+        <%= render PublicProfile::LatestPostsSectionComponent.new(posts: @posts) %>
+        <%= render PublicProfile::ExperienceSectionComponent.new(experiences: @experiences) %>
+      </div>
+
+      <%= render PublicProfile::LinksSectionComponent.new(links: @links) %>
+    </div>
+  </div>
+</div>

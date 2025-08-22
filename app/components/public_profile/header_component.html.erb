@@ -1,0 +1,34 @@
+
+<section class="rounded-2xl bg-[var(--card)] ring-1 ring-[var(--border)] shadow-sm p-6">
+  <div class="flex items-center gap-5">
+    <%= image_tag avatar_src(192),
+          alt: display_name,
+          class: "w-20 h-20 md:w-24 md:h-24 rounded-full ring-2 ring-[var(--border)] object-cover shrink-0" %>
+
+    <div class="min-w-0 flex-1">
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <h1 class="text-xl md:text-2xl font-semibold truncate"><%= display_name %></h1>
+        <span class="text-sm text-[var(--muted)] truncate"><%= handle %></span>
+      </div>
+
+      <% if @user.respond_to?(:bio) && @user.bio.present? %>
+        <p class="mt-2 text-sm leading-relaxed text-[var(--muted-contrast)]"><%= @user.bio %></p>
+      <% end %>
+
+      <div class="mt-3 flex flex-wrap gap-3 text-xs text-[var(--muted)]">
+        <% if @user.respond_to?(:location) && @user.location.present? %>
+          <span class="inline-flex items-center gap-1 rounded-md px-2 py-1 ring-1 ring-[var(--border)] bg-[var(--surface)]">
+            📍 <%= @user.location %>
+          </span>
+        <% end %>
+        <% if website_url.present? %>
+          <span class="inline-flex items-center gap-1 rounded-md px-2 py-1 ring-1 ring-[var(--border)] bg-[var(--surface)]">
+            🔗 <%= link_to website_short, website_url,
+                    class: "underline underline-offset-2 hover:text-[var(--link-hover)] break-all",
+                    target: "_blank", rel: "noopener" %>
+          </span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>

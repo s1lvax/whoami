@@ -1,3 +1,4 @@
+
 <div data-controller="avatar-preview">
   <%= form_with model: user,
                 url: onboarding_path(step: "avatar"),
@@ -30,18 +31,16 @@
       <% end %>
     </div>
 
-    <div class="grid grid-cols-2 gap-3">
-      <%# Primary submit (save avatar or continue if none) %>
-      <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
-        Save & Continue
-      <% end %>
+        <div class="grid grid-cols-2 gap-3 mt-4">
+    <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
+      Continue
+    <% end %>
 
-      <%# Skip button -> same PATCH with skip=1 %>
-      <button type="submit" name="skip" value="1"
-              class="w-full rounded-md px-3 py-2 ring-1 ring-[var(--input-border)]
-                     text-[var(--text)] bg-[var(--input-bg)] hover:bg-[var(--bg)]">
-        Skip for now
-      </button>
-    </div>
+    <%= render ButtonComponent.new(type: :submit, style: :secondary, full_width: true, name: "skip") do %>
+      Skip for now
+    <% end %>
+
+  </div>
+
   <% end %>
 </div>

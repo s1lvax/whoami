@@ -28,4 +28,13 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "dashboard#index"
+
+  reserved = %w[users rails active_storage assets packs system onboarding dashboard posts links admin]
+  username = /\A[a-z0-9]{3,30}\z/
+
+  get "/:username", to: "profiles#show", as: :public_profile,
+    constraints: ->(req) {
+      u = req.params[:username].to_s
+      u.match?(username) && !reserved.include?(u)
+    }
 end

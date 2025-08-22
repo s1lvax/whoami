@@ -16,7 +16,17 @@ class InputComponent < ViewComponent::Base
   def error_text_for(field)
     obj = @form&.object
     return nil unless obj.respond_to?(:errors)
-    msgs = obj.errors.full_messages_for(field)
-    msgs.first
+    obj.errors.full_messages_for(field).first
+  end
+
+  # Map component `type` to the actual Rails FormBuilder method
+  def form_method_name
+    t = @type.to_s
+    case t
+    when "text_area" then :text_area
+    when "file"      then :file_field
+    else
+      :"#{t}_field"  # text_field, email_field, password_field, number_field, etc.
+    end
   end
 end

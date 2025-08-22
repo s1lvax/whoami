@@ -1,0 +1,7 @@
+
+<%= helpers.turbo_frame_tag "username_status" do %>
+  <span class="<%= classes_for(status[:tone]) %>"
+        data-available="<%= available? %>">
+    <%= status[:text] %>
+  </span>
+<% end %>

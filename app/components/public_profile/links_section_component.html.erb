@@ -1,0 +1,28 @@
+
+<section class="rounded-2xl bg-[var(--card)] ring-1 ring-[var(--border)] p-6 self-start">
+  <div class="mb-3 flex items-center justify-between">
+    <h2 class="text-sm uppercase tracking-wide text-[var(--muted)]">Links</h2>
+    <span class="text-xs text-[var(--muted)]"><%= links.size %></span>
+  </div>
+
+  <% if links.any? %>
+    <ul class="space-y-2">
+      <% links.each do |link| %>
+        <% href = normalized_url(link.url) %>
+        <li class="rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] transition">
+          <%= link_to href, target: "_blank", rel: "noopener", class: "block px-3 py-2" do %>
+            <div class="flex items-center justify-between gap-3">
+              <div class="min-w-0">
+                <p class="text-sm font-medium truncate"><%= link.label %></p>
+                <p class="text-xs text-[var(--muted)] truncate"><%= href.sub(%r{\Ahttps?://}i, "") %></p>
+              </div>
+              <span class="text-[var(--muted)]">↗</span>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="text-sm text-[var(--muted)]">No links yet.</p>
+  <% end %>
+</section>

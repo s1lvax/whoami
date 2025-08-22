@@ -1,0 +1,27 @@
+
+<section class="rounded-2xl bg-[var(--card)] ring-1 ring-[var(--border)] p-6">
+  <div class="mb-3 flex items-center justify-between">
+    <h2 class="text-sm uppercase tracking-wide text-[var(--muted)]">Latest Posts</h2>
+    <span class="text-xs text-[var(--muted)]"><%= posts.size %></span>
+  </div>
+
+  <% if posts.any? %>
+    <ul class="space-y-3">
+      <% posts.each do |p| %>
+        <li class="rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] transition">
+          <div class="px-4 py-3">
+            <div class="flex items-center justify-between gap-3">
+              <p class="text-base font-medium truncate"><%= p[:title] %></p>
+              <span class="shrink-0 text-xs text-[var(--muted)]"><%= p[:date].to_fs(:long) %></span>
+            </div>
+            <% if p[:excerpt].present? %>
+              <p class="mt-1 text-sm text-[var(--muted-contrast)]"><%= p[:excerpt] %></p>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="text-sm text-[var(--muted)]">No blog posts yet.</p>
+  <% end %>
+</section>

@@ -5,7 +5,7 @@
       <div>
         <h1 class="text-2xl font-semibold">Dashboard</h1>
         <p class="text-sm text-[var(--muted)]">Welcome back,
-          <%= current_user.email %></p>
+          <%= current_user.full_name %></p>
       </div>
       <div class="flex gap-2">
         <%= render ButtonComponent.new(type: :button, style: :primary, full_width: false) do %>
@@ -18,11 +18,11 @@
       </div>
     </header>
     <div class="mb-4">
-      <%= render Dashboard::ProfileHeaderComponent.new(
-        profile: @profile,
-        edit_href: edit_user_registration_path,
+  <%= render Dashboard::ProfileHeaderComponent.new(
+        user: @user,
+        edit_href: edit_user_registration_path
       ) %>
-    </div>
+</div>
     <!-- Grid: stats -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       <% @stats.each do |s| %>
@@ -36,7 +36,7 @@
         <!-- Quick Links -->
         <%= render Dashboard::SectionComponent.new(title: "Quick Links", action_label: "Manage", action_href: "/links") do %>
           <ul class="grid sm:grid-cols-2 gap-3">
-            <% @links.each do |link| %>
+            <% @favorite_links.each do |link| %>
               <li
                 class="
                   rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)]

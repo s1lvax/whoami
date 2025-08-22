@@ -1,8 +1,14 @@
+
 class DashboardController < ApplicationController
   before_action :authenticate_user!
   before_action :require_onboarded!
+  before_action :set_user
 
   def index
+    # Real data from onboarding
+    @favorite_links = @user.favorite_links.order(:position, :id)
+
+    # Keep your sample sections (replace with real data later if you want)
     @stats = [
       { label: "Profile Views", value: "2,481", delta: "+12%", up: true },
       { label: "Link Clicks",   value: "613",  delta: "+4%",  up: true },
@@ -10,50 +16,33 @@ class DashboardController < ApplicationController
       { label: "CV Downloads",  value: "27",   delta: "0%",   up: nil }
     ]
 
-@profile = {
-  name: "Cesario Silva",
-  handle: "cesario",
-  avatar_url: "https://avatars.githubusercontent.com/u/9919?v=4", # fake avatar
-  bio: "Full-stack engineer passionate about Rails, ViewComponent, and clean design.
-        Building whoami.tech to help devs showcase their journey.",
-  location: "Luxembourg, LU",
-  website: "https://whoami.tech/cesario"
-}
-
-      @experiences = [
-    {
-      company: "whoami.tech",
-      role: "Founder & Full-stack Engineer",
-      location: "Luxembourg (Remote)",
-      start_date: Date.new(2024, 11, 1),
-      end_date: nil, # current
-      highlights: [
-        "Shipped CV + blog + links platform",
-        "Rails 8, Turbo, ViewComponent, Tailwind",
-        "Pay (Stripe) subscriptions, Devise auth"
-      ],
-      tech: %w[Rails Postgres Hotwire Tailwind Stripe]
-    },
-    {
-      company: "ACME Cloud",
-      role: "Senior Software Engineer",
-      location: "Berlin",
-      start_date: Date.new(2022, 3, 1),
-      end_date: Date.new(2024, 10, 1),
-      highlights: [
-        "Led migration to multi-tenant architecture",
-        "Cut p95 latency by 38%",
-        "Mentored 4 engineers"
-      ],
-      tech: %w[Ruby Sidekiq Redis Kubernetes]
-    }
-  ]
-
-    @links = [
-      { label: "GitHub",  url: "github.com/silva",    clicks: 312 },
-      { label: "X/Twitter", url: "x.com/silva",      clicks: 181 },
-      { label: "Blog",    url: "blog.whoami.tech",   clicks: 92  },
-      { label: "CV (PDF)", url: "/cv.pdf",           clicks: 27  }
+    @experiences = [
+      {
+        company: "whoami.tech",
+        role: "Founder & Full-stack Engineer",
+        location: "Luxembourg (Remote)",
+        start_date: Date.new(2024, 11, 1),
+        end_date: nil,
+        highlights: [
+          "Shipped CV + blog + links platform",
+          "Rails 8, Turbo, ViewComponent, Tailwind",
+          "Pay (Stripe) subscriptions, Devise auth"
+        ],
+        tech: %w[Rails Postgres Hotwire Tailwind Stripe]
+      },
+      {
+        company: "ACME Cloud",
+        role: "Senior Software Engineer",
+        location: "Berlin",
+        start_date: Date.new(2022, 3, 1),
+        end_date: Date.new(2024, 10, 1),
+        highlights: [
+          "Led migration to multi-tenant architecture",
+          "Cut p95 latency by 38%",
+          "Mentored 4 engineers"
+        ],
+        tech: %w[Ruby Sidekiq Redis Kubernetes]
+      }
     ]
 
     @posts = [
@@ -72,9 +61,12 @@ class DashboardController < ApplicationController
 
   private
 
+  def set_user
+    @user = current_user
+  end
+
   def require_onboarded!
     return if current_user.onboarded?
-
     redirect_to onboarding_path, notice: "Let’s finish setting up your profile first."
   end
 end

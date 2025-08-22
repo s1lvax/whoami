@@ -1,19 +1,25 @@
-<%= form_with model: user, url: onboarding_path(step: "name"), method: :patch, data: { turbo: true } do |f| %>
+
+<%= form_with model: user,
+              url: onboarding_path(step: "name"),
+              method: :patch,
+              data: { turbo: true } do |f| %>
+
   <%= render InputComponent.new(form: f, field: :name, type: :text,
                                 label: "First name", autocomplete: "given-name", autofocus: true) %>
 
   <% if user.errors[:name].any? %>
-    <p class="mb-2 text-sm text-red-400"><%= user.errors[:name].first %></p>
+    <p class="mb-2 text-xs text-[var(--danger)]"><%= user.errors[:name].first %></p>
   <% end %>
 
   <%= render InputComponent.new(form: f, field: :family_name, type: :text,
                                 label: "Family name", autocomplete: "family-name") %>
 
   <% if user.errors[:family_name].any? %>
-    <p class="mb-2 text-sm text-red-400"><%= user.errors[:family_name].first %></p>
+    <p class="mb-2 text-xs text-[var(--danger)]"><%= user.errors[:family_name].first %></p>
   <% end %>
 
-  <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
+    <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
     Continue
   <% end %>
+
 <% end %>

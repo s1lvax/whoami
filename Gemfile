@@ -68,3 +68,4 @@ gem "view_component", "~> 4.0"
 
 gem "devise", "~> 4.9"
 gem "postmark-rails"
+gem "image_processing", "~> 1.2"

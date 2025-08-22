@@ -1,0 +1,40 @@
+
+<%= form_with model: user,
+              url: onboarding_path(step: "username"),
+              method: :patch,
+              data: { turbo: true } do |f| %>
+
+  <div data-controller="username-check" class="mb-4">
+    <div class="mb-2 flex items-center justify-between">
+      <label class="text-sm font-medium text-[var(--muted-contrast)]">
+        Username (letters & digits only)
+      </label>
+      <turbo-frame id="username_status">
+        <span class="text-sm text-[var(--muted)]">Type a username…</span>
+      </turbo-frame>
+    </div>
+
+    <%= render InputComponent.new(
+          form: f,
+          field: :username,
+          type: :text,
+          label: nil,
+          autocomplete: "off",
+          input_options: {
+            data: {
+              action: "input->username-check#changed",
+              username_check_target: "input",
+              # also mark the submit button as a target
+              # we'll reference it below:
+            },
+            inputmode: "latin",
+            spellcheck: "false"
+          }
+        ) %>
+  </div>
+
+  <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
+    Continue
+  <% end %>
+
+<% end %>

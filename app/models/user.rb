@@ -23,10 +23,21 @@ class User < ApplicationRecord
     format: { with: USERNAME_REGEX, message: "must be 3–30 chars, lowercase letters and digits only" },
     allow_nil: true
 
+  validates :bio, length: { maximum: 280 }, allow_nil: true
+
   validates :name, presence: true, length: { maximum: 80 }, allow_nil: true
   validates :family_name, presence: true, length: { maximum: 80 }, allow_nil: true
 
   def onboarded? = onboarded_at.present?
+
+
+  def full_name
+    [ name, family_name ].compact_blank.join(" ")
+  end
+
+  def handle
+    username.presence || email.to_s.split("@").first
+  end
 
   private
 
