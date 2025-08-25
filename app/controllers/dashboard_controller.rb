@@ -14,34 +14,7 @@ class DashboardController < ApplicationController
       { label: "CV Downloads",  value: "27",   delta: "0%",   up: nil }
     ]
 
-    @experiences = [
-      {
-        company: "whoami.tech",
-        role: "Founder & Full-stack Engineer",
-        location: "Luxembourg (Remote)",
-        start_date: Date.new(2024, 11, 1),
-        end_date: nil,
-        highlights: [
-          "Shipped CV + blog + links platform",
-          "Rails 8, Turbo, ViewComponent, Tailwind",
-          "Pay (Stripe) subscriptions, Devise auth"
-        ],
-        tech: %w[Rails Postgres Hotwire Tailwind Stripe]
-      },
-      {
-        company: "ACME Cloud",
-        role: "Senior Software Engineer",
-        location: "Berlin",
-        start_date: Date.new(2022, 3, 1),
-        end_date: Date.new(2024, 10, 1),
-        highlights: [
-          "Led migration to multi-tenant architecture",
-          "Cut p95 latency by 38%",
-          "Mentored 4 engineers"
-        ],
-        tech: %w[Ruby Sidekiq Redis Kubernetes]
-      }
-    ]
+    @experiences    = @user.experiences.order(start_date: :desc)
 
     @posts = [
       { title: "Shipping the minimal profile", date: Date.today - 3, views: 128, status: "Published" },

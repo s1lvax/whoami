@@ -8,6 +8,9 @@ class User < ApplicationRecord
   has_many :favorite_links, -> { order(:position, :id) }, dependent: :destroy
   accepts_nested_attributes_for :favorite_links, allow_destroy: true
 
+  # cv
+  has_many :experiences, dependent: :destroy
+
   # sets username to downcase before validation
   before_validation :downcase_username
 

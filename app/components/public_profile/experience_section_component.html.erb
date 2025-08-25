@@ -1,7 +1,6 @@
-
 <section class="rounded-2xl bg-[var(--card)] ring-1 ring-[var(--border)] p-6">
   <div class="mb-3 flex items-center justify-between">
-    <h2 class="text-sm uppercase tracking-wide text-[var(--muted)]">Experience</h2>
+    <h2 class="text-sm uppercase tracking-wide text-[var(--muted)]">Professional Experience</h2>
     <span class="text-xs text-[var(--muted)]"><%= experiences.size %></span>
   </div>
 
@@ -10,23 +9,34 @@
       <% experiences.each do |exp| %>
         <li class="rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] transition">
           <div class="px-4 py-3">
-            <div class="flex items-center justify-between gap-3">
-              <p class="text-base font-medium truncate"><%= exp[:role] %> · <%= exp[:company] %></p>
-              <span class="shrink-0 text-xs text-[var(--muted)]">
-                <%= exp[:start_date].to_fs(:month_and_year) %> –
-                <%= exp[:end_date].present? ? exp[:end_date].to_fs(:month_and_year) : "Present" %>
+            <!-- header row: stack on mobile, row on desktop -->
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-3">
+              <p class="text-base font-medium break-words sm:truncate">
+                <%= role_for(exp) %> · <%= company_for(exp) %>
+              </p>
+              <span class="text-xs text-[var(--muted)]">
+                <% sd = start_date_for(exp) %>
+                <% ed = end_date_for(exp) %>
+                <%= sd.respond_to?(:to_fs) ? sd.to_fs(:month_and_year) : sd %> –
+                <%= ed.present? ? (ed.respond_to?(:to_fs) ? ed.to_fs(:month_and_year) : ed) : "Present" %>
               </span>
             </div>
 
-            <p class="mt-1 text-sm text-[var(--muted)] truncate"><%= exp[:location] %></p>
-
-            <% if exp[:highlights].present? %>
-              <p class="mt-1 text-sm text-[var(--muted-contrast)]"><%= exp[:highlights].first %></p>
+            <% if location_for(exp).present? %>
+              <p class="mt-1 text-sm text-[var(--muted)] break-words sm:truncate"><%= location_for(exp) %></p>
             <% end %>
 
-            <% if exp[:tech].present? %>
+            <% hl = highlights_for(exp) %>
+            <% if hl.any? %>
+              <p class="mt-1 text-sm text-[var(--muted-contrast)] break-words">
+                <%= hl.first %>
+              </p>
+            <% end %>
+
+            <% techs = tech_for(exp) %>
+            <% if techs.any? %>
               <div class="mt-2 flex flex-wrap gap-1">
-                <% exp[:tech].first(4).each do |t| %>
+                <% techs.first(4).each do |t| %>
                   <span class="text-[10px] px-2 py-0.5 rounded ring-1 ring-[var(--border)] bg-[var(--surface-2)]"><%= t %></span>
                 <% end %>
               </div>

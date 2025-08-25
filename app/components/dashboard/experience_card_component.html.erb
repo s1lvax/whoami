@@ -1,0 +1,35 @@
+<%= helpers.turbo_frame_tag dom_id_for do %>
+  <li class="rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)] p-4 space-y-2">
+    <div class="flex items-start justify-between gap-3">
+      <div class="min-w-0">
+        <p class="text-sm font-medium"><%= @experience.role %></p>
+        <p class="text-xs text-[var(--muted)]">
+          <%= @experience.company %><% if @experience.location.present? %> — <%= @experience.location %><% end %>
+        </p>
+        <p class="text-xs text-[var(--muted)]"><%= date_range %></p>
+      </div>
+
+      <%= link_to "×",
+                  destroy_path,
+                  data: { turbo_method: :delete, turbo_confirm: "Delete this experience?" },
+                  class: "shrink-0 inline-flex items-center justify-center w-6 h-6 rounded-md
+                          ring-1 ring-[var(--border)] hover:bg-[var(--surface-2)] text-sm" %>
+    </div>
+
+    <% if @experience.highlights_list.any? %>
+      <ul class="list-disc pl-4 text-sm space-y-1">
+        <% @experience.highlights_list.each do |h| %>
+          <li><%= h %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <% if @experience.tech_list.any? %>
+      <div class="flex flex-wrap gap-2 pt-1">
+        <% @experience.tech_list.each do |t| %>
+          <span class="text-xs px-2 py-0.5 rounded ring-1 ring-[var(--border)] bg-[var(--surface-2)]"><%= t %></span>
+        <% end %>
+      </div>
+    <% end %>
+  </li>
+<% end %>

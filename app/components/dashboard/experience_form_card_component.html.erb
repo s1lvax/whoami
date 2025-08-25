@@ -1,0 +1,62 @@
+<%= helpers.turbo_frame_tag "new_experience" do %>
+  <li class="rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)] p-4">
+    <%= form_with model: experience, url: create_path, data: { turbo: true } do |f| %>
+      <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+        <div class="sm:col-span-6">
+          <label class="block text-xs mb-1">Company</label>
+          <%= f.text_field :company, class: "w-full rounded-md px-3 py-2 bg-[var(--input-bg)] ring-1 ring-[var(--input-border)] text-sm" %>
+          <% if experience.errors[:company].any? %><p class="mt-1 text-xs text-[var(--danger)]"><%= experience.errors[:company].first %></p><% end %>
+        </div>
+
+        <div class="sm:col-span-6">
+          <label class="block text-xs mb-1">Role</label>
+          <%= f.text_field :role, class: "w-full rounded-md px-3 py-2 bg-[var(--input-bg)] ring-1 ring-[var(--input-border)] text-sm" %>
+          <% if experience.errors[:role].any? %><p class="mt-1 text-xs text-[var(--danger)]"><%= experience.errors[:role].first %></p><% end %>
+        </div>
+
+        <div class="sm:col-span-6">
+          <label class="block text-xs mb-1">Location (optional)</label>
+          <%= f.text_field :location, class: "w-full rounded-md px-3 py-2 bg-[var(--input-bg)] ring-1 ring-[var(--input-border)] text-sm" %>
+        </div>
+
+        <div class="sm:col-span-3">
+          <label class="block text-xs mb-1">Start date</label>
+          <%= f.date_field :start_date, class: "w-full rounded-md px-3 py-2 bg-[var(--input-bg)] ring-1 ring-[var(--input-border)] text-sm" %>
+          <% if experience.errors[:start_date].any? %><p class="mt-1 text-xs text-[var(--danger)]"><%= experience.errors[:start_date].first %></p><% end %>
+        </div>
+
+        <div class="sm:col-span-3">
+          <label class="block text-xs mb-1">End date</label>
+          <%= f.date_field :end_date, class: "w-full rounded-md px-3 py-2 bg-[var(--input-bg)] ring-1 ring-[var(--input-border)] text-sm" %>
+          <% if experience.errors[:end_date].any? %><p class="mt-1 text-xs text-[var(--danger)]"><%= experience.errors[:end_date].first %></p><% end %>
+        </div>
+
+        <div class="sm:col-span-12">
+          <label class="block text-xs mb-1">Highlights (one per line)</label>
+          <%= f.text_area :highlights, rows: 4, placeholder: "Led migration to multi-tenant architecture\nCut p95 latency by 38%", class: "w-full rounded-md px-3 py-2 bg-[var(--input-bg)] ring-1 ring-[var(--input-border)] text-sm min-h-[6rem]" %>
+        </div>
+
+        <div class="sm:col-span-12">
+          <label class="block text-xs mb-1">Tech (comma separated)</label>
+          <%= f.text_field :tech, placeholder: "Ruby, Rails, Sidekiq, Redis, Kubernetes", class: "w-full rounded-md px-3 py-2 bg-[var(--input-bg)] ring-1 ring-[var(--input-border)] text-sm" %>
+        </div>
+
+        <div class="sm:col-span-12 flex justify-end gap-2">
+          <%= f.submit "Add",
+                class: "inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium
+                        bg-[var(--btn-bg)] text-[var(--btn-text)] hover:bg-[var(--btn-hover-bg)]" %>
+
+          <%= link_to "Cancel",
+                helpers.new_dashboard_experience_path,
+                data: { turbo_frame: "new_experience" },
+                class: "inline-flex items-center justify-center rounded-md px-3 py-2 text-sm
+                        ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)]" %>
+        </div>
+      </div>
+
+      <% if experience.errors[:base].any? %>
+        <p class="mt-2 text-xs text-[var(--danger)]"><%= experience.errors[:base].first %></p>
+      <% end %>
+    <% end %>
+  </li>
+<% end %>
