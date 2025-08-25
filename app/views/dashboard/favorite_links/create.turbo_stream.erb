@@ -1,0 +1,9 @@
+<%= turbo_stream.prepend "favorite_links_list",
+      render(Dashboard::LinkCardComponent.new(link: @link)) %>
+
+<% if current_user.favorite_links.count < 6 %>
+  <%= turbo_stream.replace "new_favorite_link",
+        render(Dashboard::NewLinkCardComponent.new) %>
+<% else %>
+  <%= turbo_stream.replace "new_favorite_link", "" %>
+<% end %>

@@ -1,0 +1,32 @@
+<%= helpers.turbo_frame_tag dom_id_for do %>
+  <li
+    class="rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)]
+           hover:bg-[var(--surface-2)] p-3 relative"
+  >
+    <div class="flex items-center justify-between gap-3">
+      <div class="min-w-0">
+        <p class="text-sm truncate"><%= @link.label %></p>
+        <p class="text-xs text-[var(--muted)] truncate"><%= @link.url %></p>
+      </div>
+
+      <div class="flex items-center gap-2 text-xs text-[var(--muted)]">
+        <!-- eye icon -->
+        <svg xmlns="http://www.w3.org/2000/svg"
+             class="w-4 h-4 shrink-0"
+             fill="none" viewBox="0 0 24 24" stroke="currentColor"
+             stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M1.5 12s4-7.5 10.5-7.5S22.5 12 22.5 12s-4 7.5-10.5 7.5S1.5 12 1.5 12z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        <%= @link.clicks || 0 %>
+      </div>
+
+      <%= link_to "×",
+                  delete_path,
+                  data: { turbo_method: :delete, turbo_confirm: "Delete this link?" },
+                  class: "shrink-0 inline-flex items-center justify-center w-6 h-6 rounded-md
+                          ring-1 ring-[var(--border)] hover:bg-[var(--surface-2)] text-sm" %>
+    </div>
+  </li>
+<% end %>

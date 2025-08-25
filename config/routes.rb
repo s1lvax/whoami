@@ -9,6 +9,10 @@ Rails.application.routes.draw do
     resource :dashboard, only: [ :show, :edit, :update ], controller: "dashboard"
   end
 
+  namespace :dashboard do
+    resources :favorite_links, only: [ :new, :create, :destroy ]
+  end
+
   resource :onboarding, only: [ :show, :update ] do
     get :check_username, on: :collection
   end

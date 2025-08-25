@@ -1,0 +1,42 @@
+<%= helpers.turbo_frame_tag "new_favorite_link" do %>
+  <li class="rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)] p-3">
+    <%= form_with model: link, url: create_path, data: { turbo: true } do |f| %>
+      <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
+        <div class="sm:col-span-5">
+          <label class="block text-xs mb-1">Title</label>
+          <%= f.text_field :label,
+                class: "w-full rounded-md px-3 py-2 bg-[var(--input-bg)] ring-1 ring-[var(--input-border)] text-sm" %>
+          <% if link.errors[:label].any? %>
+            <p class="mt-1 text-xs text-[var(--danger)]"><%= link.errors[:label].first %></p>
+          <% end %>
+        </div>
+
+        <div class="sm:col-span-7">
+          <label class="block text-xs mb-1">URL</label>
+          <%= f.url_field :url,
+                placeholder: "https://example.com",
+                class: "w-full rounded-md px-3 py-2 bg-[var(--input-bg)] ring-1 ring-[var(--input-border)] text-sm" %>
+          <% if link.errors[:url].any? %>
+            <p class="mt-1 text-xs text-[var(--danger)]"><%= link.errors[:url].first %></p>
+          <% end %>
+        </div>
+
+        <div class="sm:col-span-12 flex justify-end gap-2 pt-1">
+          <%= f.submit "Add",
+                class: "inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium
+                        bg-[var(--btn-bg)] text-[var(--btn-text)] hover:bg-[var(--btn-hover-bg)]" %>
+
+          <%= link_to "Cancel",
+                helpers.new_dashboard_favorite_link_path,
+                data: { turbo_frame: "new_favorite_link" },
+                class: "inline-flex items-center justify-center rounded-md px-3 py-2 text-sm
+                        ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)]" %>
+        </div>
+      </div>
+
+      <% if link.errors[:base].any? %>
+        <p class="mt-2 text-xs text-[var(--danger)]"><%= link.errors[:base].first %></p>
+      <% end %>
+    <% end %>
+  </li>
+<% end %>

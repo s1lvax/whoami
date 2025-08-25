@@ -1,0 +1,9 @@
+<%= helpers.turbo_frame_tag "new_favorite_link" do %>
+  <%= link_to new_path,
+              data: { turbo_frame: "new_favorite_link" },
+              class: "rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)]
+                      hover:bg-[var(--surface-2)] p-3 flex items-center justify-center
+                      h-full min-h-[64px] text-sm" do %>
+    <span class="text-xl leading-none mr-2">+</span> Add link
+  <% end %>
+<% end %>

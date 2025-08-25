@@ -1,0 +1,6 @@
+<%= turbo_stream.remove dom_id(@link) %>
+
+<% if @allow_new %>
+  <%= turbo_stream.replace "new_favorite_link",
+        render(Dashboard::NewLinkCardComponent.new) %>
+<% end %>

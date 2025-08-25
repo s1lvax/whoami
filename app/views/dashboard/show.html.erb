@@ -36,26 +36,21 @@
       <!-- Left (2 cols) -->
       <div class="lg:col-span-2 space-y-6">
         <!-- Quick Links -->
-        <%= render Dashboard::SectionComponent.new(title: "Quick Links", action_label: "Manage", action_href: "/links") do %>
-          <ul class="grid sm:grid-cols-2 gap-3">
-            <% @favorite_links.each do |link| %>
-              <li
-                class="
-                  rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)]
-                  hover:bg-[var(--surface-2)] p-3
-                "
-              >
-                <div class="flex items-center justify-between">
-                  <div>
-                    <p class="text-sm"><%= link[:label] %></p>
-                    <p class="text-xs text-[var(--muted)] truncate max-w-[20ch]"><%= link[:url] %></p>
-                  </div>
-                  <span class="text-xs text-[var(--muted)]"><%= link[:clicks] %>
-                    clicks</span>
-                </div>
-              </li>
+        <%= render Dashboard::SectionComponent.new(title: "Favorite Links") do %>
+          <div class="grid sm:grid-cols-2 gap-3">
+            <ul id="favorite_links_list" class="contents">
+              <% @favorite_links.each do |link| %>
+                <%= render Dashboard::LinkCardComponent.new(link: link) %>
+              <% end %>
+            </ul>
+
+            <%# “+” card or nothing if already at 6 %>
+            <% if @favorite_links.size < 6 %>
+              <%= render Dashboard::NewLinkCardComponent.new %>
+            <% else %>
+              <%= turbo_frame_tag "new_favorite_link" %>
             <% end %>
-          </ul>
+          </div>
         <% end %>
         <!-- Latest Posts -->
         <%= render Dashboard::SectionComponent.new(title: "Latest Posts", action_label: "Write", action_href: "/posts/new") do %>
