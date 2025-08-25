@@ -27,10 +27,10 @@ Devise.setup do |config|
   config.mailer_sender = "system@whoami.tech"
 
   # Configure the class responsible to send e-mails.
-  config.mailer = "ActionMailer::Base"
+  config.mailer = "Devise::Mailer"
 
   # Configure the parent class responsible to send e-mails.
-  # config.parent_mailer = "ActionMailer::Base"
+  config.parent_mailer = "ActionMailer::Base"
 
   # ==> ORM configuration
   # Load and configure the ORM. Supports :active_record (default) and
