@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   namespace :dashboard do
     resources :favorite_links, only: [ :new, :create, :destroy ]
+    resources :experiences, only: [ :new, :create, :destroy ]
   end
 
   resource :onboarding, only: [ :show, :update ] do

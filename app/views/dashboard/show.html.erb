@@ -84,10 +84,20 @@
       </div>
       <!-- Right (1 col) -->
       <div class="space-y-6">
-        <%= render Dashboard::ExperienceSectionComponent.new(
-          experiences: @experiences,
-          action_href: "/experience/new",
-        ) %>
+        <%= render Dashboard::SectionComponent.new(
+          title: "Experience",
+          action_href: "/experience/new" # optional/remove if not used
+        ) do %>
+          <div class="space-y-3">
+            <ul id="experiences_list" class="space-y-3">
+              <% @experiences.each do |exp| %>
+                <%= render Dashboard::ExperienceCardComponent.new(experience: exp) %>
+              <% end %>
+            </ul>
+
+            <%= render Dashboard::NewExperienceCardComponent.new %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>
