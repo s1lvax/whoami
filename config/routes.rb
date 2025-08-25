@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  root "dashboard#show"
+  root "pages#index"
 
   reserved = %w[users rails active_storage assets packs system onboarding dashboard posts links admin]
   username = /\A[a-z0-9]{3,30}\z/

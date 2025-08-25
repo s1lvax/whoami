@@ -1,0 +1,25 @@
+
+<section class="py-24">
+  <div class="mx-auto max-w-6xl grid md:grid-cols-2 gap-12 items-center">
+    <!-- Left column: headline + text -->
+    <div class="text-center md:text-left">
+      <h1 class="text-4xl md:text-6xl font-extrabold mb-6">
+        Build your <span class="text-red-500">identity</span> online
+      </h1>
+      <p class="max-w-lg text-lg text-[var(--muted)] mb-8">
+        Whoami helps you showcase your profile, share links, publish posts, and grow your personal brand — all in one place.
+      </p>
+      <%= link_to new_user_registration_path,
+            class: "inline-flex items-center px-6 py-3 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 transition" do %>
+        Create Your Profile
+      <% end %>
+    </div>
+
+    <!-- Right column: illustration -->
+    <div class="flex justify-center md:justify-end">
+      <%= image_tag "hero.png",
+            alt: "Profile preview",
+            class: "rounded-2xl shadow-lg ring-1 ring-[var(--border)] max-w-full h-auto" %>
+    </div>
+  </div>
+</section>
