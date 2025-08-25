@@ -1,49 +1,28 @@
-class Dashboard::ProfileHeaderComponent < ViewComponent::Base
-  def initialize(user:, edit_href:)
-    @user = user
-    @edit_href = edit_href
+
+# app/components/dashboard/profile_form_header_component.rb
+class Dashboard::ProfileFormHeaderComponent < ViewComponent::Base
+  # update_href: PATCH endpoint (e.g., dashboard_path)
+  # cancel_href: GET endpoint that re-renders the read-only header in the same frame
+  def initialize(user:, update_href:, cancel_href:)
+    @user        = user
+    @update_href = update_href
+    @cancel_href = cancel_href
   end
 
   private
 
-  attr_reader :user, :edit_href
+  attr_reader :user, :update_href, :cancel_href
 
   def display_name
     user.respond_to?(:full_name) ? (user.full_name.presence || user.email) : user.email
   end
 
-  def handle
-    base = if user.respond_to?(:handle)
-      user.handle
-    else
-      user.username.presence || user.email.to_s.split("@").first
-    end
-    "@#{base}"
+  def avatar_src
+    return "" unless user.respond_to?(:avatar) && user.avatar&.attached?
+    helpers.url_for(user.avatar.variant(resize_to_fill: [ 192, 192 ]))
   end
 
-  # Returns an <img> tag using Rails' image_tag helper
-  def avatar_tag
-    if user.respond_to?(:avatar) && user.avatar&.attached?
-      image_tag(
-        helpers.url_for(user.avatar.variant(resize_to_fill: [ 192, 192 ])),
-        alt: display_name,
-        class: "w-16 h-16 sm:w-20 sm:h-20 rounded-full ring-2 ring-[var(--border)] object-cover"
-      )
-    else
-      image_tag(
-        initials_data_uri(display_name, 192),
-        alt: display_name,
-        class: "w-16 h-16 sm:w-20 sm:h-20 rounded-full ring-2 ring-[var(--border)] object-cover"
-      )
-    end
-  end
-
-  def bio
-    user.respond_to?(:bio) ? user.bio : nil
-  end
-
-  # --- Helpers for generated SVG avatar ---
-
+  # --- Helpers for generated SVG avatar fallback ---
   def initials_data_uri(name, size)
     initials = extract_initials(name)
     bg, fg   = palette_for(name)
@@ -69,7 +48,6 @@ class Dashboard::ProfileHeaderComponent < ViewComponent::Base
   end
 
   def palette_for(seed)
-    # Deterministic background from name; foreground is always white for contrast
     colors = %w[
       #ef4444 #f59e0b #10b981 #3b82f6 #8b5cf6
       #ec4899 #14b8a6 #22c55e #eab308 #6366f1

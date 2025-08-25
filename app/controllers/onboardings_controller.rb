@@ -1,3 +1,4 @@
+
 class OnboardingsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_step
@@ -10,8 +11,6 @@ class OnboardingsController < ApplicationController
     if @step == "links" && @user.favorite_links.empty?
       @user.favorite_links.build
     end
-
-    @progress = progress_for(@step)
   end
 
   def update
@@ -22,7 +21,7 @@ class OnboardingsController < ApplicationController
       if @user.update(user_params.slice(:name, :family_name))
         redirect_to onboarding_path(step: "username")
       else
-        @step = "name"; @progress = progress_for(@step)
+        @step = "name"
         render :show, status: :unprocessable_entity
       end
 
@@ -30,7 +29,7 @@ class OnboardingsController < ApplicationController
       if @user.update(user_params.slice(:username))
         redirect_to onboarding_path(step: "bio")
       else
-        @step = "username"; @progress = progress_for(@step)
+        @step = "username"
         render :show, status: :unprocessable_entity
       end
 
@@ -41,7 +40,7 @@ class OnboardingsController < ApplicationController
         if @user.update(user_params.slice(:bio))
           redirect_to onboarding_path(step: "links")
         else
-          @step = "bio"; @progress = progress_for(@step)
+          @step = "bio"
           render :show, status: :unprocessable_entity
         end
       end
@@ -58,7 +57,7 @@ class OnboardingsController < ApplicationController
         if @user.update(user_params.slice(:favorite_links_attributes))
           redirect_to onboarding_path(step: "avatar")
         else
-          @step = "links"; @progress = progress_for(@step)
+          @step = "links"
           render :show, status: :unprocessable_entity
         end
       end
@@ -69,7 +68,7 @@ class OnboardingsController < ApplicationController
       else
         @user.avatar.attach(user_params[:avatar]) if user_params[:avatar].present?
         if @user.errors.any?
-          @step = "avatar"; @progress = progress_for(@step)
+          @step = "avatar"
           render :show, status: :unprocessable_entity
         else
           finalize!
@@ -115,18 +114,6 @@ class OnboardingsController < ApplicationController
   def set_step
     # Allowed steps in order
     @step = params[:step].presence_in(%w[name username bio links avatar]) || "name"
-  end
-
-  def progress_for(step)
-    # 5 steps → 20/40/60/80/100
-    case step
-    when "name"     then 20
-    when "username" then 40
-    when "bio"      then 60
-    when "links"    then 80
-    when "avatar"   then 100
-    else 0
-    end
   end
 
   def user_params

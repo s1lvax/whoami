@@ -14,11 +14,7 @@
 
     <!-- Progress (keep your component if you prefer) -->
     <div class="mb-6">
-      <div class="w-full h-2 bg-[var(--border)] rounded-full overflow-hidden">
-        <div class="h-full bg-[var(--primary)] transition-all duration-300" style="width: <%= @progress %>%;">
-        </div>
-      </div>
-      <div class="mt-2 text-xs text-[var(--muted)] text-center">
+      <div class="mt-2 text-xl text-[var(--muted)] text-center">
         Step <%= { "name" => 1, "username" => 2, "bio" => 3, "links" => 4, "avatar" => 5 }[@step] %> of 5
       </div>
     </div>

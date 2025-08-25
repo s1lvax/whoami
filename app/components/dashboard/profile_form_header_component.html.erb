@@ -1,0 +1,102 @@
+<section class="rounded-xl bg-[var(--surface)] ring-1 ring-[var(--border)] p-6">
+  <%= form_with model: user,
+                url: update_href,
+                method: :patch,
+                data: { turbo: true },
+                html: { multipart: true, "data-controller": "avatar-preview" } do |f| %>
+
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
+      <!-- avatar -->
+      <div class="shrink-0 text-center sm:text-left">
+        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-[var(--input-bg)] ring-2 ring-[var(--border)]">
+          <img data-avatar-preview-target="img"
+               src="<%= avatar_src.presence || '' %>"
+               alt="<%= display_name %>"
+               class="w-full h-full object-cover <%= avatar_src.present? ? '' : 'hidden' %>">
+          <% if avatar_src.blank? %>
+            <img src="<%= initials_data_uri(display_name, 192) %>"
+                 alt="<%= display_name %>"
+                 class="w-full h-full object-cover"
+                 data-avatar-preview-target="fallback">
+          <% end %>
+        </div>
+
+        <div class="mt-3 space-y-2">
+          <%= f.file_field :avatar,
+                direct_upload: true,
+                accept: "image/png,image/jpeg,image/webp",
+                data: { action: "change->avatar-preview#pick" },
+                class: "block w-full text-xs text-[var(--input-text)] file:mr-2 file:py-1.5 file:px-3
+                        file:rounded-md file:border-0 file:text-xs file:font-semibold
+                        file:bg-[var(--primary)] file:text-white hover:file:opacity-90
+                        bg-[var(--input-bg)] ring-1 ring-[var(--input-border)] rounded-md px-3 py-1.5" %>
+
+          <div class="flex items-center gap-2">
+            <%= f.check_box :remove_avatar, value: "1", class: "rounded" %>
+            <%= f.label :remove_avatar, "Remove avatar", class: "text-xs text-[var(--muted)]" %>
+          </div>
+
+          <% if user.errors[:avatar].any? %>
+            <p class="text-xs text-[var(--danger)]"><%= user.errors[:avatar].first %></p>
+          <% else %>
+            <p class="text-[10px] text-[var(--muted)]">PNG, JPG, or WEBP up to 5&nbsp;MB</p>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- fields -->
+      <div class="flex-1 w-full">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <%= render InputComponent.new(
+                form: f, field: :name, type: :text,
+                label: "First name", autocomplete: "given-name",
+                input_options: { value: user.name }
+              ) %>
+
+          <%= render InputComponent.new(
+                form: f, field: :family_name, type: :text,
+                label: "Family name", autocomplete: "family-name",
+                input_options: { value: user.family_name }
+              ) %>
+        </div>
+
+        <div class="mt-3">
+          <%= render InputComponent.new(
+                form: f, field: :bio, type: :text_area,
+                label: "Short bio",
+                input_options: {
+                  rows: 4,
+                  placeholder: "What do you do? What are you into?",
+                  class: "min-h-[6rem]",
+                  value: user.bio # ensure prefill for your component
+                }
+              ) %>
+          <% if user.errors[:bio].any? %>
+            <p class="mt-1 text-xs text-[var(--danger)]"><%= user.errors[:bio].first %></p>
+          <% end %>
+        </div>
+
+        <% if user.respond_to?(:location) %>
+          <div class="mt-3">
+            <%= render InputComponent.new(
+                  form: f, field: :location, type: :text,
+                  label: "Location",
+                  input_options: { placeholder: "Luxembourg", value: user.location }
+                ) %>
+          </div>
+        <% end %>
+
+        <div class="mt-4 flex flex-col sm:flex-row gap-3">
+          <%= render ButtonComponent.new(type: :submit, style: :primary) do %>
+            Save changes
+          <% end %>
+
+          <%= link_to "Cancel",
+                      cancel_href,
+                      data: { turbo_frame: "profile_header" },
+                              class: "inline-flex justify-center items-center rounded-md px-4 py-2 font-medium focus:outline-none focus:ring-2 transition disabled:opacity-60 disabled:cursor-not-allowed bg-[var(--muted-bg)] text-[var(--text)] hover:bg-[var(--hover)] cursor-pointer focus:ring-[var(--muted-bg)]" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</section>

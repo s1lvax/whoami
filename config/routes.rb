@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   }
 
   authenticate :user do
-    get "/dashboard", to: "dashboard#index"
+    resource :dashboard, only: [ :show, :edit, :update ], controller: "dashboard"
   end
 
   resource :onboarding, only: [ :show, :update ] do
@@ -16,10 +16,6 @@ Rails.application.routes.draw do
   # public confirm email page
   get "/confirmation-sent", to: "static#confirmation_sent", as: :confirmation_sent
 
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
@@ -27,7 +23,7 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  root "dashboard#index"
+  root "dashboard#show"
 
   reserved = %w[users rails active_storage assets packs system onboarding dashboard posts links admin]
   username = /\A[a-z0-9]{3,30}\z/

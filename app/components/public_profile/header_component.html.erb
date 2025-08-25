@@ -21,13 +21,6 @@
             📍 <%= @user.location %>
           </span>
         <% end %>
-        <% if website_url.present? %>
-          <span class="inline-flex items-center gap-1 rounded-md px-2 py-1 ring-1 ring-[var(--border)] bg-[var(--surface)]">
-            🔗 <%= link_to website_short, website_url,
-                    class: "underline underline-offset-2 hover:text-[var(--link-hover)] break-all",
-                    target: "_blank", rel: "noopener" %>
-          </span>
-        <% end %>
       </div>
     </div>
   </div>

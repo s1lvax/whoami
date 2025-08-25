@@ -1,8 +1,4 @@
-
-# frozen_string_literal: true
-
 class ProfilesController < ApplicationController
-  # Public page — no auth
   def show
     uname = params[:username].to_s.downcase
     @user = User.where("LOWER(username) = ?", uname).first!

@@ -17,17 +17,6 @@ class PublicProfile::HeaderComponent < ViewComponent::Base
     "@#{base}"
   end
 
-  def website_url
-    return unless user.respond_to?(:website)
-    raw = user.website.to_s.strip
-    return if raw.blank?
-    raw =~ %r{\Ahttps?://}i ? raw : "https://#{raw}"
-  end
-
-  def website_short
-    website_url&.sub(%r{\Ahttps?://}i, "")
-  end
-
   def avatar_src(size = 192)
     if user.respond_to?(:avatar) && user.avatar&.attached?
       helpers.url_for(user.avatar.variant(resize_to_fill: [ size, size ]))

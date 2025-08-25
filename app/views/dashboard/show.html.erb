@@ -12,17 +12,19 @@
           New Post
         <% end %>
         <%= link_to "View Profile",
-        "/@silva",
+           public_profile_path(current_user.username),
         class:
           "inline-flex items-center rounded-md px-4 py-2 ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] text-sm" %>
       </div>
     </header>
     <div class="mb-4">
-  <%= render Dashboard::ProfileHeaderComponent.new(
-        user: @user,
-        edit_href: edit_user_registration_path
-      ) %>
-</div>
+      <%= turbo_frame_tag "profile_header" do %>
+        <%= render Dashboard::ProfileHeaderComponent.new(
+              user: @user,
+              edit_href: edit_dashboard_path
+            ) %>
+      <% end %>
+    </div>
     <!-- Grid: stats -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       <% @stats.each do |s| %>
