@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   namespace :dashboard do
     resources :favorite_links, only: [ :new, :create, :destroy ]
     resources :experiences, only: [ :new, :create, :destroy ]
+    resources :posts, param: :id
   end
 
   resource :onboarding, only: [ :show, :update ] do
@@ -38,4 +39,7 @@ Rails.application.routes.draw do
       u = req.params[:username].to_s
       u.match?(username) && !reserved.include?(u)
     }
+
+  # posts
+  get "/:username/posts/:id", to: "public_posts#show", as: :public_post
 end

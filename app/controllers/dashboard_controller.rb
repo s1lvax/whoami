@@ -15,19 +15,7 @@ class DashboardController < ApplicationController
     ]
 
     @experiences    = @user.experiences.order(start_date: :desc)
-
-    @posts = [
-      { title: "Shipping the minimal profile", date: Date.today - 3, views: 128, status: "Published" },
-      { title: "Why one accent color",         date: Date.today - 10, views: 245, status: "Published" },
-      { title: "Roadmap Q3",                   date: Date.today - 1, views: 0,   status: "Draft" }
-    ]
-
-    @billing = {
-      plan: "Pro",
-      renews_on: 1.month.from_now.to_date,
-      status: "Active",
-      card_last4: "4242"
-    }
+    @posts = @user.posts.latest
   end
 
   def edit

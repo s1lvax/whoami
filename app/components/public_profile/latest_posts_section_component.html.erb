@@ -1,27 +1,26 @@
-
 <section class="rounded-2xl bg-[var(--card)] ring-1 ring-[var(--border)] p-6">
-  <div class="mb-3 flex items-center justify-between">
-    <h2 class="text-sm uppercase tracking-wide text-[var(--muted)]">Latest Posts</h2>
-    <span class="text-xs text-[var(--muted)]"><%= posts.size %></span>
-  </div>
+  <h2 class="text-sm uppercase tracking-wide text-[var(--muted)] mb-3">Latest Posts</h2>
 
   <% if posts.any? %>
     <ul class="space-y-3">
-      <% posts.each do |p| %>
-        <li class="rounded-lg cursor-pointer ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] transition">
-          <div class="px-4 py-3">
-            <div class="flex items-center justify-between gap-3">
-              <p class="text-base font-medium truncate"><%= p[:title] %></p>
-              <span class="shrink-0 text-xs text-[var(--muted)]"><%= p[:date].to_fs(:long) %></span>
-            </div>
-            <% if p[:excerpt].present? %>
-              <p class="mt-1 text-sm text-[var(--muted-contrast)]"><%= p[:excerpt] %></p>
+      <% posts.each do |post| %>
+        <li>
+          <%= link_to public_post_path_for(post),
+                      class: "block rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] transition p-3 focus:outline-none focus:ring-2 focus:ring-[var(--btn-bg)]" do %>
+            <p class="text-sm font-medium"><%= post.title %></p>
+
+            <% if (ex = excerpt_text(post)) %>
+              <p class="text-xs text-[var(--muted)] mt-1"><%= ex %></p>
             <% end %>
-          </div>
+
+            <p class="text-[10px] text-[var(--muted)] mt-2">
+              <%= date_text(post) %> · <%= views_text(post) %>
+            </p>
+          <% end %>
         </li>
       <% end %>
     </ul>
   <% else %>
-    <p class="text-sm text-[var(--muted)]">No blog posts yet.</p>
+    <p class="text-sm text-[var(--muted)]">No posts yet.</p>
   <% end %>
 </section>

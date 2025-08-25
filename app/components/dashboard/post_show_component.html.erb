@@ -1,0 +1,34 @@
+<section class="p-12">
+  <div class="mx-auto max-w-3xl">
+    <!-- Title -->
+    <div class="text-center mb-4">
+      <h1 class="text-xl md:text-2xl font-semibold"><%= post.title %></h1>
+    </div>
+
+    <!-- Meta -->
+    <p class="text-xs text-[var(--muted)] text-center mb-4">
+      <%= status_text %> · <%= date_text %> · <%= views_text %>
+    </p>
+
+    <!-- Actions -->
+    <div class="flex items-center justify-center gap-2 mb-6">
+      <%= link_to "Edit",
+            edit_path,
+            class: "inline-flex items-center rounded-md px-4 py-2 text-sm ring-1 ring-[var(--border)]
+                     bg-[var(--surface)] hover:bg-[var(--surface-2)]" %>
+
+      <%= link_to "Delete",
+            delete_path,
+            data: { turbo_method: :delete, turbo_confirm: "Delete this post?" },
+            class: "inline-flex items-center rounded-md px-4 py-2 text-sm ring-1 ring-[var(--border)]
+                     bg-[var(--surface)] hover:bg-[var(--surface-2)] text-[var(--danger)]" %>
+    </div>
+
+    <!-- Body -->
+    <div class="trix-theme">
+      <div class="trix-content max-w-none">
+        <%= post.body %>
+      </div>
+    </div>
+  </div>
+</section>

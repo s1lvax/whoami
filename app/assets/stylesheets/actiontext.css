@@ -1,0 +1,133 @@
+
+/* ===== Scoped to .trix-theme (wrap your toolbar+editor) ===== */
+.trix-theme trix-toolbar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Row: horizontal scroll on small screens */
+.trix-theme trix-toolbar .trix-button-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+}
+
+/* Button groups (our pills) */
+.trix-theme trix-toolbar .trix-button-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0; /* buttons touch inside the group */
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background: var(--surface);
+  padding: 0;            /* let buttons handle their padding */
+  margin: 0 0.5rem 0.5rem 0;
+}
+
+/* Buttons: square, centered, no borders between, hover/active styles */
+.trix-theme trix-toolbar .trix-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;      /* 32px */
+  height: 2rem;     /* 32px */
+  padding: 0;
+  margin: 0;
+  color: var(--text);
+  background: transparent;
+  border: 0;        /* remove default borders */
+  border-radius: 0; /* we rely on group radius */
+  outline: none;
+  cursor: pointer;
+}
+
+.trix-theme trix-toolbar .trix-button:hover {
+  background: var(--surface-2);
+}
+
+.trix-theme trix-toolbar .trix-button.trix-active {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+}
+
+.trix-theme trix-toolbar .trix-button:disabled {
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+/* Our SVG icons: inherit color and size */
+.trix-theme trix-toolbar .trix-button svg {
+  width: 1.25rem;   /* 20px */
+  height: 1.25rem;
+  display: block;
+  stroke: currentColor;
+  fill: none;       /* most of yours are stroke icons */
+}
+
+/* If an icon uses fill (e.g. your quote variant), allow it: */
+.trix-theme trix-toolbar .trix-button svg[fill]:not([fill="none"]) {
+  fill: currentColor;
+}
+
+/* Dialog inputs (link dialog) */
+.trix-theme trix-toolbar .trix-input--dialog {
+  border: 1px solid var(--input-border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 0.375rem;
+}
+
+/* ===== Editor field ===== */
+.trix-theme trix-editor {
+  background: var(--input-bg);
+  color: var(--text);
+  border: 1px solid var(--input-border);
+  border-radius: 0.5rem;
+  padding: 0.75rem 0.875rem;
+  min-height: 16rem;
+  outline: none;
+}
+
+.trix-theme trix-editor:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--btn-bg) 20%, transparent);
+  border-color: var(--btn-bg);
+}
+
+/* ===== Rendered content (when showing a post) ===== */
+.trix-theme .trix-content {
+  color: var(--text);
+  line-height: 1.7;
+}
+.trix-theme .trix-content h1,
+.trix-theme .trix-content h2,
+.trix-theme .trix-content h3 {
+  margin: 1.25em 0 0.5em;
+}
+.trix-theme .trix-content p,
+.trix-theme .trix-content ul,
+.trix-theme .trix-content ol,
+.trix-theme .trix-content pre,
+.trix-theme .trix-content blockquote {
+  margin: 0.75em 0;
+}
+.trix-theme .trix-content blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 0.75rem;
+  color: var(--muted);
+}
+.trix-theme .trix-content pre {
+  background: var(--surface-2);
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  overflow-x: auto;
+}
+
+/* ===== Mobile niceties ===== */
+@media (max-width: 640px) {
+  .trix-theme trix-toolbar { padding: 0.25rem; }
+  .trix-theme trix-editor  { min-height: 14rem; }
+}

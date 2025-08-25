@@ -11,6 +11,9 @@ class User < ApplicationRecord
   # cv
   has_many :experiences, dependent: :destroy
 
+  # posts
+  has_many :posts, dependent: :destroy
+
   # sets username to downcase before validation
   before_validation :downcase_username
 

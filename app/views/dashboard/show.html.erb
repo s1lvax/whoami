@@ -8,9 +8,11 @@
           <%= current_user.full_name %></p>
       </div>
       <div class="flex gap-2">
-        <%= render ButtonComponent.new(type: :button, style: :primary, full_width: false) do %>
-          New Post
-        <% end %>
+        <%= link_to "Account Settings",
+           edit_registration_path(current_user),
+        class:
+          "inline-flex items-center rounded-md px-4 py-2 ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] text-sm" %>
+
         <%= link_to "View Profile",
            public_profile_path(current_user.username),
         class:
@@ -52,35 +54,38 @@
             <% end %>
           </div>
         <% end %>
-        <!-- Latest Posts -->
-        <%= render Dashboard::SectionComponent.new(title: "Latest Posts", action_label: "Write", action_href: "/posts/new") do %>
-          <div class="overflow-hidden rounded-lg ring-1 ring-[var(--border)]">
-            <table class="w-full text-sm">
-              <thead class="bg-[var(--surface-2)] text-left">
-                <tr>
-                  <th class="px-4 py-2">Title</th>
-                  <th class="px-4 py-2 w-32">Date</th>
-                  <th class="px-4 py-2 w-24">Views</th>
-                  <th class="px-4 py-2 w-24">Status</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-[var(--border)]">
-                <% @posts.each do |p| %>
-                  <tr class="hover:bg-[var(--surface-2)]">
-                    <td class="px-4 py-2"><%= p[:title] %></td>
-                    <td class="px-4 py-2 text-[var(--muted)]"><%= p[:date].to_fs(:long) %></td>
-                    <td class="px-4 py-2"><%= p[:views] %></td>
-                    <td class="px-4 py-2">
-                      <span class="text-xs px-2 py-1 rounded ring-1 ring-[var(--border)]">
-                        <%= p[:status] %>
-                      </span>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
+        <%= render Dashboard::SectionComponent.new(title: "Latest Posts", action_label: "Write", action_href: new_dashboard_post_path) do %>
+  <div class="overflow-hidden rounded-lg ring-1 ring-[var(--border)]">
+    <table class="w-full text-sm">
+      <thead class="bg-[var(--surface-2)] text-left">
+        <tr>
+          <th class="px-4 py-2">Title</th>
+          <th class="px-4 py-2 w-32">Date</th>
+          <th class="px-4 py-2 w-24">Views</th>
+          <th class="px-4 py-2 w-24">Status</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-[var(--border)]">
+        <% @posts.each do |post| %>
+          <tr class="hover:bg-[var(--surface-2)]">
+            <td class="px-4 py-2">
+              <%= link_to post.title, dashboard_post_path(post), class: "underline" %>
+            </td>
+            <td class="px-4 py-2 text-[var(--muted)]">
+              <%= (post.published_at || post.updated_at).to_date.to_fs(:long) %>
+            </td>
+            <td class="px-4 py-2"><%= post.views %></td>
+            <td class="px-4 py-2">
+              <span class="text-xs px-2 py-1 rounded ring-1 ring-[var(--border)]">
+                <%= post.status.titleize %>
+              </span>
+            </td>
+          </tr>
         <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
       </div>
       <!-- Right (1 col) -->
       <div class="space-y-6">

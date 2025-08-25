@@ -1,0 +1,6 @@
+<%= render Dashboard::PostFormComponent.new(
+      post: @post,
+      submit_path: dashboard_post_path(@post),
+      submit_method: :patch,
+      cancel_path: dashboard_post_path(@post)
+    ) %>

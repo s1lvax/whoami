@@ -7,19 +7,7 @@ class ProfilesController < ApplicationController
     # Real data
     @links       = @user.favorite_links.order(:position, :id)
     @experiences = @user.experiences.order(start_date: :desc)
-
-    # --- Fake sections (match your dashboard for now) ---
-    @posts = [
-      { title: "Shipping the minimal profile",
-        date: Date.today - 3, views: 128, status: "Published",
-        excerpt: "A quick dive into the MVP that powers profiles, links and a simple blog." },
-      { title: "Why one accent color",
-        date: Date.today - 10, views: 245, status: "Published",
-        excerpt: "Design is a set of constraints. Here’s why one strong accent is enough." },
-      { title: "Roadmap Q3",
-        date: Date.today - 1, views: 0, status: "Draft",
-        excerpt: "What’s coming next for the profile, editor, and subscriptions." }
-    ]
+    @posts = @user.posts.where(status: "published").latest
   end
 
   helper_method :avatar_src_for, :normalized_url, :display_name, :handle, :website_url, :website_short
