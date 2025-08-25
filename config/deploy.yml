@@ -7,7 +7,7 @@ image: s1lvax/whoami
 # Deploy to these servers.
 servers:
   web:
-    - whoami.tech
+    - 65.109.229.30
   # job:
   #   hosts:
   #     - 192.168.0.1
