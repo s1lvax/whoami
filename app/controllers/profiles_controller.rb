@@ -1,4 +1,6 @@
 class ProfilesController < ApplicationController
+  include VisitTrackingHelper
+
   def show
     uname = params[:username].to_s.downcase
     @user = User.where("LOWER(username) = ?", uname).first!
@@ -8,9 +10,11 @@ class ProfilesController < ApplicationController
     @links       = @user.favorite_links.order(:position, :id)
     @experiences = @user.experiences.order(start_date: :desc)
     @posts = @user.posts.where(status: "published").latest
+
+    track_visit!(@user)
   end
 
-  helper_method :avatar_src_for, :normalized_url, :display_name, :handle, :website_url, :website_short
+  helper_method :avatar_src_for, :normalized_url, :display_name, :handle
 
   private
 
@@ -21,18 +25,6 @@ class ProfilesController < ApplicationController
   def handle(user = @user)
     base = user.respond_to?(:handle) ? user.handle : (user.username.presence || user.email.to_s.split("@").first)
     "@#{base}"
-  end
-
-  def website_url(user = @user)
-    return nil unless user.respond_to?(:website)
-    raw = user.website.to_s.strip
-    return if raw.blank?
-    normalized_url(raw)
-  end
-
-  def website_short(user = @user)
-    w = website_url(user)
-    w&.sub(%r{\Ahttps?://}i, "")
   end
 
   def avatar_src_for(user = @user, size = 256)

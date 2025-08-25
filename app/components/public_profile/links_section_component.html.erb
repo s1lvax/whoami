@@ -8,10 +8,10 @@
   <% if links.any? %>
     <ul class="space-y-2">
       <% links.each do |link| %>
-        <% href = normalized_url(link.url) %>
+        <% href = helpers.normalized_url(link.url) %>
         <li class="rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] transition">
-          <%= link_to href, target: "_blank", rel: "noopener", class: "block px-3 py-2" do %>
-            <div class="flex items-center justify-between gap-3">
+          <%= link_to public_link_click_path(username: user.username, id: link.id) do %>
+            <div class="flex items-center justify-between gap-3 px-3 py-2">
               <div class="min-w-0">
                 <p class="text-sm font-medium truncate"><%= link.label %></p>
                 <p class="text-xs text-[var(--muted)] truncate"><%= href.sub(%r{\Ahttps?://}i, "") %></p>

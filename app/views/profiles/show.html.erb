@@ -9,7 +9,7 @@
         <%= render PublicProfile::ExperienceSectionComponent.new(experiences: @experiences) %>
       </div>
 
-      <%= render PublicProfile::LinksSectionComponent.new(links: @links) %>
+      <%= render PublicProfile::LinksSectionComponent.new(user: @user, links: @links) %>
     </div>
   </div>
 </div>

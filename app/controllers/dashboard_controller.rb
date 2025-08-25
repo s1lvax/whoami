@@ -7,11 +7,15 @@ class DashboardController < ApplicationController
     # Real data from onboarding
     @favorite_links = @user.favorite_links.order(:position, :id)
 
+    # --- Live stats ---
+    visits      = @user.visits.to_i
+    link_clicks = @user.favorite_links.sum(:clicks) rescue 0      # assumes favorite_links has :clicks
+    blog_reads  = @user.posts.sum(:views)           rescue 0
+
     @stats = [
-      { label: "Profile Views", value: "2,481", delta: "+12%", up: true },
-      { label: "Link Clicks",   value: "613",  delta: "+4%",  up: true },
-      { label: "Blog Reads",    value: "188",  delta: "-3%",  up: false },
-      { label: "CV Downloads",  value: "27",   delta: "0%",   up: nil }
+      { label: "Profile Views", value: helpers.number_with_delimiter(visits),      delta: nil, up: nil },
+      { label: "Link Clicks",   value: helpers.number_with_delimiter(link_clicks), delta: nil, up: nil },
+      { label: "Blog Reads",    value: helpers.number_with_delimiter(blog_reads),  delta: nil, up: nil }
     ]
 
     @experiences    = @user.experiences.order(start_date: :desc)

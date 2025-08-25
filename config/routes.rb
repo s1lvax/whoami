@@ -34,6 +34,8 @@ Rails.application.routes.draw do
   reserved = %w[users rails active_storage assets packs system onboarding dashboard posts links admin]
   username = /\A[a-z0-9]{3,30}\z/
 
+  get "/:username/links/:id/click", to: "public_links#click", as: :public_link_click
+
   get "/:username", to: "profiles#show", as: :public_profile,
     constraints: ->(req) {
       u = req.params[:username].to_s
