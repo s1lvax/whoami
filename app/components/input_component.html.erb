@@ -22,12 +22,14 @@
   <% merged_data = {}.merge(extra_data) %>
 
   <% opts = {
-       autocomplete: @autocomplete,
-       autofocus: @autofocus,
-       value: @value,
-       class: merged_class,
-       data: merged_data
-     }.merge(@input_options) %>
+     autocomplete: @autocomplete,
+     autofocus: @autofocus,
+     class: merged_class,
+     data: merged_data
+   }.merge(@input_options) %>
+
+  <%# Only set value if explicitly provided %>
+  <% opts[:value] = @value if @value.present? %>
 
   <%= @form.send(form_method_name, @field, **opts) %>
 
