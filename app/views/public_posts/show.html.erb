@@ -1,4 +1,4 @@
-<section class="p-24 sm:p-12">
+<section class="px-4 sm:px-8 md:px-12 lg:px-24 py-12">
   <div class="mx-auto max-w-3xl">
     <!-- Title -->
     <div class="text-center mb-4">
@@ -8,8 +8,7 @@
     <!-- Meta -->
     <p class="text-xs text-[var(--muted)] text-center mb-4">
       <% date = (@post.published_at || @post.updated_at).to_date %>
-      <%= @post.published? ? "Published" : "Draft" %> · <%= date.to_fs(:long) %> ·
-      <%= @post.views %> <%= "view".pluralize(@post.views) %>
+      <%= date.to_fs(:long) %>
     </p>
 
     <!-- Author -->
@@ -54,5 +53,11 @@
         <%= @post.body %>
       </div>
     </div>
+    <!-- Read more from user -->
+    <% if @more_posts.any? %>
+      <div class="mx-auto max-w-3xl mt-12 border-t border-[var(--border)] pt-8">
+        <%= render PublicProfile::MorePostsComponent.new(posts: @more_posts) %>
+      </div>
+    <% end %>
   </div>
 </section>

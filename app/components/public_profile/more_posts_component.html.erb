@@ -1,0 +1,26 @@
+<section class="rounded-2xl bg-[var(--card)] ring-1 ring-[var(--border)] p-6">
+  <h2 class="text-sm uppercase tracking-wide text-[var(--muted)] mb-3">Read more from this user..</h2>
+
+  <% if posts.any? %>
+    <ul class="space-y-3">
+      <% posts.each do |post| %>
+        <li>
+          <%= link_to public_post_path_for(post),
+                      class: "block rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] transition p-3 focus:outline-none focus:ring-2 focus:ring-[var(--btn-bg)]" do %>
+            <p class="text-sm font-medium"><%= post.title %></p>
+
+            <% if (ex = excerpt_text(post)) %>
+              <p class="text-xs text-[var(--muted)] mt-1"><%= ex %></p>
+            <% end %>
+
+            <p class="text-[10px] text-[var(--muted)] mt-2">
+              <%= date_text(post) %> · <%= views_text(post) %>
+            </p>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="text-sm text-[var(--muted)]">No posts yet.</p>
+  <% end %>
+</section>
