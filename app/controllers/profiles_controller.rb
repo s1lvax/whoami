@@ -10,7 +10,7 @@ class ProfilesController < ApplicationController
     # Real data
     @links       = @user.favorite_links.order(:position, :id)
     @experiences = @user.experiences.order(start_date: :desc)
-    @pagy, @posts = pagy(@user.posts.where(status: "published"), limit: 3)
+    @pagy, @posts = pagy(@user.posts.latest.where(status: "published"), limit: 3)
 
     track_visit!(@user)
   end
