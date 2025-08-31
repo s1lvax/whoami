@@ -1,5 +1,6 @@
 class ProfilesController < ApplicationController
   include VisitTrackingHelper
+  include Pagy::Backend
 
   def show
     uname = params[:username].to_s.downcase
@@ -9,7 +10,7 @@ class ProfilesController < ApplicationController
     # Real data
     @links       = @user.favorite_links.order(:position, :id)
     @experiences = @user.experiences.order(start_date: :desc)
-    @posts = @user.posts.where(status: "published").latest
+    @pagy, @posts = pagy(@user.posts.where(status: "published"), limit: 3)
 
     track_visit!(@user)
   end

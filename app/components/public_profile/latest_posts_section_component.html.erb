@@ -20,6 +20,11 @@
         </li>
       <% end %>
     </ul>
+
+    <!-- Pagination -->
+    <div class="mt-4">
+      <%= render PaginationComponent.new(pagy: pagy) %>
+    </div>
   <% else %>
     <p class="text-sm text-[var(--muted)]">No posts yet.</p>
   <% end %>

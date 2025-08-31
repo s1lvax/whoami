@@ -1,4 +1,6 @@
 class DashboardController < ApplicationController
+  include Pagy::Backend
+
   before_action :authenticate_user!
   before_action :require_onboarded!
   before_action :set_user
@@ -19,7 +21,7 @@ class DashboardController < ApplicationController
     ]
 
     @experiences    = @user.experiences.order(start_date: :desc)
-    @posts = @user.posts.latest
+    @pagy, @posts = pagy(@user.posts.latest, limit: 3)
   end
 
   def edit

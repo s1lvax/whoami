@@ -1,15 +1,14 @@
 class PublicProfile::LatestPostsSectionComponent < ViewComponent::Base
-  def initialize(posts:)
-    @posts = Array(posts)
+  def initialize(posts:, pagy:)
+    @posts = posts
+    @pagy  = pagy
   end
 
   private
 
-  attr_reader :posts
+  attr_reader :posts, :pagy
 
   def public_post_path_for(post)
-    # Assumes a route like:
-    #   get "/:username/posts/:id", to: "public_posts#show", as: :public_post
     helpers.public_post_path(username: post.user.username, id: post)
   end
 
