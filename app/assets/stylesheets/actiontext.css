@@ -287,9 +287,6 @@
   text-decoration: underline;
   text-underline-offset: 2px;
 }
-.trix-theme .trix-content a:hover {
-  text-decoration: none;
-}
 .trix-theme .trix-content .attachment {
   display: inline-block;
   position: relative;

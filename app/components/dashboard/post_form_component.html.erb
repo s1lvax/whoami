@@ -164,7 +164,6 @@
               <span class="trix-button-group trix-button-group--file-tools" data-trix-button-group="file-tools">
                 <button type="button" 
                         class="trix-button trix-button--icon-link flex items-center justify-center w-8 h-8"
-                        data-trix-action="link" 
                         data-trix-attribute="href"
                         title="Link" 
                         tabindex="-1" 
@@ -227,12 +226,25 @@
 
             <!-- Link dialog -->
             <div class="trix-dialogs" data-trix-dialogs>
-              <div class="trix-dialog trix-dialog--link" data-trix-dialog="href" data-trix-dialog-attribute="href">
+              <div class="trix-dialog trix-dialog--link"
+                  data-trix-dialog="href"
+                  data-trix-dialog-attribute="href">
                 <div class="trix-dialog__link-fields">
-                  <input name="href" type="url" required class="trix-input trix-input--dialog" placeholder="Enter a URL…" aria-label="URL" disabled>
+                  <input name="href"
+                        type="url"
+                        class="trix-input trix-input--dialog"
+                        placeholder="Enter a URL…"
+                        aria-label="URL"
+                        data-trix-input>
                   <div class="trix-button-group">
-                    <input type="button" class="trix-button trix-button--dialog" value="Link" data-trix-method="setAttribute">
-                    <input type="button" class="trix-button trix-button--dialog" value="Unlink" data-trix-method="removeAttribute">
+                    <input type="button"
+                          class="trix-button trix-button--dialog"
+                          value="Link"
+                          data-trix-method="setAttribute">
+                    <input type="button"
+                          class="trix-button trix-button--dialog"
+                          value="Unlink"
+                          data-trix-method="removeAttribute">
                   </div>
                 </div>
               </div>
@@ -243,7 +255,7 @@
           <label class="block text-sm mb-1">Body</label>
           <%= f.rich_text_area :body,
                 toolbar: toolbar_id,
-                class: "max-w-none min-h-[20rem]",
+                class: "max-w-none min-h-[20rem] trix-content",
                 data: { behavior: "post-body" } %>
 
           <% if post.errors[:body].any? %>
