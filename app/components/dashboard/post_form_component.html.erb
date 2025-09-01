@@ -1,5 +1,4 @@
-
-<section class="rounded-2xl bg-[var(--card)] ring-1 ring-[var(--border)] shadow-sm p-6">
+<section class="p-6 md:p-12">
   <div class="mx-auto max-w-3xl">
     <h1 class="text-xl md:text-2xl font-semibold mb-4">
       <%= post.persisted? ? "Edit Post" : "New Post" %>
@@ -15,10 +14,15 @@
           <trix-toolbar id="<%= toolbar_id %>">
             <div class="trix-button-row">
               <!-- Formatting -->
-              <span class="trix-button-group">
+              <span class="trix-button-group trix-button-group--text-tools" data-trix-button-group="text-tools">
                 <!-- Bold -->
-                <button type="button" class="trix-button flex items-center justify-center w-8 h-8"
-                        data-trix-attribute="bold" title="Bold" tabindex="-1" aria-label="Bold">
+                <button type="button" 
+                        class="trix-button trix-button--icon-bold flex items-center justify-center w-8 h-8"
+                        data-trix-attribute="bold" 
+                        data-trix-key="b"
+                        title="Bold" 
+                        tabindex="-1" 
+                        aria-label="Bold">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                        stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linejoin="round" d="M6.75 3.744h-.753v8.25h7.125a4.125 4.125 0 0 0 0-8.25H6.75Zm0 0v.38m0 16.122h6.747a4.5 4.5 0 0 0 0-9.001h-7.5v9h.753Zm0 0v-.37m0-15.751h6a3.75 3.75 0 1 1 0 7.5h-6m0-7.5v7.5m0 0v8.25m0-8.25h6.375a4.125 4.125 0 0 1 0 8.25H6.75m.747-15.38h4.875a3.375 3.375 0 0 1 0 6.75H7.497v-6.75Zm0 7.5h5.25a3.75 3.75 0 0 1 0 7.5h-5.25v-7.5Z" />
@@ -26,8 +30,13 @@
                 </button>
 
                 <!-- Italic -->
-                <button type="button" class="trix-button flex items-center justify-center w-8 h-8"
-                        data-trix-attribute="italic" title="Italic" tabindex="-1" aria-label="Italic">
+                <button type="button" 
+                        class="trix-button trix-button--icon-italic flex items-center justify-center w-8 h-8"
+                        data-trix-attribute="italic" 
+                        data-trix-key="i"
+                        title="Italic" 
+                        tabindex="-1" 
+                        aria-label="Italic">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                        stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -36,8 +45,12 @@
                 </button>
 
                 <!-- Strike -->
-                <button type="button" class="trix-button flex items-center justify-center w-8 h-8"
-                        data-trix-attribute="strike" title="Strike" tabindex="-1" aria-label="Strike">
+                <button type="button" 
+                        class="trix-button trix-button--icon-strike flex items-center justify-center w-8 h-8"
+                        data-trix-attribute="strike" 
+                        title="Strike" 
+                        tabindex="-1" 
+                        aria-label="Strike">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                        stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -45,9 +58,44 @@
                   </svg>
                 </button>
 
+                <!-- Code -->
+                <button type="button" 
+                        class="trix-button trix-button--icon-code flex items-center justify-center w-8 h-8"
+                        data-trix-attribute="code" 
+                        title="Code" 
+                        tabindex="-1" 
+                        aria-label="Code">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                       stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="m6.75 7.5 3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0 0 21 18V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v12a2.25 2.25 0 0 0 2.25 2.25Z" />
+                  </svg>
+                </button>
+              </span>
+
+              <!-- Block Formatting -->
+              <span class="trix-button-group trix-button-group--block-tools" data-trix-button-group="block-tools">
+                <!-- Heading -->
+                <button type="button" 
+                        class="trix-button trix-button--icon-heading-1 flex items-center justify-center w-8 h-8"
+                        data-trix-attribute="heading1" 
+                        title="Heading" 
+                        tabindex="-1" 
+                        aria-label="Heading">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                       stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
+                  </svg>
+                </button>
+
                 <!-- Quote -->
-                <button type="button" class="trix-button flex items-center justify-center w-8 h-8"
-                        data-trix-attribute="quote" title="Quote" tabindex="-1" aria-label="Quote">
+                <button type="button" 
+                        class="trix-button trix-button--icon-quote flex items-center justify-center w-8 h-8"
+                        data-trix-attribute="quote" 
+                        title="Quote" 
+                        tabindex="-1" 
+                        aria-label="Quote">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                        stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -55,32 +103,13 @@
                   </svg>
                 </button>
 
-                <!-- Code -->
-                <button type="button" class="trix-button flex items-center justify-center w-8 h-8"
-                        data-trix-attribute="code" title="Code" tabindex="-1" aria-label="Code">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                       stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="m6.75 7.5 3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0 0 21 18V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v12a2.25 2.25 0 0 0 2.25 2.25Z" />
-                  </svg>
-                </button>
-
-                <!-- Heading -->
-                <button type="button" class="trix-button flex items-center justify-center w-8 h-8"
-                        data-trix-attribute="heading1" title="Heading" tabindex="-1" aria-label="Heading">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                       stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" />
-                  </svg>
-                </button>
-              </span>
-
-              <!-- Lists -->
-              <span class="trix-button-group">
                 <!-- Bulleted list -->
-                <button type="button" class="trix-button flex items-center justify-center w-8 h-8"
-                        data-trix-attribute="bullet" title="Bulleted list" tabindex="-1" aria-label="Bulleted list">
+                <button type="button" 
+                        class="trix-button trix-button--icon-bullet-list flex items-center justify-center w-8 h-8"
+                        data-trix-attribute="bullet" 
+                        title="Bulleted list" 
+                        tabindex="-1" 
+                        aria-label="Bulleted list">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                        stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -89,33 +118,89 @@
                 </button>
 
                 <!-- Numbered list -->
-                <button type="button" class="trix-button flex items-center justify-center w-8 h-8"
-                        data-trix-attribute="number" title="Numbered list" tabindex="-1" aria-label="Numbered list">
+                <button type="button" 
+                        class="trix-button trix-button--icon-number-list flex items-center justify-center w-8 h-8"
+                        data-trix-attribute="number" 
+                        title="Numbered list" 
+                        tabindex="-1" 
+                        aria-label="Numbered list">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                        stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round"
                           d="M8.242 5.992h12m-12 6.003H20.24m-12 5.999h12M4.117 7.495v-3.75H2.99m1.125 3.75H2.99m1.125 0H5.24m-1.92 2.577a1.125 1.125 0 1 1 1.591 1.59l-1.83 1.83h2.16M2.99 15.745h1.125a1.125 1.125 0 0 1 0 2.25H3.74m0-.002h.375a1.125 1.125 0 0 1 0 2.25H2.99" />
                   </svg>
                 </button>
+
+                <!-- Decrease nesting level -->
+                <button type="button" 
+                        class="trix-button trix-button--icon-decrease-nesting-level flex items-center justify-center w-8 h-8"
+                        data-trix-action="decreaseNestingLevel" 
+                        title="Decrease nesting level" 
+                        tabindex="-1" 
+                        aria-label="Decrease nesting level">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                       stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+                  </svg>
+                </button>
+
+                <!-- Increase nesting level -->
+                <button type="button" 
+                        class="trix-button trix-button--icon-increase-nesting-level flex items-center justify-center w-8 h-8"
+                        data-trix-action="increaseNestingLevel" 
+                        title="Increase nesting level" 
+                        tabindex="-1" 
+                        aria-label="Increase nesting level">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                       stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+                  </svg>
+                </button>
               </span>
 
               <!-- Link -->
-              <span class="trix-button-group">
-                <button type="button" class="trix-button flex items-center justify-center w-8 h-8"
-                        data-trix-action="link" title="Link" tabindex="-1" aria-label="Link">
+              <span class="trix-button-group trix-button-group--file-tools" data-trix-button-group="file-tools">
+                <button type="button" 
+                        class="trix-button trix-button--icon-link flex items-center justify-center w-8 h-8"
+                        data-trix-action="link" 
+                        data-trix-attribute="href"
+                        title="Link" 
+                        tabindex="-1" 
+                        aria-label="Link">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                        stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round"
                           d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
                   </svg>
                 </button>
+
+                <!-- Attach -->
+                <button type="button" 
+                        class="trix-button trix-button--icon-attach flex items-center justify-center w-8 h-8"
+                        data-trix-action="attachFiles" 
+                        title="Attach file" 
+                        tabindex="-1" 
+                        aria-label="Attach file">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                       stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13" />
+                  </svg>
+                </button>
               </span>
 
-              <!-- Undo/Redo + Attach -->
-              <span class="trix-button-group">
+              <!-- History -->
+              <span class="trix-button-group trix-button-group--history-tools" data-trix-button-group="history-tools">
                 <!-- Undo -->
-                <button type="button" class="trix-button flex items-center justify-center w-8 h-8"
-                        data-trix-action="undo" title="Undo" tabindex="-1" aria-label="Undo">
+                <button type="button" 
+                        class="trix-button trix-button--icon-undo flex items-center justify-center w-8 h-8"
+                        data-trix-action="undo" 
+                        data-trix-key="z"
+                        title="Undo" 
+                        tabindex="-1" 
+                        aria-label="Undo">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                        stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -124,22 +209,17 @@
                 </button>
 
                 <!-- Redo -->
-                <button type="button" class="trix-button flex items-center justify-center w-8 h-8"
-                        data-trix-action="redo" title="Redo" tabindex="-1" aria-label="Redo">
+                <button type="button" 
+                        class="trix-button trix-button--icon-redo flex items-center justify-center w-8 h-8"
+                        data-trix-action="redo" 
+                        data-trix-key="shift+z"
+                        title="Redo" 
+                        tabindex="-1" 
+                        aria-label="Redo">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                        stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round"
                           d="m16.49 12 3.75 3.75m0 0-3.75 3.75m3.75-3.75H3.74V4.499" />
-                  </svg>
-                </button>
-
-                <!-- Attach -->
-                <button type="button" class="trix-button flex items-center justify-center w-8 h-8"
-                        data-trix-action="attachFiles" title="Attach file" tabindex="-1" aria-label="Attach file">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                       stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13" />
                   </svg>
                 </button>
               </span>
@@ -149,17 +229,17 @@
             <div class="trix-dialogs" data-trix-dialogs>
               <div class="trix-dialog trix-dialog--link" data-trix-dialog="href" data-trix-dialog-attribute="href">
                 <div class="trix-dialog__link-fields">
-                  <input name="href" type="url" class="trix-input trix-input--dialog" placeholder="https://example.com" aria-label="URL">
+                  <input name="href" type="url" required class="trix-input trix-input--dialog" placeholder="Enter a URL…" aria-label="URL" disabled>
                   <div class="trix-button-group">
-                    <button type="button" class="trix-button trix-button--dialog" data-trix-method="setAttribute">Link</button>
-                    <button type="button" class="trix-button trix-button--dialog" data-trix-method="removeAttribute">Unlink</button>
+                    <input type="button" class="trix-button trix-button--dialog" value="Link" data-trix-method="setAttribute">
+                    <input type="button" class="trix-button trix-button--dialog" value="Unlink" data-trix-method="removeAttribute">
                   </div>
                 </div>
               </div>
             </div>
           </trix-toolbar>
 
-          <!-- Editor (bind to /users/editcustom toolbar) -->
+          <!-- Editor (bind to custom toolbar) -->
           <label class="block text-sm mb-1">Body</label>
           <%= f.rich_text_area :body,
                 toolbar: toolbar_id,

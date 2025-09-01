@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+.trix-content ul {
+  @apply list-disc pl-5;
+}
+
+.trix-content ol {
+  @apply list-decimal pl-5;
+}
