@@ -17,17 +17,24 @@
       <% end %>
     </div>
 
-    <!-- edit button -->
-    <% if edit_href.present? %>
-      <div class="sm:self-center sm:ml-auto w-full sm:w-auto">
+    <div class="sm:self-center sm:ml-auto w-full sm:w-auto flex flex-col sm:flex-row gap-2">
+      <!-- edit button -->
+      <% if edit_href.present? %>
         <%= link_to edit_href,
           data: {turbo_frame: "profile_header"},
-                    class: "inline-flex w-full sm:w-auto justify-center items-center rounded-md px-4 py-2 text-sm font-medium
-                            bg-[var(--btn-bg)] text-[var(--btn-text)]
-                            hover:bg-[var(--btn-hover-bg)] focus:outline-none focus:ring-2 focus:ring-[var(--btn-bg)]" do %>
+          class: "inline-flex w-full sm:w-auto justify-center items-center rounded-md px-4 py-2 text-sm font-medium
+                  bg-[var(--btn-bg)] text-[var(--btn-text)]
+                  hover:bg-[var(--btn-hover-bg)] focus:outline-none focus:ring-2 focus:ring-[var(--btn-bg)]" do %>
           Edit profile
         <% end %>
-      </div>
-    <% end %>
+      <% end %>
+
+      <%= button_to "Logout",
+        destroy_user_session_path,
+        method: :delete,
+        data: { turbo: false },
+        class: "inline-flex w-full sm:w-auto justify-center items-center rounded-md px-4 py-2 text-sm font-medium
+                bg-red-500 text-white hover:bg-red-600 cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500" %>
+    </div>
   </div>
 </section>
