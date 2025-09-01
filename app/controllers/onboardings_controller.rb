@@ -1,4 +1,3 @@
-
 class OnboardingsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_step
@@ -8,7 +7,7 @@ class OnboardingsController < ApplicationController
     @user = current_user
 
     # Seed one empty link row for nicer UX on the links step
-    if @step == "links" && @user.favorite_links.empty?
+    if @step == "links" && @user.favorite_links.empty? && params[:skip].blank?
       @user.favorite_links.build
     end
   end
@@ -36,13 +35,11 @@ class OnboardingsController < ApplicationController
     when "bio"
       if params[:skip].present?
         redirect_to onboarding_path(step: "links")
+      elsif @user.update(user_params.slice(:bio))
+        redirect_to onboarding_path(step: "links")
       else
-        if @user.update(user_params.slice(:bio))
-          redirect_to onboarding_path(step: "links")
-        else
-          @step = "bio"
-          render :show, status: :unprocessable_entity
-        end
+        @step = "bio"
+        render :show, status: :unprocessable_entity
       end
 
     when "links"
@@ -65,14 +62,20 @@ class OnboardingsController < ApplicationController
     when "avatar"
       if params[:skip].present?
         finalize!
-      else
-        @user.avatar.attach(user_params[:avatar]) if user_params[:avatar].present?
+        return
+      end
+
+      if user_params[:avatar].present?
+        @user.avatar.attach(user_params[:avatar])
         if @user.errors.any?
           @step = "avatar"
           render :show, status: :unprocessable_entity
         else
           finalize!
         end
+      else
+        # No avatar uploaded, just continue
+        finalize!
       end
 
     else
@@ -117,6 +120,8 @@ class OnboardingsController < ApplicationController
   end
 
   def user_params
+    return {} if params[:skip].present? || params[:user].blank?
+
     params.require(:user).permit(
       :name,
       :family_name,
