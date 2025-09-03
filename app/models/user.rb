@@ -6,7 +6,7 @@ class User < ApplicationRecord
 
   # links
   has_many :favorite_links, -> { order(:position, :id) }, dependent: :destroy
-  accepts_nested_attributes_for :favorite_links, allow_destroy: true
+  accepts_nested_attributes_for :favorite_links, allow_destroy: true, reject_if: :all_blank
 
   # cv
   has_many :experiences, dependent: :destroy

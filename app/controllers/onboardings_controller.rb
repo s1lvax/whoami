@@ -44,10 +44,16 @@ class OnboardingsController < ApplicationController
 
     when "links"
       if params[:skip].present?
+        # IMPORTANT: unload unsaved built records so they won't be autosaved later
+        @user.favorite_links.reload
         redirect_to onboarding_path(step: "avatar")
       else
-        # Ensure positions exist (helpful if client didn’t set them)
+        # Ensure positions exist
         if (attrs = user_params[:favorite_links_attributes]).present?
+          # Drop fully blank rows (defense in depth; complements reject_if: :all_blank)
+          attrs.delete_if { |_k, v| v[:label].to_s.strip.blank? && v[:url].to_s.strip.blank? }
+
+          # Default positions
           attrs.each { |_k, v| v[:position] ||= 0 }
         end
 
@@ -110,6 +116,7 @@ class OnboardingsController < ApplicationController
 
   def finalize!
     # Mark user onboarded and send to dashboard
+    @user.favorite_links.where(label: [ nil, "" ], url: [ nil, "" ]).delete_all
     @user.update!(onboarded_at: Time.current, onboarded: true)
     redirect_to dashboard_path, notice: "Welcome, #{display_name(@user)}!"
   end
