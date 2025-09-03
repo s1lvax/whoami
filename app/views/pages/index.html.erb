@@ -1,5 +1,15 @@
-<%= render HeroComponent.new %>
-<%= render FeaturesComponent.new %>
-<%= render CtaComponent.new %>
-<%= render FooterComponent.new %>
+<% cache ["home:hero", I18n.locale, "v1"] do %>
+  <%= render HeroComponent.new %>
+<% end %>
 
+<% cache ["home:features", I18n.locale, "v1"] do %>
+  <%= render FeaturesComponent.new %>
+<% end %>
+
+<% cache ["home:cta", I18n.locale, "v1"] do %>
+  <%= render CtaComponent.new %>
+<% end %>
+
+<% cache ["home:footer", I18n.locale, "v1"] do %>
+  <%= render FooterComponent.new %>
+<% end %>
