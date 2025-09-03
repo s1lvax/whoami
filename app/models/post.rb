@@ -3,25 +3,25 @@ class Post < ApplicationRecord
   belongs_to :user
   has_rich_text :body
 
-  friendly_id :title, use: [ :slugged, :history, :finders ]
+  friendly_id :title, use: %i[slugged history finders]
 
   STATUSES = %w[draft published].freeze
 
+  MAX_IMAGE_SIZE     = 5.megabytes
+  ALLOWED_IMAGE_TYPES = %w[image/png image/jpg image/jpeg image/webp image/gif].freeze
+  MAX_TOTAL_PIXELS    = 20_000_000 # ~20 MP
+
   validates :title, presence: true, length: { maximum: 120 }
   validates :status, inclusion: { in: STATUSES }
+  validate  :body_attachments_are_images_and_small
 
   before_validation :trim_fields
   before_save :sync_published_at
 
-  scope :latest, -> { order(Arel.sql("COALESCE(published_at, updated_at) DESC")) }
-
-  def published?
-    status == "published"
-  end
-
+  scope :latest,    -> { order(Arel.sql("COALESCE(published_at, updated_at) DESC")) }
   scope :published, -> { where(status: "published") }
+  def published? = status == "published"
 
-  # regenerate slug only if title changed
   def should_generate_new_friendly_id?
     title_changed? || super
   end
@@ -38,6 +38,34 @@ class Post < ApplicationRecord
       self.published_at = Time.current
     elsif !published?
       self.published_at = nil
+    end
+  end
+
+  def body_attachments_are_images_and_small
+    return unless body&.body
+
+    blobs = body.body.attachables.grep(ActiveStorage::Blob) # only files, not embeds/records
+    return if blobs.empty?
+
+    blobs.each do |blob|
+      unless ALLOWED_IMAGE_TYPES.include?(blob.content_type.to_s)
+        errors.add(:body, "attachments must be images (PNG, JPG, JPEG, WEBP, or GIF)")
+        next
+      end
+
+      if blob.byte_size.to_i > MAX_IMAGE_SIZE
+        errors.add(:body, "images must be smaller than #{MAX_IMAGE_SIZE / 1.megabyte} MB")
+      end
+
+      w = blob.metadata[:width]
+      h = blob.metadata[:height]
+      if w && h
+        if (w.to_i * h.to_i) > MAX_TOTAL_PIXELS
+          errors.add(:body, "images are too large (max ~#{MAX_TOTAL_PIXELS / 1_000_000} MP)")
+        end
+      else
+        blob.analyze_later
+      end
     end
   end
 end
