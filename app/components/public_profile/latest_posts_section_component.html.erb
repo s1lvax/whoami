@@ -1,5 +1,12 @@
 <section class="rounded-2xl bg-[var(--card)] ring-1 ring-[var(--border)] p-6">
-  <h2 class="text-sm uppercase tracking-wide text-[var(--muted)] mb-3">Latest Posts</h2>
+  <div class="mb-3 flex items-center justify-between">
+    <h2 class="text-sm uppercase tracking-wide text-[var(--muted)]">Latest Posts</h2>
+    <%= link_to "Subscribe (RSS Feed)",
+                user_feed_path(username: @user.username, format: :rss),
+                class: "text-xs underline text-[var(--muted)] hover:text-[var(--fg)]",
+                rel: "alternate",
+                type: "application/rss+xml" %>
+  </div>
 
   <% if posts.any? %>
     <ul class="space-y-3">

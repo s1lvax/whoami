@@ -12,6 +12,7 @@
 
         <% cache ["public_profile_latest_posts", @user.id, @pagy.page, @posts.cache_key_with_version] do %>
           <%= render PublicProfile::LatestPostsSectionComponent.new(
+            user: @user,
             posts: @posts,
             pagy: @pagy,
           ) %>

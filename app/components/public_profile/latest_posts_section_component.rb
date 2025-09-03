@@ -1,5 +1,6 @@
 class PublicProfile::LatestPostsSectionComponent < ViewComponent::Base
-  def initialize(posts:, pagy:)
+  def initialize(user:, posts:, pagy:)
+    @user = user
     @posts = posts
     @pagy  = pagy
   end
