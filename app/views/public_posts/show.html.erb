@@ -1,63 +1,75 @@
 <section class="px-4 sm:px-8 md:px-12 lg:px-24 py-12">
   <div class="mx-auto max-w-3xl">
-    <!-- Title -->
-    <div class="text-center mb-4">
-      <h1 class="text-xl md:text-4xl font-semibold"><%= @post.title %></h1>
-    </div>
 
-    <!-- Meta -->
-    <p class="text-xs text-[var(--muted)] text-center mb-4">
-      <% date = (@post.published_at || @post.updated_at).to_date %>
-      <%= date.to_fs(:long) %>
-    </p>
+    <%# -------- Post header + meta + author -------- %>
+    <% cache ["public_post:header", @user.id, @post.cache_key_with_version, I18n.locale] do %>
+      <div class="text-center mb-4">
+        <h1 class="text-xl md:text-4xl font-semibold"><%= @post.title %></h1>
+      </div>
 
-    <!-- Author -->
-    <% author_name = @user.full_name.presence || @user.email %>
-    <% handle      = "@#{@user.handle}" %>
-    <% avatar_url  =
-         if @user.avatar&.attached?
-           url_for(@user.avatar.variant(resize_to_fill: [96, 96]))
-         else
-           nil
-         end %>
+      <p class="text-xs text-[var(--muted)] text-center mb-4">
+        <% date = (@post.published_at || @post.updated_at).to_date %>
+        <%= date.to_fs(:long) %>
+      </p>
 
-    <div class="mb-8 flex items-center justify-center gap-3">
-      <% if avatar_url.present? %>
-        <%= image_tag avatar_url,
-              alt: author_name,
-              loading: "lazy",
-              class: "w-10 h-10 md:w-12 md:h-12 rounded-full ring-2 ring-[var(--border)] object-cover" %>
-      <% else %>
-        <% # initials fallback (simple, no SVG): %>
-        <% initials = author_name.to_s.scan(/[A-Za-z0-9]/).first(2)&.join&.upcase.presence || "?" %>
-        <div class="w-10 h-10 md:w-12 md:h-12 rounded-full ring-2 ring-[var(--border)]
-                    bg-[var(--surface-2)] text-[var(--text)]
-                    flex items-center justify-center font-semibold">
-          <%= initials %>
+      <% author_name = @user.full_name.presence || @user.email %>
+      <% handle = "@#{@user.handle}" %>
+      <% avatar_url =
+        if @user.avatar&.attached?
+          url_for(@user.avatar.variant(resize_to_fill: [96, 96]))
+        else
+          nil
+        end %>
+
+      <div class="mb-8 flex items-center justify-center gap-3">
+        <% if avatar_url.present? %>
+          <%= image_tag avatar_url,
+          alt: author_name,
+          loading: "lazy",
+          class:
+            "w-10 h-10 md:w-12 md:h-12 rounded-full ring-2 ring-[var(--border)] object-cover" %>
+        <% else %>
+          <% initials =
+            author_name.to_s.scan(/[A-Za-z0-9]/).first(2)&.join&.upcase.presence || "?" %>
+          <div
+            class="
+              w-10 h-10 md:w-12 md:h-12 rounded-full ring-2 ring-[var(--border)]
+              bg-[var(--surface-2)] text-[var(--text)] flex items-center justify-center
+              font-semibold
+            "
+          >
+            <%= initials %>
+          </div>
+        <% end %>
+
+        <div class="min-w-0">
+          <p class="text-sm font-medium leading-tight">
+            <%= link_to author_name,
+            public_profile_path(@user.username),
+            class: "hover:underline" %>
+          </p>
+          <p class="text-xs text-[var(--muted)] leading-tight"><%= handle %></p>
         </div>
-      <% end %>
-
-      <div class="min-w-0">
-        <p class="text-sm font-medium leading-tight">
-          <%= link_to author_name,
-                public_profile_path(@user.username),
-                class: "hover:underline" %>
-        </p>
-        <p class="text-xs text-[var(--muted)] leading-tight"><%= handle %></p>
-      </div>
-    </div>
-
-    <!-- Body -->
-    <div class="trix-theme">
-      <div class="trix-content max-w-none">
-        <%= @post.body %>
-      </div>
-    </div>
-    <!-- Read more from user -->
-    <% if @more_posts.any? %>
-      <div class="mx-auto max-w-3xl mt-12 border-t border-[var(--border)] pt-8">
-        <%= render PublicProfile::MorePostsComponent.new(posts: @more_posts) %>
       </div>
     <% end %>
+
+    <%# -------- Post body (ActionText / Trix) -------- %>
+    <% cache ["public_post:body", @post.cache_key_with_version] do %>
+      <div class="trix-theme">
+        <div class="trix-content max-w-none">
+          <%= @post.body %>
+        </div>
+      </div>
+    <% end %>
+
+    <%# -------- More from this author -------- %>
+    <% if @more_posts.any? %>
+      <% cache ["public_post:more", @user.id, @more_posts.cache_key_with_version] do %>
+        <div class="mx-auto max-w-3xl mt-12 border-t border-[var(--border)] pt-8">
+          <%= render PublicProfile::MorePostsComponent.new(posts: @more_posts) %>
+        </div>
+      <% end %>
+    <% end %>
+
   </div>
 </section>
