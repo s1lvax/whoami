@@ -18,6 +18,11 @@ class User < ApplicationRecord
   before_validation :downcase_username
 
   USERNAME_REGEX = /\A(?=.{3,30}\z)(?=.*[a-z])[a-z0-9]+\z/  # 3–30, only a–z0–9, at least one letter
+  RESERVED_USERNAMES = %w[
+    users rails active_storage assets packs system onboarding dashboard posts links admin
+    confirmation-sent up api
+  ].freeze
+
 
   has_one_attached :avatar
 
@@ -27,6 +32,7 @@ class User < ApplicationRecord
     presence: true,
     uniqueness: { case_sensitive: false },
     format: { with: USERNAME_REGEX, message: "must be 3–30 chars, lowercase letters and digits only" },
+    exclusion: { in: RESERVED_USERNAMES, message: "is reserved" },
     allow_nil: true
 
   validates :bio, length: { maximum: 280 }, allow_nil: true

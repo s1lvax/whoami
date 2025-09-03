@@ -92,21 +92,24 @@ class OnboardingsController < ApplicationController
   # GET /onboarding/check_username?username=foo
   def check_username
     @username = params[:username].to_s.downcase.strip
+
     valid_format = @username.match?(User::USERNAME_REGEX)
-    available = valid_format &&
-                !User.where("LOWER(username) = ?", @username)
-                     .where.not(id: current_user.id)
-                     .exists?
+    reserved     = User::RESERVED_USERNAMES.include?(@username)
+    taken        = User.where("LOWER(username) = ?", @username)
+                      .where.not(id: current_user.id)
+                      .exists?
 
     @status =
       if @username.blank?
         { text: "Type a username…", tone: :muted }
       elsif !valid_format
         { text: "Must be 3–30 chars, letters & digits only", tone: :error }
-      elsif available
-        { text: "Available ✓", tone: :ok }
-      else
+      elsif reserved
+        { text: "Not available", tone: :error }
+      elsif taken
         { text: "Taken", tone: :error }
+      else
+        { text: "Available ✓", tone: :ok }
       end
 
     render Onboarding::UsernameStatusComponent.new(status: @status)
