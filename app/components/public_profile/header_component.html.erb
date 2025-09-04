@@ -1,19 +1,20 @@
 <section class="rounded-2xl bg-[var(--card)] ring-1 ring-[var(--border)] p-8">
   <div class="flex flex-col items-center text-center">
     <!-- Big Avatar -->
-    <%= image_tag avatar_src(512), # load a large source
+    <%= image_tag avatar_src(512),
     alt: display_name,
     class: "w-56 h-56 rounded-full ring-2 ring-[var(--border)] object-cover mb-6" %>
     <!-- Name -->
     <h1 class="text-3xl font-bold break-words"><%= display_name %></h1>
     <!-- Handle -->
     <p class="mt-2 text-lg text-[var(--muted)] break-words"><%= handle %></p>
-    <!-- Bio -->
-    <% if @user.respond_to?(:bio) && @user.bio.present? %>
-      <p class="mt-4 text-base leading-relaxed text-[var(--muted-contrast)] max-w-md">
+  </div>
+  <!-- Bio (centered container, but left-aligned text) -->
+  <% if @user.respond_to?(:bio) && @user.bio.present? %>
+    <div class="mt-4 max-w-md mx-auto text-left">
+      <p class="text-base leading-relaxed text-[var(--muted-contrast)]">
         <%= @user.bio %>
       </p>
-    <% end %>
-
-  </div>
+    </div>
+  <% end %>
 </section>

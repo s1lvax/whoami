@@ -1,33 +1,22 @@
 <div class="min-h-screen bg-[var(--bg)] text-[var(--text)]">
   <div class="max-w-6xl mx-auto px-6 pt-14 pb-16">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <!-- LEFT (desktop): Sidebar with Header + Links -->
-      <aside
-        class="
-          hidden lg:block lg:col-span-4 space-y-6 lg:sticky lg:top-8 self-start
-        "
-      >
-        <% cache [@user, "public_profile_header_v3"] do %>
+      <!-- LEFT: Sidebar -->
+      <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-8 self-start">
+        <% cache [@user, "public_profile_header_v5"] do %>
           <%= render PublicProfile::HeaderComponent.new(user: @user) %>
         <% end %>
-        <!-- Desktop-only Links -->
+
         <% cache ["public_profile_links", @user.id, @links.cache_key_with_version] do %>
           <%= render PublicProfile::LinksSectionComponent.new(user: @user, links: @links) %>
         <% end %>
       </aside>
-      <!-- RIGHT content column (desktop), full width on mobile -->
+      <!-- RIGHT: Experience + Posts -->
       <main class="lg:col-span-8 space-y-8">
-        <!-- Mobile-only Header on top -->
-        <div class="lg:hidden">
-          <% cache [@user, "public_profile_header_v1_mobile"] do %>
-            <%= render PublicProfile::HeaderComponent.new(user: @user) %>
-          <% end %>
-        </div>
-        <!-- 1) Experience (mobile: first) -->
         <% cache ["public_profile_experiences", @user.id, @experiences.cache_key_with_version] do %>
           <%= render PublicProfile::ExperienceSectionComponent.new(experiences: @experiences) %>
         <% end %>
-        <!-- 2) Blog/Posts (mobile: second) -->
+
         <% cache ["public_profile_latest_posts", @user.id, @pagy.page, @posts.cache_key_with_version] do %>
           <%= render PublicProfile::LatestPostsSectionComponent.new(
             user: @user,
@@ -35,12 +24,6 @@
             pagy: @pagy,
           ) %>
         <% end %>
-        <!-- 3) Links (mobile: third) -->
-        <div class="lg:hidden">
-          <% cache ["public_profile_links_mobile", @user.id, @links.cache_key_with_version] do %>
-            <%= render PublicProfile::LinksSectionComponent.new(user: @user, links: @links) %>
-          <% end %>
-        </div>
       </main>
     </div>
   </div>
