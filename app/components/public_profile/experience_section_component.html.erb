@@ -7,18 +7,34 @@
   <% if experiences.any? %>
     <ul class="space-y-3">
       <% experiences.each do |exp| %>
-        <li class="rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] transition">
+        <li
+          class="
+            rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)]
+            hover:bg-[var(--surface-2)] transition
+          "
+        >
           <div class="px-4 py-3">
             <!-- header row: stack on mobile, row on desktop -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-3">
+            <div
+              class="
+                flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-3
+              "
+            >
               <p class="text-base font-medium break-words sm:truncate">
-                <%= role_for(exp) %> · <%= company_for(exp) %>
+                <%= role_for(exp) %>
+                ·
+                <%= company_for(exp) %>
               </p>
               <span class="text-xs text-[var(--muted)]">
                 <% sd = start_date_for(exp) %>
                 <% ed = end_date_for(exp) %>
-                <%= sd.respond_to?(:to_fs) ? sd.to_fs(:month_and_year) : sd %> –
-                <%= ed.present? ? (ed.respond_to?(:to_fs) ? ed.to_fs(:month_and_year) : ed) : "Present" %>
+                <%= sd.respond_to?(:to_fs) ? sd.to_fs(:month_and_year) : sd %>
+                –
+                <%= if ed.present?
+                  (ed.respond_to?(:to_fs) ? ed.to_fs(:month_and_year) : ed)
+                else
+                  "Present"
+                end %>
               </span>
             </div>
 
@@ -28,16 +44,23 @@
 
             <% hl = highlights_for(exp) %>
             <% if hl.any? %>
-              <p class="mt-1 text-sm text-[var(--muted-contrast)] break-words">
-                <%= hl.first %>
-              </p>
+              <ul class="mt-2 list-disc pl-5 text-sm space-y-1">
+                <% hl.each do |h| %>
+                  <li><%= h %></li>
+                <% end %>
+              </ul>
             <% end %>
 
             <% techs = tech_for(exp) %>
             <% if techs.any? %>
               <div class="mt-2 flex flex-wrap gap-1">
                 <% techs.first(4).each do |t| %>
-                  <span class="text-[10px] px-2 py-0.5 rounded ring-1 ring-[var(--border)] bg-[var(--surface-2)]"><%= t %></span>
+                  <span
+                    class="
+                      text-[10px] px-2 py-0.5 rounded ring-1 ring-[var(--border)]
+                      bg-[var(--surface-2)]
+                    "
+                  ><%= t %></span>
                 <% end %>
               </div>
             <% end %>
