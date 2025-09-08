@@ -19,7 +19,7 @@ class User < ApplicationRecord
 
   USERNAME_REGEX = /\A(?=.{3,30}\z)(?=.*[a-z])[a-z0-9]+\z/  # 3–30, only a–z0–9, at least one letter
   RESERVED_USERNAMES = %w[
-    users rails active_storage assets packs system onboarding dashboard posts links admin
+    users privacy terms rails active_storage assets packs system onboarding dashboard posts links admin
     confirmation-sent up api
   ].freeze
 

@@ -8,11 +8,14 @@
     </div>
 
     <!-- Center -->
-    <nav class="flex flex-wrap justify-center gap-6 text-sm">
+    <nav class="flex flex-wrap justify-center gap-6 text-sm text-[var(--text)]">
       <%= link_to "Features", "#features", class: "hover:text-red-500 transition" %>
       <%= link_to "Blog", "#blog", class: "hover:text-red-500 transition" %>
       <%= link_to "About", "#about", class: "hover:text-red-500 transition" %>
+      <%= link_to "Privacy Policy", privacy_path, class: "hover:text-red-500 transition" %>
+      <%= link_to "Terms of Service", terms_path, class: "hover:text-red-500 transition" %>
     </nav>
+
 
     <!-- Right -->
     <div class="flex items-center gap-4">
