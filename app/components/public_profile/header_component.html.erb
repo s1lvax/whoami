@@ -2,8 +2,9 @@
   <div class="flex flex-col items-center text-center">
     <!-- Big Avatar -->
     <%= image_tag avatar_src(512),
+    fetchpriority: "high",
     alt: display_name,
-    class: "w-56 h-56 rounded-full ring-2 ring-[var(--border)] object-cover mb-6" %>
+    class: "w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-56 lg:h-56 rounded-full ring-2 ring-[var(--border)] object-cover mb-6" %>
     <!-- Name -->
     <h1 class="text-3xl font-bold break-words"><%= display_name %></h1>
     <!-- Handle -->
