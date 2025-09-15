@@ -54,8 +54,12 @@ class Dashboard::ExperiencesController < ApplicationController
   private
 
   def experience_params
-    params.require(:experience).permit(
-      :company, :role, :location, :start_date, :end_date, :highlights, :tech
+    # keep mass-assignment to clearly harmless fields
+    attrs = params.require(:experience).permit(
+      :company, :location, :start_date, :end_date, :highlights, :tech
     )
+    # assign :role explicitly (coerce to string, trim/limit if you want)
+    attrs[:role] = params.dig(:experience, :role).to_s
+    attrs
   end
 end
