@@ -3,9 +3,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <!-- LEFT: Sidebar -->
       <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-8 self-start">
-        <% cache [@user, "public_profile_header_v5"] do %>
-          <%= render PublicProfile::HeaderComponent.new(user: @user) %>
-        <% end %>
+        <%= render PublicProfile::HeaderComponent.new(user: @user) %>
 
         <% cache ["public_profile_links", @user.id, @links.cache_key_with_version] do %>
           <%= render PublicProfile::LinksSectionComponent.new(user: @user, links: @links) %>
