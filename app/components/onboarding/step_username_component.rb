@@ -1,4 +1,3 @@
-
 class Onboarding::StepUsernameComponent < ViewComponent::Base
   def initialize(user:)
     @user = user

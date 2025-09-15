@@ -1,5 +1,3 @@
-
-# app/models/favorite_link.rb
 class FavoriteLink < ApplicationRecord
   belongs_to :user
 

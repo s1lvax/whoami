@@ -7,12 +7,12 @@ Rails.application.routes.draw do
 
   authenticate :user do
     resource :dashboard, only: [ :show, :edit, :update ], controller: "dashboard"
-  end
 
-  namespace :dashboard do
-    resources :favorite_links, only: [ :new, :create, :destroy ]
-    resources :experiences, only: [ :new, :create, :destroy ]
-    resources :posts, param: :id
+    namespace :dashboard do
+      resources :favorite_links, only: [ :new, :create, :destroy ]
+      resources :experiences, only: [ :new, :create, :destroy ]
+      resources :posts, param: :id
+    end
   end
 
   resource :onboarding, only: [ :show, :update ] do
