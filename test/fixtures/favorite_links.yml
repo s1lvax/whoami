@@ -1,0 +1,9 @@
+one:
+  user: one
+  url: https://example.com
+  label: Example
+
+two:
+  user: two
+  url: https://rubyonrails.org
+  label: Rails Link

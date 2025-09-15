@@ -1,4 +1,3 @@
-
 class ButtonComponent < ViewComponent::Base
   def initialize(type: :submit, style: :primary, full_width: true, name: nil)
     @type = type

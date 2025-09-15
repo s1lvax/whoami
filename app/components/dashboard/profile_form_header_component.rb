@@ -1,4 +1,3 @@
-
 # app/components/dashboard/profile_form_header_component.rb
 class Dashboard::ProfileFormHeaderComponent < ViewComponent::Base
   # update_href: PATCH endpoint (e.g., dashboard_path)

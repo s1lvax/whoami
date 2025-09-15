@@ -1,19 +1,18 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
   user: one
-  title: MyString
-  excerpt: MyText
+  title: My RSS Post
+  excerpt: Hello world
   views: 1
-  status: MyString
-  slug: MyString
-  published_at: 2025-08-25 14:50:55
+  status: published
+  slug: my-rss-post
+  published_at: <%= Time.current %>
 
 two:
   user: two
-  title: MyString
-  excerpt: MyText
+  title: Draft Post
+  excerpt: Not published
   views: 1
-  status: MyString
-  slug: MyString
-  published_at: 2025-08-25 14:50:55
+  status: draft
+  slug: draft-post
+  published_at: <%= Time.current %>
+

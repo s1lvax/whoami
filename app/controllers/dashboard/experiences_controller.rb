@@ -34,7 +34,7 @@ class Dashboard::ExperiencesController < ApplicationController
           form_html = helpers.render(Dashboard::ExperienceFormCardComponent.new(experience: @experience))
           render turbo_stream: turbo_stream.replace("new_experience", form_html), status: :unprocessable_entity
         end
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { redirect_to dashboard_path, status: :unprocessable_entity, alert: "Please fix errors." }
       end
     end
   end
