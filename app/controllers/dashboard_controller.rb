@@ -13,11 +13,13 @@ class DashboardController < ApplicationController
     visits      = @user.visits.to_i
     link_clicks = @user.favorite_links.sum(:clicks) rescue 0      # assumes favorite_links has :clicks
     blog_reads  = @user.posts.sum(:views)           rescue 0
+    subscribers  = @user.subscriptions.confirmed.count
 
     @stats = [
       { label: "Profile Views", value: helpers.number_with_delimiter(visits),      delta: nil, up: nil },
       { label: "Link Clicks",   value: helpers.number_with_delimiter(link_clicks), delta: nil, up: nil },
-      { label: "Blog Reads",    value: helpers.number_with_delimiter(blog_reads),  delta: nil, up: nil }
+      { label: "Blog Reads",    value: helpers.number_with_delimiter(blog_reads),  delta: nil, up: nil },
+      { label: "Newsletter Subscribers",    value: helpers.number_with_delimiter(subscribers),  delta: nil, up: nil }
     ]
 
     @experiences    = @user.experiences.order(start_date: :desc)

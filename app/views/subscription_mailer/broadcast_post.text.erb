@@ -1,0 +1,6 @@
+<%= @post.body.to_plain_text %>
+--- View this post online:
+<%= public_post_url(@username, @post) %>
+You received this because you're subscribed to
+<%= @username %>. Don’t want these posts? Unsubscribe here:
+<%= cancel_subscription_url(@username, @token) %>

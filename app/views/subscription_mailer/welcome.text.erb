@@ -1,0 +1,9 @@
+Your subscription to
+<%= @username %>
+Hello, You are now subscribed to
+<%= @username %>. You'll receive all new posts that
+<%= @username %>
+chooses to share with their email list. If you'd like to unsubscribe, please
+follow this link:
+<%= cancel_subscription_url(@username, @token) %>
+

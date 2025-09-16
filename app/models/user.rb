@@ -14,6 +14,9 @@ class User < ApplicationRecord
   # posts
   has_many :posts, dependent: :destroy
 
+  # subscriptions
+  has_many :subscriptions, dependent: :destroy
+
   # sets username to downcase before validation
   before_validation :downcase_username
 

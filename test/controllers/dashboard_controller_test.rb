@@ -32,6 +32,7 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_match "Profile Views", response.body
     assert_match "Link Clicks", response.body
     assert_match "Blog Reads", response.body
+    assert_match "Newsletter Subscribers", response.body
   end
 
   test "renders edit form" do

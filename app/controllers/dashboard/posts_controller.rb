@@ -45,6 +45,6 @@ class Dashboard::PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :excerpt, :status, :slug, :body)
+    params.require(:post).permit(:title, :send_to_newsletter, :excerpt, :status, :slug, :body)
   end
 end

@@ -53,6 +53,11 @@
       </div>
     <% end %>
 
+    <%= render PublicProfile::NewsletterSubscriptionComponent.new(
+      user: @user,
+      subscription: @subscription,
+    ) %>
+
     <%# -------- Post body (ActionText / Trix) -------- %>
     <% cache ["public_post:body", @post.cache_key_with_version] do %>
       <div class="trix-theme">

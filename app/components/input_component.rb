@@ -1,8 +1,9 @@
 class InputComponent < ViewComponent::Base
-  def initialize(form:, field:, type:, label: nil, autocomplete: nil, autofocus: false, value: nil, hint: nil, input_options: {})
+  def initialize(form:, field:, type:, placeholder: nil, label: nil, autocomplete: nil, autofocus: false, value: nil, hint: nil, input_options: {})
     @form = form
     @field = field
     @type = type
+    @placeholder = placeholder
     @label = label
     @autocomplete = autocomplete
     @autofocus = autofocus

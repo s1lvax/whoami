@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_25_140855) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_16_122820) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -97,9 +97,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_25_140855) do
     t.datetime "published_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "send_to_newsletter"
+    t.boolean "newsletter_sent", default: false, null: false
     t.index ["slug"], name: "index_posts_on_slug", unique: true
     t.index ["user_id", "status", "published_at"], name: "index_posts_on_user_id_and_status_and_published_at"
     t.index ["user_id"], name: "index_posts_on_user_id"
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "subscriber_email"
+    t.string "token"
+    t.boolean "confirmed", default: false
+    t.datetime "confirmed_at"
+    t.boolean "canceled", default: false
+    t.datetime "canceled_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -132,4 +147,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_25_140855) do
   add_foreign_key "experiences", "users"
   add_foreign_key "favorite_links", "users"
   add_foreign_key "posts", "users"
+  add_foreign_key "subscriptions", "users"
 end
