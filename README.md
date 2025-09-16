@@ -34,7 +34,7 @@ It lets you share your profile, links, CV/experience, and blog posts — all in 
 Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/whoami.git
+git clone https://github.com/s1lvax/whoami.git
 cd whoami
 ```
 
