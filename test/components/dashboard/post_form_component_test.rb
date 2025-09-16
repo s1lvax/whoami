@@ -38,6 +38,17 @@ class Dashboard::PostFormComponentTest < ViewComponent::TestCase
     Nokogiri::HTML.fragment(html)
   end
   # --------------------------------
+  #
+  test "renders send_to_newsletter checkbox with label" do
+    frag = render_fragment(post: Post.new(status: :draft), submit_path: "/dashboard/posts", submit_method: :post)
+
+    checkbox = frag.at_css('input[type="checkbox"][name="post[send_to_newsletter]"]')
+    assert checkbox, "expected send_to_newsletter checkbox"
+
+    label = frag.at_css('label[for="post_send_to_newsletter"]')
+    assert label, "expected label for send_to_newsletter checkbox"
+    assert_match(/Send this post to newsletter subscribers/i, label.text)
+  end
 
   test "renders New Post title for new record and Edit Post for persisted" do
     new_post = Post.new(status: :draft)

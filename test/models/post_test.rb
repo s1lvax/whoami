@@ -1,7 +1,7 @@
-
 require "test_helper"
 
 class PostTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
   fixtures :users
 
   def setup
@@ -176,5 +176,54 @@ class PostTest < ActiveSupport::TestCase
       "<action-text-attachment sgid='#{blob.attachable_sgid}'></action-text-attachment>"
     )
     assert post.valid?, -> { post.errors.full_messages.inspect }
+  end
+
+  # --- newsletter broadcast --------------------------------------------------
+
+  test "does not enqueue newsletter for draft" do
+    post = build_post(send_to_newsletter: true, status: "draft")
+    assert_no_enqueued_jobs only: NewsletterBroadcastJob do
+      post.save!
+    end
+  end
+
+  test "does not enqueue newsletter if send_to_newsletter is false" do
+    post = build_post(status: "published", send_to_newsletter: false)
+    assert_no_enqueued_jobs only: NewsletterBroadcastJob do
+      post.save!
+    end
+  end
+
+  test "does not enqueue newsletter if no confirmed subscriptions" do
+    post = build_post(status: "published", send_to_newsletter: true)
+    assert_no_enqueued_jobs only: NewsletterBroadcastJob do
+      post.save!
+    end
+  end
+
+  test "enqueues newsletter when published, send_to_newsletter true, and confirmed subscriptions exist" do
+    @user.subscriptions.create!(
+      subscriber_email: "test@example.com",
+      confirmed: true,
+      confirmed_at: Time.current
+    )
+    post = build_post(status: "published", send_to_newsletter: true)
+
+    assert_enqueued_jobs 1, only: NewsletterBroadcastJob do
+      post.save!
+    end
+  end
+
+  test "does not enqueue newsletter again if already sent" do
+    @user.subscriptions.create!(
+      subscriber_email: "test@example.com",
+      confirmed: true,
+      confirmed_at: Time.current
+    )
+    post = build_post(status: "published", send_to_newsletter: true, newsletter_sent: true)
+
+    assert_no_enqueued_jobs only: NewsletterBroadcastJob do
+      post.save!
+    end
   end
 end
