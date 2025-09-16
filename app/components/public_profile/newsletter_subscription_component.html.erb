@@ -1,0 +1,31 @@
+<div class="mb-8 text-center">
+  <h2 class="text-sm font-medium text-[var(--muted)] mb-2">
+    Subscribe to
+    <%= user.username %>
+  </h2>
+
+  <% if subscription&.errors&.any? %>
+    <div class="text-red-500 text-xs mb-2">
+      <% subscription.errors.full_messages.each do |msg| %>
+        <p><%= msg %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= form_with(
+    url: new_subscription_path(username: user.username),
+    method: :post,
+    scope: :subscription,
+    class: "flex flex-col sm:flex-row justify-center gap-2 max-w-md mx-auto"
+  ) do |f| %>
+    <%= f.email_field :subscriber_email,
+                  placeholder: "Enter your email",
+                  required: true,
+                  class:
+                    "flex-1 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--btn-bg)]" %>
+
+    <%= f.submit "Subscribe",
+             class:
+               "rounded-md bg-[var(--btn-bg)] text-black cursor-pointer px-4 py-2 text-sm font-medium hover:opacity-90 transition" %>
+  <% end %>
+</div>

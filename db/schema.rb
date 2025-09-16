@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_25_140855) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_16_084728) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -102,6 +102,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_25_140855) do
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "subscriber_email"
+    t.string "token"
+    t.boolean "confirmed", default: false
+    t.datetime "confirmed_at"
+    t.boolean "canceled", default: false
+    t.datetime "canceled_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -132,4 +145,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_25_140855) do
   add_foreign_key "experiences", "users"
   add_foreign_key "favorite_links", "users"
   add_foreign_key "posts", "users"
+  add_foreign_key "subscriptions", "users"
 end

@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  subscriber_email: MyString
+  token: MyString
+  confirmed: false
+  confirmed_at: 2025-09-16 10:47:28
+  canceled: false
+  canceled_at: 2025-09-16 10:47:28
+
+two:
+  user: two
+  subscriber_email: MyString
+  token: MyString
+  confirmed: false
+  confirmed_at: 2025-09-16 10:47:28
+  canceled: false
+  canceled_at: 2025-09-16 10:47:28

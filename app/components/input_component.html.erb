@@ -1,19 +1,24 @@
-
 <% error_text = error_text_for(@field) %>
 
 <div class="mb-4">
-  <%= @form.label @field, @label, class: "block text-sm font-medium text-[var(--muted)] mb-1" %>
+  <%= @form.label @field,
+              @label,
+              class: "block text-sm font-medium text-[var(--muted)] mb-1" %>
 
   <% base_class = [
-       "w-full rounded-md px-3 py-2 focus:outline-none",
-       "bg-[var(--input-bg)] text-[var(--input-text)] placeholder-[var(--input-placeholder)]",
-       "ring-1"
-     ].join(" ") %>
+    "w-full rounded-md px-3 py-2 focus:outline-none",
+    "bg-[var(--input-bg)] text-[var(--input-text)] placeholder-[var(--input-placeholder)]",
+    "ring-1",
+  ].join(" ") %>
 
-  <% ring_class = error_text.present? ?
-       "ring-[var(--danger)] focus:ring-2 focus:ring-[var(--danger)]" :
-       "ring-[var(--input-border)] focus:ring-2 focus:ring-[var(--btn-ring)]"
-  %>
+  <% ring_class =
+    (
+      if error_text.present?
+        "ring-[var(--danger)] focus:ring-2 focus:ring-[var(--danger)]"
+      else
+        "ring-[var(--input-border)] focus:ring-2 focus:ring-[var(--btn-ring)]"
+      end
+    ) %>
 
   <% extra_class = @input_options.delete(:class) %>
   <% merged_class = [base_class, ring_class, extra_class].compact.join(" ") %>
@@ -22,11 +27,12 @@
   <% merged_data = {}.merge(extra_data) %>
 
   <% opts = {
-     autocomplete: @autocomplete,
-     autofocus: @autofocus,
-     class: merged_class,
-     data: merged_data
-   }.merge(@input_options) %>
+    autocomplete: @autocomplete,
+    autofocus: @autofocus,
+    placeholder: @placeholder,
+    class: merged_class,
+    data: merged_data,
+  }.merge(@input_options) %>
 
   <%# Only set value if explicitly provided %>
   <% opts[:value] = @value if @value.present? %>

@@ -1,0 +1,8 @@
+Confirm your subscription Hello, You requested to subscribe to
+<%= @username %>
+. Please confirm your subscription by visiting the link below:
+<%= confirm_subscription_url(@username, @token) %>
+If you didn’t request this subscription, you can safely ignore this email. ---
+This email was sent to
+<%= @email %>.
+

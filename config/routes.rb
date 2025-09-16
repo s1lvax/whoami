@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "subscription/subscribe"
+  get "subscription/confirm"
+  get "subscription/cancel"
   devise_for :users,
   controllers: {
     registrations: "users/registrations",
@@ -22,6 +25,9 @@ Rails.application.routes.draw do
   # public confirm email page
   get "/confirmation-sent", to: "static#confirmation_sent", as: :confirmation_sent
 
+  # public confirm subscription page
+  get "/:username/confirmation-sent", to: "static#subscription_sent", as: :subscription_sent
+
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Policies
@@ -44,6 +50,11 @@ Rails.application.routes.draw do
   get "/:username/feed", to: "rss#user", as: :user_feed, defaults: { format: :rss }
 
   get "/:username/links/:id/click", to: "public_links#click", as: :public_link_click
+
+  # subscription logic
+  post "/:username/subscribe", to: "subscription#subscribe", as: :new_subscription
+  get "/:username/:token/confirm", to: "subscription#confirm", as: :confirm_subscription
+  get "/:username/:token/cancel", to: "subscription#cancel", as: :cancel_subscription
 
   get "/:username", to: "profiles#show", as: :public_profile,
     constraints: ->(req) {
