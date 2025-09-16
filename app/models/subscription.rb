@@ -6,4 +6,7 @@ class Subscription < ApplicationRecord
   validates :subscriber_email, presence: true
 
   validates :subscriber_email, uniqueness: { scope: :user_id, message: "is already subscribed" }
+
+  # scope to only get confirmed subscribtptions
+  scope :confirmed, -> { where(confirmed: true) }
 end

@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  get "subscription/subscribe"
-  get "subscription/confirm"
-  get "subscription/cancel"
   devise_for :users,
   controllers: {
     registrations: "users/registrations",
