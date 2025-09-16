@@ -1,5 +1,6 @@
 class Post < ApplicationRecord
   extend FriendlyId
+
   belongs_to :user
   has_rich_text :body
 
@@ -18,8 +19,12 @@ class Post < ApplicationRecord
   before_validation :trim_fields
   before_save :sync_published_at
 
+  # enqueue newsletter sending when user creates post or modifies it from draft to published
+  after_commit :enqueue_newsletter_broadcast, on: [ :create, :update ]
+
   scope :latest,    -> { order(Arel.sql("COALESCE(published_at, updated_at) DESC")) }
   scope :published, -> { where(status: "published") }
+
   def published? = status == "published"
 
   def should_generate_new_friendly_id?
@@ -38,6 +43,14 @@ class Post < ApplicationRecord
       self.published_at = Time.current
     elsif !published?
       self.published_at = nil
+    end
+  end
+
+  def enqueue_newsletter_broadcast
+    return unless published? && send_to_newsletter? && !newsletter_sent?
+
+    if user.subscriptions.confirmed.exists?
+      NewsletterBroadcastJob.perform_later(id)
     end
   end
 

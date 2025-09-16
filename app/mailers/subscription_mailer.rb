@@ -33,4 +33,23 @@ class SubscriptionMailer < ApplicationMailer
       track_opens: true
     )
   end
+
+  def broadcast_post
+    @post     = params[:post]
+    @username = params[:username]
+    @token    = params[:token]
+    @email    = params[:email]
+
+    mail(
+      to: @email,
+      subject: "#{@username} just published: #{@post.title}",
+      track_opens: true
+    )
+  end
+
+  private
+
+  def default_host
+    Rails.application.config.action_mailer.default_url_options&.dig(:host)
+  end
 end
