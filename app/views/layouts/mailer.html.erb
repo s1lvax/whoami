@@ -2,12 +2,32 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <style>
-      /* Email styles need to be inline */
-    </style>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
   </head>
 
-  <body>
-    <%= yield %>
+  <body style="margin:0; padding:0; background-color:#F3F3F1; color:#111110; font-family:-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; -webkit-font-smoothing:antialiased;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#F3F3F1;">
+      <tr>
+        <td align="center" style="padding:40px 16px;">
+          <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="width:100%; max-width:600px;">
+            <tr>
+              <td style="padding:0 8px 16px; font-size:16px; font-weight:700; letter-spacing:-0.03em; color:#111110;">
+                <span style="display:inline-block; width:9px; height:9px; background:#3A3AF4; border-radius:2px; transform:rotate(45deg); margin-right:7px; vertical-align:middle;"></span>whoami
+              </td>
+            </tr>
+            <tr>
+              <td style="background:#FFFFFF; border:1px solid #E4E4E0; border-radius:24px; padding:36px 36px 32px; font-size:16px; line-height:1.6; color:#111110;">
+                <%= yield %>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:16px 8px 0; font-size:12px; line-height:1.5; color:#72726D;">
+                <% if @email.present? %>Sent to <%= @email %>. <% end %>whoami · one link for all of you.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>

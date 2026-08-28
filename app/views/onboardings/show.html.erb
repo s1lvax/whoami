@@ -1,37 +1,43 @@
+<% steps = %w[name username bio links avatar] %>
+<% titles = {
+     "name"     => ["Tell us your name", "This is the name at the top of your page."],
+     "username" => ["Pick your username", "It becomes your URL. Letters and digits only."],
+     "bio"      => ["Say what you do", "One or two lines. You can change it later."],
+     "links"    => ["Where should people find you?", "Up to six links. Label and URL."],
+     "avatar"   => ["Put a face on it", "PNG, JPG, or WEBP up to 5 MB."]
+   } %>
+<% index = steps.index(@step) || 4 %>
 
-<!-- app/views/onboardings/show.html.erb -->
-<div class="min-h-screen flex items-center justify-center bg-[var(--bg)] px-4">
-  <div class="w-full max-w-md bg-[var(--card)] rounded-xl shadow-md p-8">
-    <h2 class="text-2xl font-semibold mb-6 text-center text-[var(--text)]">
-      <%= {
-            "name"     => "Welcome",
-            "username" => "Choose a username",
-            "bio"      => "Write a short bio",
-            "links"    => "Add your favorite links",
-            "avatar"   => "Add a profile picture"
-          }[@step] %>
-    </h2>
+<div class="gate">
+  <div class="gate-top">
+    <%= link_to "whoami", root_path, class: "wordmark" %>
+    <%= render ThemeToggleComponent.new(variant: :gate) %>
+  </div>
 
-    <!-- Progress (keep your component if you prefer) -->
-    <div class="mb-6">
-      <div class="mt-2 text-xl text-[var(--muted)] text-center">
-        Step <%= { "name" => 1, "username" => 2, "bio" => 3, "links" => 4, "avatar" => 5 }[@step] %> of 5
+  <section class="card card-pad">
+    <div class="rail">
+      <div class="rail-track" aria-hidden="true">
+        <% steps.each_with_index do |_, i| %>
+          <span class="<%= 'is-done' if i <= index %>"></span>
+        <% end %>
       </div>
+      <p class="rail-meta mono">Step <%= index + 1 %> of <%= steps.size %></p>
     </div>
 
+    <h1 class="display"><%= titles[@step]&.first || titles["avatar"].first %></h1>
+    <p class="intro"><%= titles[@step]&.last || titles["avatar"].last %></p>
+
     <% case @step
-   when "name" %>
-  <%= render Onboarding::StepNameComponent.new(user: @user) %>
-<% when "username" %>
-  <%= render Onboarding::StepUsernameComponent.new(user: @user) %>
-<% when "bio" %>
-  <%= render Onboarding::StepBioComponent.new(user: @user) %>
-<% when "links" %>
-  <%= render Onboarding::StepLinksComponent.new(user: @user) %>
-<% else %>
-  <%= render Onboarding::StepAvatarComponent.new(user: @user) %>
-<% end %>
-
-
-  </div>
+       when "name" %>
+      <%= render Onboarding::StepNameComponent.new(user: @user) %>
+    <% when "username" %>
+      <%= render Onboarding::StepUsernameComponent.new(user: @user) %>
+    <% when "bio" %>
+      <%= render Onboarding::StepBioComponent.new(user: @user) %>
+    <% when "links" %>
+      <%= render Onboarding::StepLinksComponent.new(user: @user) %>
+    <% else %>
+      <%= render Onboarding::StepAvatarComponent.new(user: @user) %>
+    <% end %>
+  </section>
 </div>

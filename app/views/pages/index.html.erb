@@ -1,15 +1,16 @@
-<% cache ["home:hero", I18n.locale, "v5"] do %>
-  <%= render HeroComponent.new %>
-<% end %>
+<% content_for :title, "Whoami – one link for all of you" %>
+<% content_for :description, "One page you own: name, work, links, writing. The link for your email signature, your bios, your slides." %>
 
-<% cache ["home:features", I18n.locale, "v1"] do %>
-  <%= render FeaturesComponent.new %>
-<% end %>
+<div class="landing">
+  <%= render HeroComponent.new(
+        signed_in: user_signed_in?,
+        page_href: @sample ? public_profile_path(@sample.username) : nil,
+        sample: @sample
+      ) %>
 
-<% cache ["home:cta", I18n.locale, "v1"] do %>
+  <%= render Landing::WalkComponent.new %>
+  <%= render Landing::PitchComponent.new %>
+  <%= render Landing::FaqComponent.new %>
   <%= render CtaComponent.new %>
-<% end %>
-
-<% cache ["home:footer", I18n.locale, "v4"] do %>
   <%= render FooterComponent.new %>
-<% end %>
+</div>

@@ -1,28 +1,42 @@
-<div class="min-h-screen bg-[var(--bg)] text-[var(--text)]">
-  <div class="max-w-6xl mx-auto px-6 pt-14 pb-16">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <!-- LEFT: Sidebar -->
-      <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-8 self-start">
-        <%= render PublicProfile::HeaderComponent.new(user: @user) %>
+<% content_for :body_class, params[:preview] ? "identity is-preview" : "identity" %>
+<% content_for :og_type, "profile" %>
+<% content_for :title, "#{@user.display_name} · @#{@user.handle}" %>
+<% content_for :description, @user.bio.presence || "#{@user.display_name}'s page." %>
+<% content_for :canonical, public_profile_url_for(@user) %>
 
-        <% cache ["public_profile_links", @user.id, @links.cache_key_with_version] do %>
-          <%= render PublicProfile::LinksSectionComponent.new(user: @user, links: @links) %>
-        <% end %>
-      </aside>
-      <!-- RIGHT: Experience + Posts -->
-      <main class="lg:col-span-8 space-y-8">
-        <% cache ["public_profile_experiences", @user.id, @experiences.cache_key_with_version] do %>
-          <%= render PublicProfile::ExperienceSectionComponent.new(experiences: @experiences) %>
-        <% end %>
+<div class="poster">
+  <div class="poster-body">
+    <% if current_user&.id == @user.id && !params[:preview] %>
+      <p class="page-owner">
+        <span>This is your page. Only you see this bar.</span>
+        <%= link_to "Edit in dashboard →", dashboard_path %>
+      </p>
+    <% end %>
 
-        <% cache ["public_profile_latest_posts", @user.id, @pagy.page, @posts.cache_key_with_version] do %>
-          <%= render PublicProfile::LatestPostsSectionComponent.new(
-            user: @user,
-            posts: @posts,
-            pagy: @pagy,
-          ) %>
-        <% end %>
-      </main>
-    </div>
+    <%= render PublicProfile::HeaderComponent.new(user: @user) %>
+
+    <% cache [@user, @links, :links] do %>
+      <%= render PublicProfile::LinksSectionComponent.new(user: @user, links: @links) %>
+    <% end %>
+
+    <% cache [@user, @experiences, :experiences] do %>
+      <%= render PublicProfile::ExperienceSectionComponent.new(experiences: @experiences) %>
+    <% end %>
+
+    <% cache [@user, @posts, @pagy.page, :posts] do %>
+      <%= render PublicProfile::LatestPostsSectionComponent.new(
+        user: @user,
+        posts: @posts,
+        pagy: @pagy,
+      ) %>
+    <% end %>
+
+    <footer class="page-foot poster-foot">
+      <%= link_to "whoami", root_path, class: "wordmark" %>
+      <span class="page-foot-tools">
+        <%= link_to "RSS", user_feed_path_for(@user), rel: "alternate", type: "application/rss+xml" %>
+        <%= render ThemeToggleComponent.new(variant: :page) %>
+      </span>
+    </footer>
   </div>
 </div>

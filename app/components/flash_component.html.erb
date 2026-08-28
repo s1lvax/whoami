@@ -1,17 +1,10 @@
-<% if @notice.present? %>
-  <div class="w-full fixed top-0 left-0 z-50">
-    <div class="mx-auto max-w-2xl bg-[color-mix(in_srgb,var(--success)_12%,transparent)] text-[var(--success)] border border-[var(--success)] rounded-b-lg shadow-md px-4 py-3 text-center">
-      <%= @notice %>
-    </div>
+<% { notice: @notice, alert: @alert }.each do |kind, message| %>
+  <% next if message.blank? %>
+  <div class="flash<%= " flash-alert" if kind == :alert %>" role="<%= kind == :alert ? "alert" : "status" %>"
+       data-controller="toast" data-toast-delay-value="<%= kind == :alert ? 8000 : 4500 %>">
+    <span class="flash-text"><%= message %></span>
+    <button type="button" class="flash-close" data-action="toast#close" aria-label="Dismiss">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
   </div>
 <% end %>
-
-<% if @alert.present? %>
-  <div class="w-full fixed top-0 left-0 z-50">
-    <div class="mx-auto max-w-2xl bg-[color-mix(in_srgb,var(--danger)_12%,transparent)] text-[var(--danger)] border border-[var(--danger)] rounded-b-lg shadow-md px-4 py-3 text-center">
-      <%= @alert %>
-    </div>
-  </div>
-<% end %>
-
-

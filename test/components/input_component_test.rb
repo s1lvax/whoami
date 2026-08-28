@@ -44,7 +44,7 @@ class InputComponentTest < ViewComponent::TestCase
     user = User.new(username: "")
     user.validate # triggers validations
     html = render_with_form(user, field: :username, type: :text, label: "Username").to_html
-    assert_match(/text-\[var\(--danger\)\]/, html) # CSS error class
+    assert_match(/class="error"/, html) # CSS error class
     assert_match(/can't be blank/, html)          # error message
   end
 

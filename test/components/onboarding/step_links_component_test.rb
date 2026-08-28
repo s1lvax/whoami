@@ -55,8 +55,8 @@ class Onboarding::StepLinksComponentTest < ViewComponent::TestCase
     assert add_btn, "Add link button should be present"
     assert_includes add_btn.text, "+ Add link"
 
-    hint = form.at_css('span.text-xs.text-\\[var\\(--muted\\)\\]')
-    assert_equal "Up to 10 links", hint.text.strip
+    hint = form.at_css(".gate-link-tools span")
+    assert_equal "Up to 6 links", hint.text.strip
 
     # Two submit buttons: Continue and Skip for now
     btn_primary = form.at_css('button[type="submit"]')
@@ -111,8 +111,8 @@ class Onboarding::StepLinksComponentTest < ViewComponent::TestCase
 
     # Labels rendered by InputComponent
     # (We don't depend on exact InputComponent markup beyond label texts and presence of inputs)
-    label_lab = first.at_css('label:contains("Label (e.g., GitHub, Blog)")')
-    url_lab   = first.at_css('label:contains("URL (https://...)")')
+    label_lab = first.at_css('label:contains("Label")')
+    url_lab   = first.at_css('label:contains("URL")')
     assert label_lab, "Label field label should be present"
     assert url_lab,   "URL field label should be present"
 

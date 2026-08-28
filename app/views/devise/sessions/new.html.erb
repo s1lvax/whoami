@@ -1,7 +1,12 @@
+<div class="gate">
+  <div class="gate-top">
+    <%= link_to "whoami", root_path, class: "wordmark" %>
+    <%= render ThemeToggleComponent.new(variant: :gate) %>
+  </div>
 
-<div class="min-h-screen flex items-center justify-center bg-[var(--bg)] px-4">
-  <div class="w-full max-w-md bg-[var(--card)] rounded-xl shadow-md p-8">
-    <h2 class="text-2xl font-semibold mb-6 text-center text-[var(--text)]">Log in</h2>
+  <section class="card card-pad">
+    <h1 class="display">Welcome back</h1>
+    <p class="intro">Log in to edit your page.</p>
 
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
       <%= render InputComponent.new(form: f, field: :email, type: :email,
@@ -11,19 +16,19 @@
                                     label: "Password", autocomplete: "current-password") %>
 
       <% if devise_mapping.rememberable? %>
-        <div class="mb-4 flex items-center">
-          <%= f.check_box :remember_me, class: "mr-2 rounded border-[var(--border)] bg-[var(--input-bg)]" %>
-          <%= f.label :remember_me, class: "text-sm text-[var(--muted)]" %>
-        </div>
+        <label class="check" style="margin-bottom: 1.25rem">
+          <%= f.check_box :remember_me %>
+          <span>Remember me</span>
+        </label>
       <% end %>
 
-      <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
-        Log in
-      <% end %>
+      <div class="actions">
+        <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
+          Log in
+        <% end %>
+      </div>
     <% end %>
 
-    <div class="mt-6 text-center">
-      <%= render "devise/shared/links" %>
-    </div>
-  </div>
+    <%= render "devise/shared/links" %>
+  </section>
 </div>

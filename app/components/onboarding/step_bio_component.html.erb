@@ -11,23 +11,17 @@
         input_options: {
           rows: 4,
           placeholder: "What do you do? What are you into?",
-          class: "min-h-[6rem]"
+          maxlength: 280
         }
       ) %>
 
-  <% if user.errors[:bio].any? %>
-    <p class="mt-1 text-xs text-[var(--danger)]"><%= user.errors[:bio].first %></p>
-  <% end %>
 
-    <div class="grid grid-cols-2 gap-3 mt-4">
+  <div class="actions">
     <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
       Continue
     <% end %>
-
     <%= render ButtonComponent.new(type: :submit, style: :secondary, full_width: true, name: "skip") do %>
       Skip for now
     <% end %>
-
   </div>
-
 <% end %>

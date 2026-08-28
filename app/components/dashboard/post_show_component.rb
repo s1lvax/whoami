@@ -16,7 +16,7 @@ class Dashboard::PostShowComponent < ViewComponent::Base
   end
 
   def views_text
-    "#{post.views} #{'view'.pluralize(post.views)}"
+    "#{post.views} #{'read'.pluralize(post.views)}"
   end
 
   # Paths via helpers so callers don't have to pass them in

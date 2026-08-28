@@ -1,85 +1,46 @@
+<div class="gate">
+  <div class="gate-top">
+    <%= link_to "← Dashboard", dashboard_path, class: "btn btn-ghost btn-sm" %>
+    <%= render ThemeToggleComponent.new(variant: :gate) %>
+  </div>
 
-<div class="flex justify-center py-14 sm:py-6">
-  <section class="w-full max-w-lg rounded-2xl bg-[var(--card)] ring-1 ring-[var(--border)] shadow-sm p-6">
-    <h1 class="text-xl md:text-2xl font-semibold mb-4 text-center">Account Settings</h1>
+  <section class="card card-pad">
+    <h1 class="display">Account</h1>
+    <p class="intro">Email and password. Your page lives in the dashboard.</p>
 
-    <%= form_with model: resource,
-                  scope: resource_name,
-                  url: registration_path(resource_name),
-                  method: :put,
-                  data: { turbo: true } do |f| %>
-
+    <%= form_with model: resource, scope: resource_name, url: registration_path(resource_name),
+                  method: :put, data: { turbo: true } do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
-      <!-- Email -->
       <%= render InputComponent.new(form: f, field: :email, type: :email,
-                                    label: "Email", autocomplete: "email", autofocus: true) %>
+                                    label: "Email", autocomplete: "email",
+                                    hint: (devise_mapping.confirmable? && resource.pending_reconfirmation? ? "Waiting for confirmation of #{resource.unconfirmed_email}" : nil)) %>
 
-      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-        <p class="mt-2 text-xs text-[var(--muted)]">
-          Currently waiting confirmation for:
-          <span class="font-medium"><%= resource.unconfirmed_email %></span>
-        </p>
-      <% end %>
+      <%= render InputComponent.new(form: f, field: :password, type: :password,
+                                    label: "New password", autocomplete: "new-password",
+                                    placeholder: "Leave blank to keep current",
+                                    hint: (@minimum_password_length ? "#{@minimum_password_length} characters minimum" : nil)) %>
 
-      <!-- New password -->
-      <div class="mt-4">
-        <%= render InputComponent.new(form: f, field: :password, type: :password,
-                                      label: "New password",
-                                      autocomplete: "new-password",
-                                      input_options: { placeholder: "Leave blank to keep current" }) %>
-        <% if @minimum_password_length %>
-          <p class="mt-1 text-[10px] text-[var(--muted)]">
-            <%= @minimum_password_length %> characters minimum
-          </p>
-        <% end %>
-      </div>
+      <%= render InputComponent.new(form: f, field: :password_confirmation, type: :password,
+                                    label: "Confirm new password", autocomplete: "new-password") %>
 
-      <!-- Confirm new password -->
-      <div class="mt-3">
-        <%= render InputComponent.new(form: f, field: :password_confirmation, type: :password,
-                                      label: "Confirm new password",
-                                      autocomplete: "new-password") %>
-      </div>
+      <%= render InputComponent.new(form: f, field: :current_password, type: :password,
+                                    label: "Current password", autocomplete: "current-password",
+                                    placeholder: "Required to save changes") %>
 
-      <!-- Current password (required to confirm changes) -->
-      <div class="mt-3">
-        <%= render InputComponent.new(form: f, field: :current_password, type: :password,
-                                      label: "Current password",
-                                      autocomplete: "current-password",
-                                      input_options: { placeholder: "Required to confirm changes" }) %>
-      </div>
-
-      <!-- Actions -->
-      <div class="mt-5 flex items-center justify-end gap-2">
-        <%= link_to "Back",
-              (request.referer || root_path),
-              class: "inline-flex items-center rounded-md px-4 py-2 text-sm ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)]" %>
-
-        <%= render ButtonComponent.new(type: :submit, style: :primary) do %>
-          Update
+      <div class="actions">
+        <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
+          Save changes
         <% end %>
       </div>
     <% end %>
   </section>
-</div>
 
-<!-- Danger zone card -->
-<div class="flex justify-center mt-2">
-  <section class="w-full max-w-lg rounded-2xl bg-[var(--card)] ring-1 ring-[var(--border)] shadow-sm p-6">
-    <h2 class="text-sm uppercase tracking-wide text-[var(--muted)] mb-3">Danger Zone</h2>
-    <div class="flex items-center justify-between gap-4 rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)] p-3">
-      <div>
-        <p class="text-sm font-medium">Cancel my account</p>
-        <p class="text-xs text-[var(--muted)]">This will permanently delete your account and data.</p>
-      </div>
-      <%= button_to "Delete",
-            registration_path(resource_name),
-            method: :delete,
-            data: { turbo_confirm: "Are you sure you want to delete your account?" },
-            class: "inline-flex items-center rounded-md px-4 py-2 text-sm font-medium
-                    ring-1 ring-[var(--border)] bg-[var(--surface)]
-                    text-[var(--danger)] hover:bg-[var(--surface-2)]" %>
-    </div>
+  <section class="card card-pad">
+    <h2 style="font-size: 1.1rem; font-family: var(--font-display); font-weight: 650; letter-spacing: -0.02em">Delete account</h2>
+    <p class="intro" style="margin-bottom: 1rem">Removes your page, links, posts, and subscribers. There is no undo.</p>
+    <%= button_to "Delete my account", registration_path(resource_name), method: :delete,
+          data: { turbo_confirm: "Delete your account and everything on it?" },
+          class: "btn btn-danger" %>
   </section>
 </div>

@@ -1,112 +1,152 @@
-<div class="min-h-screen bg-[var(--bg)] text-[var(--text)]">
-  <div class="max-w-6xl mx-auto px-4 py-8">
-    <!-- Header -->
-    <header class="mb-8 flex items-center justify-between">
-      <div>
-        <h1 class="text-2xl font-semibold">Dashboard</h1>
-        <p class="text-sm text-[var(--muted)]">Welcome back,
-          <%= current_user.full_name %></p>
-      </div>
-      <div class="flex gap-2">
-        <%= link_to "Account Settings",
-        edit_registration_path(current_user),
-        class:
-          "inline-flex items-center rounded-md px-4 py-2 ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] text-sm" %>
+<% page_url = public_profile_url_for(current_user) %>
+<% preview_url = public_profile_url(current_user.username, preview: 1) %>
+<div class="ws" data-controller="preview"
+     data-action="turbo:submit-end@document->preview#reload">
 
-        <%= link_to "View Profile",
-        public_profile_path(current_user.username),
-        class:
-          "inline-flex items-center rounded-md px-4 py-2 ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] text-sm" %>
-      </div>
+  <nav class="ws-nav" aria-label="Dashboard">
+    <%= link_to "whoami", root_path, class: "wordmark" %>
+    <ul class="ws-nav-links">
+      <li><a href="#profile">Profile</a></li>
+      <li><a href="#links">Links</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#writing">Writing</a></li>
+      <li><a href="#audience">Audience</a></li>
+      <li><a href="#domain">Domain</a></li>
+      <li><%= link_to "Share", share_dashboard_path %></li>
+      <li><%= link_to "Settings", edit_registration_path(current_user) %></li>
+    </ul>
+    <div class="ws-nav-foot">
+      <%= link_to page_url, class: "btn btn-secondary btn-block", target: "_blank", rel: "noopener" do %>
+        Open your page
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+      <% end %>
+      <%= button_to "Log out", destroy_user_session_path, method: :delete, data: { turbo: false }, class: "btn btn-ghost" %>
+    </div>
+  </nav>
+
+  <main class="ws-main">
+    <header>
+      <h1 class="ws-title display">Your page</h1>
+      <p class="ws-lede">Everything here is what visitors see.</p>
     </header>
-    <div class="mb-4">
+
+    <% stat = ->(label) { @stats.find { |s| s[:label] == label }&.dig(:value) } %>
+    <%= render Dashboard::SectionComponent.new(title: "Profile", id: "profile", count: "#{stat.("Profile Views")} views") do %>
       <%= turbo_frame_tag "profile_header" do %>
-        <%= render Dashboard::ProfileHeaderComponent.new(
-          user: @user,
-          edit_href: edit_dashboard_path,
-        ) %>
+        <%= render Dashboard::ProfileHeaderComponent.new(user: @user, edit_href: edit_dashboard_path) %>
       <% end %>
-    </div>
-    <!-- Grid: stats -->
-    <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-      <% @stats.each do |s| %>
-        <%= render Dashboard::StatCardComponent.new(**s) %>
-      <% end %>
-    </section>
-    <!-- Grid: left main column + right sidebar -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <!-- Left (2 cols) -->
-      <div class="lg:col-span-2 space-y-6">
-        <!-- Quick Links -->
-        <%= render Dashboard::SectionComponent.new(title: "Favorite Links") do %>
-          <div class="grid sm:grid-cols-2 gap-3">
-            <ul id="favorite_links_list" class="contents">
-              <% @favorite_links.each do |link| %>
-                <%= render Dashboard::LinkCardComponent.new(link: link) %>
-              <% end %>
-            </ul>
+    <% end %>
 
-            <%# “+” card or nothing if already at 6 %>
-            <% if @favorite_links.size < 6 %>
-              <%= render Dashboard::NewLinkCardComponent.new %>
-            <% else %>
-              <%= turbo_frame_tag "new_favorite_link" %>
-            <% end %>
-          </div>
-        <% end %>
-        <%= render Dashboard::SectionComponent.new(title: "Latest Posts", action_label: "Write", action_href: new_dashboard_post_path) do %>
-          <div class="overflow-hidden rounded-lg ring-1 ring-[var(--border)]">
-            <table class="w-full text-sm">
-              <thead class="bg-[var(--surface-2)] text-left">
-                <tr>
-                  <th class="px-4 py-2">Title</th>
-                  <th class="px-4 py-2 w-32">Date</th>
-                  <th class="px-4 py-2 w-24">Views</th>
-                  <th class="px-4 py-2 w-24">Status</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-[var(--border)]">
-                <% @posts.each do |post| %>
-                  <tr class="hover:bg-[var(--surface-2)]">
-                    <td class="px-4 py-2">
-                      <%= link_to post.title, dashboard_post_path(post), class: "underline" %>
-                    </td>
-                    <td class="px-4 py-2 text-[var(--muted)]">
-                      <%= (post.published_at || post.updated_at).to_date.to_fs(:long) %>
-                    </td>
-                    <td class="px-4 py-2"><%= post.views %></td>
-                    <td class="px-4 py-2">
-                      <span class="text-xs px-2 py-1 rounded ring-1 ring-[var(--border)]">
-                        <%= post.status.titleize %>
-                      </span>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-          <!-- Pagination -->
-          <div class="mt-4">
-            <%= render PaginationComponent.new(pagy: @pagy) %>
-          </div>
+    <%= render Dashboard::SectionComponent.new(title: "Links", id: "links", count: "#{@favorite_links.size} of 6 · #{stat.("Link Clicks")} clicks") do %>
+      <% if @favorite_links.empty? %>
+        <p class="ws-lede" style="margin: 0 0 0.75rem">None yet. Add the places you actually send people.</p>
+      <% end %>
+      <div class="ws-links">
+        <ul id="favorite_links_list" style="display: contents; list-style: none; margin: 0; padding: 0">
+          <% @favorite_links.each do |link| %>
+            <%= render Dashboard::LinkCardComponent.new(link: link) %>
+          <% end %>
+        </ul>
+        <% if @favorite_links.size < 6 %>
+          <%= render Dashboard::NewLinkCardComponent.new %>
+        <% else %>
+          <%= turbo_frame_tag "new_favorite_link" %>
         <% end %>
       </div>
-      <!-- Right (1 col) -->
-      <div class="space-y-6">
-        <%= render Dashboard::SectionComponent.new(
-          title: "Experience",
-          action_href: "/experience/new" # optional/remove if not used
-        ) do %>
-          <div class="space-y-3">
-            <ul id="experiences_list" class="space-y-3">
-              <% @experiences.each do |exp| %>
-                <%= render Dashboard::ExperienceCardComponent.new(experience: exp) %>
-              <% end %>
-            </ul>
+    <% end %>
 
-            <%= render Dashboard::NewExperienceCardComponent.new %>
-          </div>
+    <%= render Dashboard::SectionComponent.new(title: "Work", id: "work", count: @experiences.size) do %>
+      <ul id="experiences_list" class="rows">
+        <% @experiences.each do |exp| %>
+          <%= render Dashboard::ExperienceCardComponent.new(experience: exp) %>
+        <% end %>
+      </ul>
+      <% if @experiences.empty? %>
+        <p class="ws-lede" style="margin: 0 0 0.75rem">None yet. Add a role the public page can show.</p>
+      <% end %>
+      <div class="ws-rows-add">
+        <%= render Dashboard::NewExperienceCardComponent.new %>
+      </div>
+    <% end %>
+
+    <%= render Dashboard::SectionComponent.new(title: "Writing", id: "writing", count: "#{stat.("Blog Reads")} reads", action_label: "Write", action_href: new_dashboard_post_path) do %>
+      <% if @posts.empty? %>
+        <div class="empty">
+          <strong>No posts yet.</strong>
+          <span>Writing is optional. The section only shows once there is something to read.</span>
+        </div>
+      <% else %>
+        <ul class="rows">
+          <% @posts.each do |post| %>
+            <li class="row ws-post">
+              <p class="row-when"><%= (post.published_at || post.updated_at).to_date.strftime("%b %-d, %Y") %></p>
+              <div class="row-body">
+                <h3 class="row-title"><%= link_to post.title, dashboard_post_path(post) %></h3>
+              </div>
+              <p class="ws-post-meta">
+                <span class="num"><%= post.views %> <%= "read".pluralize(post.views) %></span>
+                <span class="chip <%= post.status == "published" ? "chip-ok" : "" %>"><%= post.status.titleize %></span>
+              </p>
+            </li>
+          <% end %>
+        </ul>
+        <%= render PaginationComponent.new(pagy: @pagy) %>
+      <% end %>
+    <% end %>
+
+    <%= render Dashboard::SectionComponent.new(title: "Audience", id: "audience", count: @subscribers.size) do %>
+      <% if @subscribers.any? %>
+        <ul class="ws-list">
+          <% @subscribers.each do |subscriber| %>
+            <li>
+              <span class="mono" style="overflow:hidden; text-overflow:ellipsis"><%= subscriber.subscriber_email %></span>
+              <%= button_to "Remove", dashboard_subscriber_path(subscriber), method: :delete, class: "btn btn-ghost btn-sm" %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <div class="empty">
+          <strong>Nobody is subscribed yet.</strong>
+          <span>Readers can subscribe from any post. New published posts go out by email.</span>
+        </div>
+      <% end %>
+
+      <div class="ws-sub">
+        <h3>Import from GitHub</h3>
+        <p>Pull name, bio, avatar, and links from a public GitHub user.</p>
+        <%= form_with url: github_import_path, method: :post, class: "ws-inline" do %>
+          <%= text_field_tag :github_login, current_user.username, class: "input mono", "aria-label": "GitHub username" %>
+          <%= submit_tag "Import", class: "btn btn-secondary" %>
         <% end %>
       </div>
+    <% end %>
+
+    <%= render Dashboard::SectionComponent.new(title: "Domain", id: "domain") do %>
+      <p class="ws-lede" style="margin: 0 0 0.75rem">
+        Point a CNAME at this app, then save the hostname. The public page will answer on that host.
+        <% if current_user.custom_domain.present? %>
+          <span class="chip chip-ok chip-dot"><%= current_user.custom_domain %></span>
+        <% end %>
+      </p>
+      <%= form_with model: current_user, url: dashboard_path, method: :patch, data: { turbo: false }, class: "ws-inline" do |f| %>
+        <%= f.text_field :custom_domain, placeholder: "you.com", class: "input mono", "aria-label": "Custom domain" %>
+        <%= f.submit "Save", class: "btn btn-secondary" %>
+      <% end %>
+    <% end %>
+  </main>
+
+  <%= link_to page_url, class: "btn btn-primary ws-preview-fab", target: "_blank", rel: "noopener" do %>
+    Preview
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+  <% end %>
+
+  <aside class="ws-preview" aria-label="Live preview" data-preview-target="panel">
+    <span class="ws-preview-live">live</span>
+    <div class="ws-phone">
+      <iframe data-preview-target="frame" data-action="load->preview#loaded" src="<%= preview_url %>" title="Live preview" loading="lazy"></iframe>
     </div>
-  </div>
+    <%= link_to page_url, class: "url-pill", target: "_blank", rel: "noopener" do %>
+      <b><%= page_url.sub(%r{\Ahttps?://}, "").delete_suffix("/") %></b>
+    <% end %>
+  </aside>
+</div>

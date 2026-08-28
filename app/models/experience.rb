@@ -4,6 +4,8 @@ class Experience < ApplicationRecord
   validates :company, :role, :start_date, presence: true
   validate  :end_date_not_before_start
 
+  scope :on_profile, -> { order(Arel.sql("end_date IS NULL DESC, start_date DESC")) }
+
   # presentation helpers – safe to call from components
   def highlights_list
     (highlights.to_s.split(/\r?\n/).map(&:strip).reject(&:blank?))[0, 10]

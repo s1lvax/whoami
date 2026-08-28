@@ -1,28 +1,26 @@
-<div class="min-h-screen flex items-center justify-center bg-[var(--bg)] px-4">
-  <div class="w-full max-w-md bg-[var(--card)] rounded-xl shadow-md p-8">
-    <h2 class="text-2xl font-semibold mb-6 text-center text-[var(--text)]">
-      Forgot your password?
-    </h2>
+<div class="gate">
+  <div class="gate-top">
+    <%= link_to "whoami", root_path, class: "wordmark" %>
+    <%= render ThemeToggleComponent.new(variant: :gate) %>
+  </div>
+
+  <section class="card card-pad">
+    <h1 class="display">Forgot your password?</h1>
+    <p class="intro">We'll email you a link to set a new one.</p>
 
     <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
-      <%= render InputComponent.new(
-        form: f,
-        field: :email,
-        type: :email,
-        label: "Email",
-        autocomplete: "email",
-        autofocus: true,
-      ) %>
+      <%= render InputComponent.new(form: f, field: :email, type: :email,
+                                    label: "Email", autocomplete: "email", autofocus: true) %>
 
-      <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
-        Send me reset password instructions
-      <% end %>
+      <div class="actions">
+        <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
+          Send reset link
+        <% end %>
+      </div>
     <% end %>
 
-    <div class="mt-6">
-      <%= render "devise/shared/links" %>
-    </div>
-  </div>
+    <%= render "devise/shared/links" %>
+  </section>
 </div>

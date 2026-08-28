@@ -14,4 +14,8 @@ class Dashboard::LinkCardComponent < ViewComponent::Base
   def delete_path
     helpers.dashboard_favorite_link_path(link)
   end
+
+  def edit_path
+    helpers.edit_dashboard_favorite_link_path(link)
+  end
 end

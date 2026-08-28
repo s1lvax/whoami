@@ -21,60 +21,34 @@ class Dashboard::ProfileHeaderComponent < ViewComponent::Base
     "@#{base}"
   end
 
-  # Returns an <img> tag using Rails' image_tag helper
   def avatar_tag
-    if user.respond_to?(:avatar) && user.avatar&.attached?
-      image_tag(
-        helpers.url_for(user.avatar.variant(resize_to_fill: [ 192, 192 ])),
-        alt: display_name,
-        class: "w-16 h-16 sm:w-20 sm:h-20 rounded-full ring-2 ring-[var(--border)] object-cover"
-      )
+    src = if user.respond_to?(:avatar) && user.avatar&.attached?
+      helpers.rails_representation_path(user.avatar.variant(resize_to_fill: [ 192, 192 ]))
     else
-      image_tag(
-        initials_data_uri(display_name, 192),
-        alt: display_name,
-        class: "w-16 h-16 sm:w-20 sm:h-20 rounded-full ring-2 ring-[var(--border)] object-cover"
-      )
+      initials_data_uri(display_name, 192)
     end
+    image_tag(src, alt: display_name, width: 72, height: 72, class: "avatar avatar-tile")
   end
 
   def bio
     user.respond_to?(:bio) ? user.bio : nil
   end
 
-  # --- Helpers for generated SVG avatar ---
-
   def initials_data_uri(name, size)
-    initials = extract_initials(name)
-    bg, fg   = palette_for(name)
+    parts    = name.to_s.split(/\s+/).reject(&:blank?)
+    initials = parts.empty? ? "?" : parts.first(2).map { |part| part[0] }.join.upcase
 
     svg = <<~SVG
-      <svg xmlns="http://www.w3.org/2000/svg" width="#{size}" height="#{size}" viewBox="0 0 #{size} #{size}" role="img" aria-label="#{ERB::Util.h(display_name)}">
-        <rect width="100%" height="100%" rx="#{(size * 0.18).round}" fill="#{bg}"/>
+      <svg xmlns="http://www.w3.org/2000/svg" width="#{size}" height="#{size}" viewBox="0 0 #{size} #{size}" role="img" aria-label="#{ERB::Util.h(name)}">
+        <rect width="100%" height="100%" rx="#{(size * 0.28).round}" fill="#ECECE9"/>
         <text x="50%" y="50%" font-size="#{(size * 0.42).round}" font-weight="700"
-              font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif"
-              fill="#{fg}" text-anchor="middle" dominant-baseline="central" letter-spacing="1">
+              font-family="Bricolage Grotesque, Geist, system-ui, sans-serif"
+              fill="#111110" text-anchor="middle" dominant-baseline="central" letter-spacing="1">
           #{ERB::Util.h(initials)}
         </text>
       </svg>
     SVG
 
     "data:image/svg+xml;utf8,#{ERB::Util.url_encode(svg)}"
-  end
-
-  def extract_initials(name)
-    parts = name.to_s.scan(/[A-Za-z0-9]+/)
-    return "?" if parts.empty?
-    (parts.first[0].to_s + parts[1].to_s[0].to_s).upcase
-  end
-
-  def palette_for(seed)
-    # Deterministic background from name; foreground is always white for contrast
-    colors = %w[
-      #ef4444 #f59e0b #10b981 #3b82f6 #8b5cf6
-      #ec4899 #14b8a6 #22c55e #eab308 #6366f1
-    ]
-    idx = Digest::MD5.hexdigest(seed.to_s).hex % colors.size
-    [ colors[idx], "#ffffff" ]
   end
 end

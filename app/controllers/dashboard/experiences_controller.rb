@@ -32,9 +32,43 @@ class Dashboard::ExperiencesController < ApplicationController
       respond_to do |format|
         format.turbo_stream do
           form_html = helpers.render(Dashboard::ExperienceFormCardComponent.new(experience: @experience))
-          render turbo_stream: turbo_stream.replace("new_experience", form_html), status: :unprocessable_entity
+          render turbo_stream: turbo_stream.replace("new_experience", form_html), status: :unprocessable_content
         end
-        format.html { redirect_to dashboard_path, status: :unprocessable_entity, alert: "Please fix errors." }
+        format.html { redirect_to dashboard_path, status: :unprocessable_content, alert: "Please fix errors." }
+      end
+    end
+  end
+
+  def edit
+    @experience = current_user.experiences.find(params[:id])
+    if turbo_frame_request?
+      render html: helpers.render(Dashboard::ExperienceFormCardComponent.new(experience: @experience)), layout: false
+    else
+      redirect_to dashboard_path
+    end
+  end
+
+  def update
+    @experience = current_user.experiences.find(params[:id])
+    if @experience.update(experience_params)
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            helpers.dom_id(@experience),
+            helpers.render(Dashboard::ExperienceCardComponent.new(experience: @experience))
+          )
+        end
+        format.html { redirect_to dashboard_path, notice: "Experience updated." }
+      end
+    else
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            helpers.dom_id(@experience),
+            helpers.render(Dashboard::ExperienceFormCardComponent.new(experience: @experience))
+          ), status: :unprocessable_content
+        end
+        format.html { redirect_to dashboard_path, alert: "Please fix the experience." }
       end
     end
   end
@@ -54,12 +88,6 @@ class Dashboard::ExperiencesController < ApplicationController
   private
 
   def experience_params
-    # keep mass-assignment to clearly harmless fields
-    attrs = params.require(:experience).permit(
-      :company, :location, :start_date, :end_date, :highlights, :tech
-    )
-    # assign :role explicitly (coerce to string, trim/limit if you want)
-    attrs[:role] = params.dig(:experience, :role).to_s
-    attrs
+    params.expect(experience: [ :company, :role, :location, :start_date, :end_date, :highlights, :tech ])
   end
 end

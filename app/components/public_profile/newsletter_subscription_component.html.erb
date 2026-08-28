@@ -1,31 +1,61 @@
-<div class="mb-8 text-center">
-  <h2 class="text-sm font-medium text-[var(--muted)] mb-2">
-    Subscribe to
-    <%= user.username %>
-  </h2>
+<% form_url = helpers.new_subscription_path_for(user) %>
 
-  <% if subscription&.errors&.any? %>
-    <div class="text-red-500 text-xs mb-2">
-      <% subscription.errors.full_messages.each do |msg| %>
-        <p><%= msg %></p>
+<% case variant %>
+<% when :bar %>
+  <aside class="subscribe-bar" id="subscribe-bar" data-controller="subscribe-bar" data-subscribe-bar-key-value="whoami:subscribe-bar:<%= user.username %>" hidden>
+    <div class="subscribe-bar-inner">
+      <% if avatar_url %><%= image_tag avatar_url, alt: "", class: "avatar avatar-round subscribe-bar-avatar", loading: "lazy" %><% end %>
+      <p class="subscribe-bar-copy">
+        <strong>New posts from <%= display_name %>, by email.</strong>
+        <% if social_proof %><span><%= social_proof %></span><% end %>
+      </p>
+      <%= form_with(url: form_url, method: :post, scope: :subscription, class: "subscribe-bar-form") do |f| %>
+        <%= hidden_field_tag :variant, "bar", id: nil %>
+        <%= f.email_field :subscriber_email, id: field_id, placeholder: "you@example.com", required: true,
+                          autocomplete: "email", class: "input", "aria-label": "Email address" %>
+        <%= f.submit "Subscribe", class: "btn btn-primary", data: { disable_with: "Sending…" } %>
+      <% end %>
+      <button type="button" class="subscribe-bar-close" data-action="subscribe-bar#dismiss" aria-label="Not now">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+  </aside>
+
+<% when :inline %>
+  <div class="subscribe-inline" id="subscribe-inline">
+    <p class="subscribe-inline-copy">
+      <strong>New posts by email.</strong>
+      <span><%= social_proof || "Confirm once, unsubscribe any time." %></span>
+    </p>
+    <%= form_with(url: form_url, method: :post, scope: :subscription, class: "subscribe-inline-form") do |f| %>
+      <%= hidden_field_tag :variant, "inline", id: nil %>
+      <%= f.email_field :subscriber_email, id: field_id, placeholder: "you@example.com", required: true,
+                        autocomplete: "email", class: "input", "aria-label": "Email address" %>
+      <%= f.submit "Subscribe", class: "btn btn-primary", data: { disable_with: "Sending…" } %>
+    <% end %>
+  </div>
+
+<% else %>
+  <section class="subscribe-card" id="subscribe-card" aria-labelledby="subscribe-heading" data-subscribe-card>
+    <% if avatar_url %>
+      <%= image_tag avatar_url, alt: "", class: "avatar avatar-round subscribe-card-avatar", loading: "lazy" %>
+    <% end %>
+    <div class="subscribe-card-copy">
+      <h2 id="subscribe-heading">Get the next one by email</h2>
+      <p>
+        <% if social_proof %><%= social_proof %><% else %>No feed, no ads — one email per post.<% end %>
+      </p>
+      <% if subscription&.errors&.any? %>
+        <% subscription.errors.full_messages.each do |msg| %>
+          <span class="error"><%= msg %></span>
+        <% end %>
       <% end %>
     </div>
-  <% end %>
-
-  <%= form_with(
-    url: new_subscription_path(username: user.username),
-    method: :post,
-    scope: :subscription,
-    class: "flex flex-col sm:flex-row justify-center gap-2 max-w-md mx-auto"
-  ) do |f| %>
-    <%= f.email_field :subscriber_email,
-                  placeholder: "Enter your email",
-                  required: true,
-                  class:
-                    "flex-1 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--btn-bg)]" %>
-
-    <%= f.submit "Subscribe",
-             class:
-               "rounded-md bg-[var(--btn-bg)] text-black cursor-pointer px-4 py-2 text-sm font-medium hover:opacity-90 transition" %>
-  <% end %>
-</div>
+    <%= form_with(url: form_url, method: :post, scope: :subscription, class: "subscribe-card-form") do |f| %>
+      <%= hidden_field_tag :variant, "card", id: nil %>
+      <%= f.email_field :subscriber_email, id: field_id, placeholder: "you@example.com", required: true,
+                        autocomplete: "email", class: "input", "aria-label": "Email address" %>
+      <%= f.submit "Subscribe", class: "btn btn-primary", data: { disable_with: "Sending…" } %>
+    <% end %>
+  </section>
+<% end %>

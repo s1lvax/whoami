@@ -54,6 +54,8 @@ group :development, :test do
 end
 
 group :development do
+  # Opens every email in the browser instead of sending it (confirmation links, newsletters)
+  gem "letter_opener"
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 end
@@ -71,3 +73,6 @@ gem "postmark-rails"
 gem "friendly_id"
 gem "pagy"
 gem "rss"
+
+# Rich text editor for Action Text (Lexical-based, Markdown shortcuts) [https://lexxy.dev]
+gem "lexxy"

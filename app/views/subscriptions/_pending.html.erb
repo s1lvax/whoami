@@ -1,0 +1,12 @@
+<%# The form's spot after submitting: waits for the emailed confirmation over Action Cable. %>
+<% root_class = { card: "subscribe-card subscribe-card--state", bar: "subscribe-bar is-visible subscribe-bar--state", inline: "subscribe-inline subscribe-inline--state" }[variant] %>
+<div id="subscribe-<%= variant %>" class="<%= root_class %>" data-subscribe-card>
+  <%= turbo_stream_from "subscription:#{subscription.token}" %>
+  <div id="subscription-status-<%= subscription.token %>" class="subscribe-status is-pending" role="status">
+    <span class="subscribe-status-dot" aria-hidden="true"></span>
+    <p>
+      <strong>Check your inbox.</strong>
+      We sent a link to <b><%= subscription.subscriber_email %></b>. This page will update the moment you confirm.
+    </p>
+  </div>
+</div>

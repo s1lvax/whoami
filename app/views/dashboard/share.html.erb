@@ -1,0 +1,52 @@
+<% content_for :title, "Put your page somewhere · whoami" %>
+<div class="gate gate--wide">
+  <div class="gate-top">
+    <%= link_to "whoami", root_path, class: "wordmark" %>
+    <%= render ThemeToggleComponent.new(variant: :gate) %>
+  </div>
+
+  <section class="card card-pad">
+    <h1 class="display">Your page is live.</h1>
+    <p class="intro">A page nobody links to is a page nobody sees. Put this in the places people already look for you.</p>
+
+    <div class="share-url" data-controller="clipboard" data-clipboard-text-value="<%= @url %>">
+      <button type="button" class="url-pill share-url-pill" data-action="clipboard#copy" title="Copy link"><b><%= @short %></b></button>
+      <button type="button" class="btn btn-primary" data-action="clipboard#copy">Copy link</button>
+      <%= link_to "Open", @url, class: "btn btn-secondary", target: "_blank", rel: "noopener" %>
+    </div>
+
+    <ul class="share-list">
+      <% [
+        ["GitHub",    "https://github.com/settings/profile",                 "Website field on your profile",      "https://github.com"],
+        ["LinkedIn",  "https://www.linkedin.com/in/me/edit/contact-info/",   "Contact info → Website",              "https://linkedin.com"],
+        ["X",         "https://x.com/settings/profile",                       "Website on your profile",            "https://x.com"],
+        ["Instagram", "https://www.instagram.com/accounts/edit/",             "The one link in your bio",           "https://instagram.com"],
+        ["Bluesky",   "https://bsky.app/settings",                            "Description on your profile",        "https://bsky.app"],
+      ].each do |name, settings_url, hint, brand_url| %>
+        <li class="share-row">
+          <span class="tile-glyph share-glyph" style="--brand: <%= link_brand(brand_url) %>"><%= link_icon(brand_url) %></span>
+          <span class="share-row-text">
+            <strong><%= name %></strong>
+            <span><%= hint %></span>
+          </span>
+          <%= link_to "Open settings", settings_url, class: "btn btn-ghost btn-sm", target: "_blank", rel: "noopener" %>
+        </li>
+      <% end %>
+      <li class="share-row" data-controller="clipboard" data-clipboard-text-value="<%= @user.display_name %> · <%= @short %>">
+        <span class="tile-glyph share-glyph" style="--brand: var(--ink)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3 8 9 6 9-6"/></svg>
+        </span>
+        <span class="share-row-text">
+          <strong>Email signature</strong>
+          <span class="mono"><%= @user.display_name %> · <%= @short %></span>
+        </span>
+        <button type="button" class="btn btn-ghost btn-sm" data-action="clipboard#copy">Copy</button>
+      </li>
+    </ul>
+
+    <p class="share-foot">
+      <%= link_to "Go to the dashboard", dashboard_path, class: "btn btn-secondary" %>
+      <span class="hint">You can come back here from the dashboard any time.</span>
+    </p>
+  </section>
+</div>

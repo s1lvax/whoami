@@ -1,7 +1,6 @@
 require "test_helper"
 
 class Dashboard::LinkCardComponentTest < ViewComponent::TestCase
-  # Fake model with minimum for dom_id + routing
   class FakeLink
     include ActiveModel::Model
     include ActiveModel::Conversion
@@ -18,56 +17,36 @@ class Dashboard::LinkCardComponentTest < ViewComponent::TestCase
   end
 
   def render_fragment(link:)
-    component = Dashboard::LinkCardComponent.new(link: link)
-
-    stub_dom_id = "fake_link_#{link.id}"
-    stub_delete_path = "/dashboard/favorite_links/#{link.to_param}"
-
-    render_inline(component) do |c|
-      # Stub route and dom_id helpers
-      c.singleton_class.class_eval do
-        define_method(:helpers) do
-          @helpers ||= Module.new do
-            define_singleton_method(:dashboard_favorite_link_path) { stub_delete_path }
-            define_singleton_method(:dom_id) { stub_dom_id }
-          end
-        end
-      end
-    end
-
+    render_inline(Dashboard::LinkCardComponent.new(link: link))
     Nokogiri::HTML.fragment(rendered_content)
   end
 
-  test "renders label, url and clicks" do
-    link = build_link(label: "Rails", url: "https://rubyonrails.org", clicks: 12)
-    frag = render_fragment(link:)
+  test "renders label, host, clicks, and a brand glyph" do
+    frag = render_fragment(link: build_link(label: "GitHub", url: "https://github.com/s1lvax", clicks: 12))
 
-    assert_text_includes frag, "Rails"
-    assert_text_includes frag, "https://rubyonrails.org"
-    assert_text_includes frag, "12"
+    assert_equal "GitHub", frag.at_css(".ws-link-label").text.strip
+    assert_equal "github.com", frag.at_css(".ws-link-host").text.strip
+    assert_includes frag.at_css(".ws-link-clicks").text, "12"
+    assert frag.at_css(".ws-glyph svg.link-glyph")
   end
 
   test "shows 0 when clicks is nil" do
-    link = build_link(clicks: nil)
-    frag = render_fragment(link:)
-
-    assert_text_includes frag, "0"
+    frag = render_fragment(link: build_link(clicks: nil))
+    assert_includes frag.at_css(".ws-link-clicks").text, "0"
   end
 
-  test "renders delete link with correct path and turbo attributes" do
+  test "renders edit and delete actions inside the record's turbo frame" do
     link = build_link
     frag = render_fragment(link:)
+    frame_id = ActionView::RecordIdentifier.dom_id(link)
 
-    delete_link = frag.at_css("a[href='/dashboard/favorite_links/42']")
+    assert frag.at_css("turbo-frame##{frame_id}")
+    assert frag.at_css(%Q(a[href="/dashboard/favorite_links/42/edit"][data-turbo-frame="#{frame_id}"]))
+
+    delete_link = frag.at_css('a[href="/dashboard/favorite_links/42"]')
     assert delete_link
     assert_equal "delete", delete_link["data-turbo-method"]
     assert_equal "Delete this link?", delete_link["data-turbo-confirm"]
-    assert_includes delete_link["class"], "inline-flex"
-  end
-
-  private
-
-  def assert_text_includes(fragment, expected)
-    assert_includes fragment.text, expected
+    assert_equal "Delete My Link", delete_link["aria-label"]
   end
 end

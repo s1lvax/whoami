@@ -5,41 +5,35 @@
                 html: { multipart: true },
                 data: { turbo: true } do |f| %>
 
-    <div class="mb-4 text-center">
-      <div class="w-24 h-24 mx-auto rounded-full overflow-hidden bg-[var(--input-bg)] ring-1 ring-[var(--input-border)]">
+    <div class="gate-avatar">
+      <div class="avatar avatar-tile" style="overflow: hidden">
         <img data-avatar-preview-target="img"
-             src="<%= user.avatar.attached? ? url_for(user.avatar.variant(resize_to_fill: [192, 192])) : '' %>"
-             alt=""
-             class="w-full h-full object-cover <%= user.avatar.attached? ? '' : 'hidden' %>">
+             src="<%= user.avatar.attached? ? rails_representation_path(user.avatar.variant(resize_to_fill: [192, 192])) : '' %>"
+             alt="<%= user.avatar.attached? ? user.display_name : '' %>"
+             class="<%= user.avatar.attached? ? '' : 'hidden' %>"
+             style="width: 100%; height: 100%; object-fit: cover">
       </div>
-      <p class="mt-2 text-xs text-[var(--muted)]">PNG, JPG, or WEBP up to 5 MB</p>
+      <div>
+        <%= f.file_field :avatar,
+              direct_upload: true,
+              accept: "image/png,image/jpeg,image/webp",
+              data: { action: "change->avatar-preview#pick" },
+              class: "file" %>
+        <% if user.errors[:avatar].any? %>
+          <p class="error"><%= user.errors[:avatar].first %></p>
+        <% else %>
+          <p class="hint">Square works best.</p>
+        <% end %>
+      </div>
     </div>
 
-    <div class="mb-6">
-      <%= f.file_field :avatar,
-            direct_upload: true,
-            accept: "image/png,image/jpeg,image/webp",
-            data: { action: "change->avatar-preview#pick" },
-            class: "block w-full text-sm text-[var(--input-text)] file:mr-4 file:py-2 file:px-4
-                    file:rounded-md file:border-0 file:text-sm file:font-semibold
-                    file:bg-[var(--primary)] file:text-white hover:file:opacity-90
-                    bg-[var(--input-bg)] ring-1 ring-[var(--input-border)] rounded-md px-3 py-2" %>
-
-      <% if user.errors[:avatar].any? %>
-        <p class="mt-1 text-xs text-[var(--danger)]"><%= user.errors[:avatar].first %></p>
+    <div class="actions">
+      <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
+        Continue
+      <% end %>
+      <%= render ButtonComponent.new(type: :submit, style: :secondary, full_width: true, name: "skip") do %>
+        Skip for now
       <% end %>
     </div>
-
-        <div class="grid grid-cols-2 gap-3 mt-4">
-    <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
-      Continue
-    <% end %>
-
-    <%= render ButtonComponent.new(type: :submit, style: :secondary, full_width: true, name: "skip") do %>
-      Skip for now
-    <% end %>
-
-  </div>
-
   <% end %>
 </div>

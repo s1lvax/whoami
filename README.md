@@ -14,7 +14,7 @@ It lets you share your profile, links, CV/experience, and blog posts — all in 
 - ✍️ **Blogging system** with rich text editor
 - 📊 **Dashboard** with live stats (profile views, link clicks, blog reads)
 - 🌍 **Public profiles** optimized for SEO (title/meta tags, slugs with FriendlyId)
-- 📱 Fully responsive, modern UI with Tailwind and custom theme (dark + accent color)
+- 📱 Fully responsive UI with a light/dark theme that follows the system
 - 📰 **RSS Feed** for every user’s blog posts (`/:username/feed`)
 - 📧 **Newsletter subscriptions**: visitors can subscribe to your profile and get your published posts delivered automatically via email
 
@@ -77,7 +77,7 @@ bin/kamal deploy
 - **Backend**: Ruby on Rails 8, Devise, FriendlyId
 - **Frontend**: Hotwire (Turbo + Stimulus), Tailwind CSS, custom dark theme
 - **Database**: SQLite (default), can be switched to PostgreSQL
-- **Editor**: ActionText (Trix) with custom SVG toolbar
+- **Editor**: Action Text with [Lexxy](https://lexxy.dev) — Markdown shortcuts, code highlighting, attachments
 - **Deployment**: Kamal + Docker
 
 ---

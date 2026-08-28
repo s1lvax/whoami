@@ -1,27 +1,13 @@
-<section class="rounded-2xl bg-[var(--card)] ring-1 ring-[var(--border)] p-6 self-start">
-  <div class="mb-3 flex items-center justify-between">
-    <h2 class="text-sm uppercase tracking-wide text-[var(--muted)]">Links</h2>
-    <span class="text-xs text-[var(--muted)]"><%= links.size %></span>
-  </div>
-
-  <% if links.any? %>
-    <ul class="space-y-2">
-      <% links.each do |link| %>
-        <% href = helpers.normalized_url(link.url) %>
-        <li class="rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] transition">
-          <%= link_to public_link_click_path(username: user.username, id: link.id) do %>
-            <div class="flex items-center justify-between gap-3 px-3 py-2">
-              <div class="min-w-0">
-                <p class="text-sm font-medium truncate"><%= link.label %></p>
-                <p class="text-xs text-[var(--muted)] truncate"><%= href.sub(%r{\Ahttps?://}i, "") %></p>
-              </div>
-              <span class="text-[var(--muted)]">↗</span>
-            </div>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
-  <% else %>
-    <p class="text-sm text-[var(--muted)]">No links yet.</p>
+<section class="poster-links" aria-label="Links">
+  <% links.each do |link| %>
+    <%= link_to href_for(link), class: "b-link poster-link", title: link.url, data: { id: link.id },
+                style: "--brand: #{helpers.link_brand(link.url)}" do %>
+      <span class="tile-glyph"><%= helpers.link_icon(link.url) %></span>
+      <span class="tile-text">
+        <span class="tile-label"><%= link.label %></span>
+        <span class="tile-host"><%= host_for(link) %></span>
+      </span>
+      <svg class="tile-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+    <% end %>
   <% end %>
 </section>

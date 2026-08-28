@@ -1,80 +1,66 @@
-<section class="px-4 sm:px-8 md:px-12 lg:px-24 py-12">
-  <div class="mx-auto max-w-3xl">
+<% content_for :body_class, "identity" %>
+<% content_for :title, "#{@post.title} · #{@user.display_name}" %>
+<% content_for :description, @post.excerpt.presence || @post.title %>
+<% content_for :canonical, public_post_url_for(@user, @post) %>
 
-    <%# -------- Post header + meta + author -------- %>
-    <% cache ["public_post:header", @user.id, @post.cache_key_with_version, I18n.locale] do %>
-      <div class="text-center mb-4">
-        <h1 class="text-xl md:text-4xl font-semibold"><%= @post.title %></h1>
-      </div>
+<article class="post-wrap">
+  <% cache [@user, @post, :header] do %>
+    <% author_name = @user.display_name %>
+    <% avatar_url = @user.avatar&.attached? ? rails_representation_path(@user.avatar.variant(resize_to_fill: [96, 96])) : nil %>
 
-      <p class="text-xs text-[var(--muted)] text-center mb-4">
-        <% date = (@post.published_at || @post.updated_at).to_date %>
-        <%= date.to_fs(:long) %>
-      </p>
-
-      <% author_name = @user.full_name.presence || @user.email %>
-      <% handle = "@#{@user.handle}" %>
-      <% avatar_url =
-        if @user.avatar&.attached?
-          url_for(@user.avatar.variant(resize_to_fill: [96, 96]))
-        else
-          nil
-        end %>
-
-      <div class="mb-8 flex items-center justify-center gap-3">
-        <% if avatar_url.present? %>
-          <%= image_tag avatar_url,
-          alt: author_name,
-          loading: "lazy",
-          class:
-            "w-10 h-10 md:w-12 md:h-12 rounded-full ring-2 ring-[var(--border)] object-cover" %>
-        <% else %>
-          <% initials =
-            author_name.to_s.scan(/[A-Za-z0-9]/).first(2)&.join&.upcase.presence || "?" %>
-          <div
-            class="
-              w-10 h-10 md:w-12 md:h-12 rounded-full ring-2 ring-[var(--border)]
-              bg-[var(--surface-2)] text-[var(--text)] flex items-center justify-center
-              font-semibold
-            "
-          >
-            <%= initials %>
-          </div>
-        <% end %>
-
-        <div class="min-w-0">
-          <p class="text-sm font-medium leading-tight">
-            <%= link_to author_name,
-            public_profile_path(@user.username),
-            class: "hover:underline" %>
-          </p>
-          <p class="text-xs text-[var(--muted)] leading-tight"><%= handle %></p>
-        </div>
-      </div>
-    <% end %>
-
-    <%= render PublicProfile::NewsletterSubscriptionComponent.new(
-      user: @user,
-      subscription: @subscription,
-    ) %>
-
-    <%# -------- Post body (ActionText / Trix) -------- %>
-    <% cache ["public_post:body", @post.cache_key_with_version] do %>
-      <div class="trix-theme">
-        <div class="trix-content max-w-none">
-          <%= @post.body %>
-        </div>
-      </div>
-    <% end %>
-
-    <%# -------- More from this author -------- %>
-    <% if @more_posts.any? %>
-      <% cache ["public_post:more", @user.id, @more_posts.cache_key_with_version] do %>
-        <div class="mx-auto max-w-3xl mt-12 border-t border-[var(--border)] pt-8">
-          <%= render PublicProfile::MorePostsComponent.new(posts: @more_posts) %>
-        </div>
+    <div class="post-top">
+      <%= link_to public_profile_path_for(@user), class: "post-back" do %>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        <span>@<%= @user.handle %></span>
       <% end %>
+      <span class="post-top-tools">
+        <a href="#subscribe-card" class="btn btn-secondary btn-sm">Subscribe</a>
+        <%= link_to "whoami", root_path, class: "wordmark", style: "font-size: 0.9rem" %>
+      </span>
+    </div>
+
+    <h1 class="post-title"><%= @post.title %></h1>
+    <% if @post.excerpt.present? %>
+      <p class="post-excerpt"><%= @post.excerpt %></p>
     <% end %>
 
-  </div>
-</section>
+    <p class="post-meta">
+      <%= link_to public_profile_path_for(@user) do %>
+        <% if avatar_url %>
+          <%= image_tag avatar_url, alt: "", class: "avatar avatar-round", loading: "lazy" %>
+        <% end %>
+        <%= author_name %>
+      <% end %>
+      <span><%= (@post.published_at || @post.updated_at).to_date.to_fs(:long) %></span>
+      <span><%= @post.views %> <%= "read".pluralize(@post.views) %></span>
+    </p>
+  <% end %>
+
+  <% cache [@post, :body] do %>
+    <div class="post-body">
+      <div class="prose">
+        <%= @post.body %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="post-end" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <%= render PublicProfile::NewsletterSubscriptionComponent.new(user: @user, subscription: @subscription, variant: :card) %>
+
+  <% if @more_posts.any? %>
+    <% cache [@user, @more_posts, :more] do %>
+      <%= render PublicProfile::MorePostsComponent.new(posts: @more_posts) %>
+    <% end %>
+  <% end %>
+
+  <footer class="page-foot" style="margin-top: 2.5rem">
+    <%= link_to "whoami", root_path, class: "wordmark", style: "font-size: 0.9rem" %>
+    <span class="page-foot-tools">
+      <%= link_to "RSS", user_feed_path_for(@user), rel: "alternate", type: "application/rss+xml" %>
+      <%= render ThemeToggleComponent.new(variant: :page) %>
+    </span>
+  </footer>
+</article>
+
+<%= render PublicProfile::NewsletterSubscriptionComponent.new(user: @user, variant: :bar) %>

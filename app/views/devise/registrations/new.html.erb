@@ -1,45 +1,44 @@
-<div class="min-h-screen flex items-center justify-center bg-[var(--bg)] px-4">
-  <div class="w-full max-w-md bg-[var(--card)] rounded-xl shadow-md p-8">
-    <h2 class="text-2xl font-semibold mb-6 text-center text-[var(--text)]">
-      Sign up
-    </h2>
+<div class="gate">
+  <div class="gate-top">
+    <%= link_to "whoami", root_path, class: "wordmark" %>
+    <%= render ThemeToggleComponent.new(variant: :gate) %>
+  </div>
+
+  <section class="card card-pad">
+    <% handle = (resource.username.presence || params[:username]).to_s.downcase.strip %>
+    <h1 class="display">Claim your page</h1>
+    <% if handle.present? %>
+      <p class="intro">
+        <span class="url-pill">whoami.tech/<b><%= handle %></b></span>
+        is yours once you confirm your email.
+      </p>
+    <% else %>
+      <p class="intro">Free. A username is enough.</p>
+    <% end %>
 
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
-
-      <%= render InputComponent.new(
-        form: f,
-        field: :email,
-        type: :email,
-        label: "Email",
-        autocomplete: "email",
-        autofocus: true
-      ) %>
-
-      <%= render InputComponent.new(
-        form: f,
-        field: :password,
-        type: :password,
-        label: "Password",
-        autocomplete: "new-password",
-        hint: (@minimum_password_length ? "(#{@minimum_password_length} characters minimum)" : nil)
-      ) %>
-
-      <%= render InputComponent.new(
-        form: f,
-        field: :password_confirmation,
-        type: :password,
-        label: "Confirm password",
-        autocomplete: "new-password"
-      ) %>
-
-      <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
-        Sign up
+      <% if handle.present? %>
+        <%= f.hidden_field :username, value: handle %>
       <% end %>
+
+      <%= render InputComponent.new(form: f, field: :email, type: :email,
+                                    label: "Email", autocomplete: "email", autofocus: true) %>
+
+      <%= render InputComponent.new(form: f, field: :password, type: :password,
+                                    label: "Password", autocomplete: "new-password",
+                                    hint: (@minimum_password_length ? "#{@minimum_password_length} characters minimum" : nil)) %>
+
+      <%= render InputComponent.new(form: f, field: :password_confirmation, type: :password,
+                                    label: "Confirm password", autocomplete: "new-password") %>
+
+      <div class="actions">
+        <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
+          Create my page
+        <% end %>
+      </div>
     <% end %>
 
-    <div class="mt-6">
-      <%= render "devise/shared/links" %>
-    </div>
-  </div>
+    <%= render "devise/shared/links" %>
+  </section>
 </div>

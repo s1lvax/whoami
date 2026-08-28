@@ -5,7 +5,7 @@ export default class extends Controller {
   static targets = ["list", "template", "item", "destroy"]
   connect() {
     this.index = this.itemTargets.length
-    this.max = 10
+    this.max = 6
     this.reindex()
   }
 

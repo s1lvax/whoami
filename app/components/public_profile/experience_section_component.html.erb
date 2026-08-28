@@ -1,74 +1,38 @@
-<section class="rounded-2xl bg-[var(--card)] ring-1 ring-[var(--border)] p-6">
-  <div class="mb-3 flex items-center justify-between">
-    <h2 class="text-sm uppercase tracking-wide text-[var(--muted)]">Professional Experience</h2>
-    <span class="text-xs text-[var(--muted)]"><%= experiences.size %></span>
+<section class="poster-section b-work" aria-labelledby="work-heading">
+  <div class="card-head">
+    <h2 id="work-heading">Work</h2>
+    <span class="count"><%= experiences.size %></span>
   </div>
 
-  <% if experiences.any? %>
-    <ul class="space-y-3">
-      <% experiences.each do |exp| %>
-        <li
-          class="
-            rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)]
-            hover:bg-[var(--surface-2)] transition
-          "
-        >
-          <div class="px-4 py-3">
-            <!-- header row: stack on mobile, row on desktop -->
-            <div
-              class="
-                flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-3
-              "
-            >
-              <p class="text-base font-medium break-words sm:truncate">
-                <%= role_for(exp) %>
-                ·
-                <%= company_for(exp) %>
-              </p>
-              <span class="text-xs text-[var(--muted)]">
-                <% sd = start_date_for(exp) %>
-                <% ed = end_date_for(exp) %>
-                <%= sd.respond_to?(:to_fs) ? sd.to_fs(:month_and_year) : sd %>
-                –
-                <%= if ed.present?
-                  (ed.respond_to?(:to_fs) ? ed.to_fs(:month_and_year) : ed)
-                else
-                  "Present"
-                end %>
-              </span>
-            </div>
+  <ul class="rows timeline">
+    <% experiences.each do |exp| %>
+      <li class="row<%= " is-current" if end_date_for(exp).blank? %>" data-experience data-id="<%= exp.respond_to?(:id) ? exp.id : nil %>">
+        <p class="row-when"><%= date_range_for(exp) %></p>
+        <div class="row-body">
+          <h3 class="row-title"><%= role_for(exp) %> · <%= company_for(exp) %></h3>
+          <% if location_for(exp).present? %>
+            <p class="row-sub"><%= location_for(exp) %></p>
+          <% end %>
 
-            <% if location_for(exp).present? %>
-              <p class="mt-1 text-sm text-[var(--muted)] break-words sm:truncate"><%= location_for(exp) %></p>
-            <% end %>
+          <% hl = highlights_for(exp) %>
+          <% if hl.any? %>
+            <ul class="row-notes">
+              <% hl.each do |h| %>
+                <li><%= h %></li>
+              <% end %>
+            </ul>
+          <% end %>
 
-            <% hl = highlights_for(exp) %>
-            <% if hl.any? %>
-              <ul class="mt-2 list-disc pl-5 text-sm space-y-1">
-                <% hl.each do |h| %>
-                  <li><%= h %></li>
-                <% end %>
-              </ul>
-            <% end %>
-
-            <% techs = tech_for(exp) %>
-            <% if techs.any? %>
-              <div class="mt-2 flex flex-wrap gap-1">
-                <% techs.first(4).each do |t| %>
-                  <span
-                    class="
-                      text-[10px] px-2 py-0.5 rounded ring-1 ring-[var(--border)]
-                      bg-[var(--surface-2)]
-                    "
-                  ><%= t %></span>
-                <% end %>
-              </div>
-            <% end %>
-          </div>
-        </li>
-      <% end %>
-    </ul>
-  <% else %>
-    <p class="text-sm text-[var(--muted)]">No experience yet.</p>
-  <% end %>
+          <% techs = tech_for(exp) %>
+          <% if techs.any? %>
+            <p class="row-tech">
+              <% techs.first(5).each do |t| %>
+                <span class="chip" data-tech><%= t %></span>
+              <% end %>
+            </p>
+          <% end %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
 </section>

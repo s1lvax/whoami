@@ -1,45 +1,31 @@
-<div class="min-h-screen flex items-center justify-center bg-[var(--bg)] px-4">
-  <div class="w-full max-w-md bg-[var(--card)] rounded-xl shadow-md p-8">
-    <h2 class="text-2xl font-semibold mb-6 text-center text-[var(--text)]">
-      Change your password
-    </h2>
+<div class="gate">
+  <div class="gate-top">
+    <%= link_to "whoami", root_path, class: "wordmark" %>
+    <%= render ThemeToggleComponent.new(variant: :gate) %>
+  </div>
+
+  <section class="card card-pad">
+    <h1 class="display">Set a new password</h1>
+    <p class="intro">Pick something you'll remember.</p>
 
     <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
       <%= f.hidden_field :reset_password_token %>
 
-      <%= render InputComponent.new(
-        form: f,
-        field: :password,
-        type: :password,
-        label: "New password",
-        autocomplete: "new-password",
-        autofocus: true,
-        hint:
-          (
-            if @minimum_password_length
-              "(#{@minimum_password_length} characters minimum)"
-            else
-              nil
-            end
-          ),
-      ) %>
+      <%= render InputComponent.new(form: f, field: :password, type: :password,
+                                    label: "New password", autocomplete: "new-password", autofocus: true,
+                                    hint: (@minimum_password_length ? "#{@minimum_password_length} characters minimum" : nil)) %>
 
-      <%= render InputComponent.new(
-        form: f,
-        field: :password_confirmation,
-        type: :password,
-        label: "Confirm new password",
-        autocomplete: "new-password",
-      ) %>
+      <%= render InputComponent.new(form: f, field: :password_confirmation, type: :password,
+                                    label: "Confirm new password", autocomplete: "new-password") %>
 
-      <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
-        Change my password
-      <% end %>
+      <div class="actions">
+        <%= render ButtonComponent.new(type: :submit, style: :primary, full_width: true) do %>
+          Change my password
+        <% end %>
+      </div>
     <% end %>
 
-    <div class="mt-6">
-      <%= render "devise/shared/links" %>
-    </div>
-  </div>
+    <%= render "devise/shared/links" %>
+  </section>
 </div>

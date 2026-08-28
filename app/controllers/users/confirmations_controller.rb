@@ -13,7 +13,7 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
     else
       # Token invalid/expired or already confirmed
       flash.now[:alert] = resource.errors.full_messages.to_sentence
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 

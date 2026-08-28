@@ -54,8 +54,6 @@ class Onboarding::StepBioComponentTest < ViewComponent::TestCase
     # Attributes passed through input_options
     assert_equal "4", textarea["rows"]
     assert_equal "What do you do? What are you into?", textarea["placeholder"]
-    # Extra class merged
-    assert_includes textarea["class"], "min-h-[6rem]"
   end
 
   test "renders error message for bio when present" do
@@ -65,7 +63,7 @@ class Onboarding::StepBioComponentTest < ViewComponent::TestCase
     frag = fragment_for(user:)
     form = frag.at_css("form")
 
-    error_p = form.at_css('p.text-xs.text-\\[var\\(--danger\\)\\]')
+    error_p = form.at_css("p.error")
     assert error_p, "error paragraph should render when user has bio errors"
     assert_includes error_p.text, "is too long (maximum is 280 characters)"
   end

@@ -3,9 +3,29 @@ class PublicProfile::ExperienceSectionComponent < ViewComponent::Base
     @experiences = Array(experiences)
   end
 
+  def render?
+    experiences.any?
+  end
+
   private
 
   attr_reader :experiences
+
+  def format_date(value)
+    return if value.blank?
+    return value unless value.respond_to?(:strftime)
+
+    value.strftime("%Y")
+  end
+
+  def date_range_for(exp)
+    start_s = format_date(start_date_for(exp)) || start_date_for(exp)
+    finish = end_date_for(exp)
+    return "#{start_s} – present" if finish.blank?
+
+    end_s = format_date(finish) || finish
+    start_s.to_s == end_s.to_s ? start_s.to_s : "#{start_s} – #{end_s}"
+  end
 
   # --- Accessors that accept either a Hash or an Experience record ---
 

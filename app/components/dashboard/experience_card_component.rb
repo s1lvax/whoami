@@ -15,6 +15,10 @@ class Dashboard::ExperienceCardComponent < ViewComponent::Base
     helpers.dashboard_experience_path(experience)
   end
 
+  def edit_path
+    helpers.edit_dashboard_experience_path(experience)
+  end
+
   def date_range
     start = experience.start_date&.strftime("%b %Y")
     end_s = experience.end_date ? experience.end_date.strftime("%b %Y") : "Present"

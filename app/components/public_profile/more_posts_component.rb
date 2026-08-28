@@ -8,13 +8,11 @@ class PublicProfile::MorePostsComponent < ViewComponent::Base
   attr_reader :posts
 
   def public_post_path_for(post)
-    # Assumes a route like:
-    #   get "/:username/posts/:id", to: "public_posts#show", as: :public_post
-    helpers.public_post_path(username: post.user.username, id: post)
+    helpers.public_post_path_for(post.user, post)
   end
 
   def views_text(post)
-    "#{post.views} #{'view'.pluralize(post.views)}"
+    "#{post.views} #{'read'.pluralize(post.views)}"
   end
 
   def date_text(post)

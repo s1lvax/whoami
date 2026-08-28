@@ -1,17 +1,14 @@
-<!-- Post content -->
-<div class="trix-content">
+<h1 style="margin:0 0 20px; font-size:26px; line-height:1.15; letter-spacing:-0.02em; font-weight:700; color:#111110;"><%= @post.title %></h1>
+
+<div style="color:#3D3D3A;">
   <%= @post.body.to_s.html_safe %>
 </div>
 
-<hr style="margin: 2rem 0; border: none; border-top: 1px solid #ddd;"/>
-
-<p style="font-size: 14px; color: #555; margin: 1rem 0;">
-  <%= link_to "View this post online", public_post_url(@username, @post) %>
+<p style="margin:28px 0 0;">
+  <a href="<%= public_post_url(@username, @post) %>" style="display:inline-block; background:#111110; color:#F3F3F1; text-decoration:none; padding:12px 20px; border-radius:12px; font-size:15px; font-weight:600;">Read online</a>
 </p>
 
-<p style="font-size: 12px; color: #888; margin: 0;">
-  You received this because you're subscribed to
-  <%= @username %>.<br>
-  Don’t want these posts?
-  <%= link_to "Unsubscribe", cancel_subscription_url(@username, @token) %>.
+<p style="margin:28px 0 0; padding-top:16px; border-top:1px solid #E4E4E0; font-size:13px; line-height:1.5; color:#72726D;">
+  You’re getting this because you subscribed to <%= @username %>.
+  <%= link_to "Unsubscribe", cancel_subscription_url(@username, @token), style: "color:#3A3AF4;" %>.
 </p>

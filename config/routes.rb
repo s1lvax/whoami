@@ -6,12 +6,20 @@ Rails.application.routes.draw do
   }
 
   authenticate :user do
-    resource :dashboard, only: [ :show, :edit, :update ], controller: "dashboard"
+    resource :dashboard, only: [ :show, :edit, :update ], controller: "dashboard" do
+      get :share
+    end
+    resource :github_import, only: :create
 
     namespace :dashboard do
-      resources :favorite_links, only: [ :new, :create, :destroy ]
-      resources :experiences, only: [ :new, :create, :destroy ]
+      resources :favorite_links, only: [ :new, :create, :edit, :update, :destroy ]
+      resources :experiences, only: [ :new, :create, :edit, :update, :destroy ]
       resources :posts, param: :id
+      resources :subscribers, only: :destroy
+      resource :draft, only: [] do
+        get :link
+        get :experience
+      end
     end
   end
 
@@ -31,7 +39,15 @@ Rails.application.routes.draw do
   get "/privacy", to: "pages#privacy", as: :privacy
   get "/terms", to: "pages#terms", as: :terms
 
-
+  constraints ->(req) { User.custom_domain?(req.host) } do
+    get "/", to: "profiles#show", as: :custom_domain_root
+    get "/feed", to: "rss#user", as: :custom_domain_feed, defaults: { format: :rss }
+    get "/links/:id/click", to: "public_links#click", as: :custom_domain_link_click
+    post "/subscribe", to: "subscriptions#subscribe", as: :custom_domain_subscribe
+    get "/posts/:id", to: "public_posts#show", as: :custom_domain_post
+    get "/:token/confirm", to: "subscriptions#confirm", as: :custom_domain_confirm
+    get "/:token/cancel", to: "subscriptions#cancel", as: :custom_domain_cancel
+  end
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
@@ -40,24 +56,14 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "pages#index"
 
-  reserved = %w[users rails active_storage assets packs system onboarding dashboard posts links admin]
-  username = /\A[a-z0-9]{3,30}\z/
-
-  # RSS feed
   get "/:username/feed", to: "rss#user", as: :user_feed, defaults: { format: :rss }
-
   get "/:username/links/:id/click", to: "public_links#click", as: :public_link_click
-
-  # subscription logic
-  post "/:username/subscribe", to: "subscription#subscribe", as: :new_subscription
-  get "/:username/:token/confirm", to: "subscription#confirm", as: :confirm_subscription
-  get "/:username/:token/cancel", to: "subscription#cancel", as: :cancel_subscription
+  post "/:username/subscribe", to: "subscriptions#subscribe", as: :new_subscription
+  get "/:username/:token/confirm", to: "subscriptions#confirm", as: :confirm_subscription
+  get "/:username/:token/cancel", to: "subscriptions#cancel", as: :cancel_subscription
 
   get "/:username", to: "profiles#show", as: :public_profile,
-    constraints: ->(req) {
-      u = req.params[:username].to_s
-      u.match?(username) && !reserved.include?(u)
-    }
+    constraints: ->(req) { User.public_username?(req.params[:username]) }
 
   # posts
   get "/:username/posts/:id", to: "public_posts#show", as: :public_post

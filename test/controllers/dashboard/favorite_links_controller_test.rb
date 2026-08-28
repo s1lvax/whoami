@@ -37,12 +37,12 @@ class Dashboard::FavoriteLinksControllerTest < ActionDispatch::IntegrationTest
         favorite_link: { label: "Test", url: "invalid-url" }
       }, as: :turbo_stream
     end
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_match "error", response.body
   end
 
   test "should not create more than 6 links" do
-    # Fill user with 6 links
+    @user.favorite_links.destroy_all
     6.times do |i|
       @user.favorite_links.create!(label: "Link #{i}", url: "https://example#{i}.com")
     end
@@ -51,8 +51,27 @@ class Dashboard::FavoriteLinksControllerTest < ActionDispatch::IntegrationTest
         favorite_link: { label: "Too Many", url: "https://toolong.com" }
       }, as: :turbo_stream
     end
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_match "You can only have up to 6 links", response.body
+  end
+
+  test "should update link with valid data" do
+    link = @user.favorite_links.create!(label: "Old", url: "https://old.example")
+    patch dashboard_favorite_link_path(link), params: {
+      favorite_link: { label: "New", url: "https://new.example" }
+    }
+    assert_redirected_to dashboard_path
+    assert_equal "New", link.reload.label
+    assert_equal "https://new.example", link.url
+  end
+
+  test "should not update link with invalid data" do
+    link = @user.favorite_links.create!(label: "Keep", url: "https://keep.example")
+    patch dashboard_favorite_link_path(link), params: {
+      favorite_link: { label: "Keep", url: "not-a-url" }
+    }, as: :turbo_stream
+    assert_response :unprocessable_content
+    assert_equal "https://keep.example", link.reload.url
   end
 
   test "should destroy link (HTML)" do
