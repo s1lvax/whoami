@@ -1,0 +1,18 @@
+<button
+  type="button"
+  class="theme-toggle theme-toggle--<%= variant %>"
+  data-controller="theme"
+  data-action="click->theme#toggle"
+  aria-pressed="true"
+  aria-label="Switch to light mode"
+>
+  <span class="theme-toggle-disk" aria-hidden="true">
+    <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+      <circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"/>
+      <path d="M12 3v1.6M12 19.4V21M4.9 4.9l1.1 1.1M18 18l1.1 1.1M3 12h1.6M19.4 12H21M4.9 19.1l1.1-1.1M18 6l1.1-1.1"/>
+    </svg>
+    <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M14.3 3.1A8.4 8.4 0 1 0 20.9 14 6.6 6.6 0 0 1 14.3 3.1Z"/>
+    </svg>
+  </span>
+</button>

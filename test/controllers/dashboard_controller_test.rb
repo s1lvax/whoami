@@ -29,10 +29,10 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
   test "shows dashboard for onboarded user" do
     get dashboard_path
     assert_response :success
-    assert_match "Profile Views", response.body
-    assert_match "Link Clicks", response.body
-    assert_match "Blog Reads", response.body
-    assert_match "Newsletter Subscribers", response.body
+    assert_match(/\d+ views/, response.body)
+    assert_match(/\d+ clicks/, response.body)
+    assert_match(/\d+ reads/, response.body)
+    assert_match "Audience", response.body
   end
 
   test "renders edit form" do
@@ -79,5 +79,22 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_content
     assert_match "form", response.body
+  end
+
+  test "saves a custom domain" do
+    patch dashboard_path, params: {
+      user: { custom_domain: "https://Cesario.DEV" }
+    }
+
+    assert_redirected_to dashboard_path
+    assert_equal "cesario.dev", @user.reload.custom_domain
+  end
+
+  test "share page shows the public URL and where to put it" do
+    get share_dashboard_path
+    assert_response :success
+    assert_match "Your page is live.", response.body
+    assert_match "github.com/settings/profile", response.body
+    assert_select "[data-controller=clipboard][data-clipboard-text-value*='#{@user.username}']"
   end
 end

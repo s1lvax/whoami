@@ -18,8 +18,7 @@ class Onboarding::UsernameStatusComponentTest < ViewComponent::TestCase
     span = frame.at_css("span")
     assert_equal "Type a username…", span.text.strip
     assert_equal "false", span["data-available"]
-    assert_includes span["class"], "text-sm"
-    assert_includes span["class"], "text-[var(--muted)]"
+    assert_includes span["class"], "status"
   end
 
   test "renders :ok tone with emerald class and data-available=true" do
@@ -28,8 +27,7 @@ class Onboarding::UsernameStatusComponentTest < ViewComponent::TestCase
 
     assert_equal "Looks good!", span.text.strip
     assert_equal "true", span["data-available"]
-    assert_includes span["class"], "text-emerald-400"
-    assert_includes span["class"], "font-medium"
+    assert_includes span["class"], "is-ok"
   end
 
   test "renders :error tone with danger class and data-available=false" do
@@ -38,8 +36,7 @@ class Onboarding::UsernameStatusComponentTest < ViewComponent::TestCase
 
     assert_equal "Already taken", span.text.strip
     assert_equal "false", span["data-available"]
-    assert_includes span["class"], "text-[var(--danger)]"
-    assert_includes span["class"], "font-medium"
+    assert_includes span["class"], "is-error"
   end
 
   test "renders other/unknown tone as muted (fallback branch)" do
@@ -48,9 +45,8 @@ class Onboarding::UsernameStatusComponentTest < ViewComponent::TestCase
 
     assert_equal "Checking…", span.text.strip
     assert_equal "false", span["data-available"]
-    assert_includes span["class"], "text-[var(--muted)]"
-    # ensure it did NOT get the ok/error color classes
-    refute_includes span["class"], "text-emerald-400"
-    refute_includes span["class"], "text-[var(--danger)]"
+    assert_includes span["class"], "status"
+    refute_includes span["class"], "is-ok"
+    refute_includes span["class"], "is-error"
   end
 end

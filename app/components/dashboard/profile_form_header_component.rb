@@ -18,40 +18,24 @@ class Dashboard::ProfileFormHeaderComponent < ViewComponent::Base
 
   def avatar_src
     return "" unless user.respond_to?(:avatar) && user.avatar&.attached?
-    helpers.url_for(user.avatar.variant(resize_to_fill: [ 192, 192 ]))
+    helpers.rails_representation_path(user.avatar.variant(resize_to_fill: [ 192, 192 ]))
   end
 
-  # --- Helpers for generated SVG avatar fallback ---
   def initials_data_uri(name, size)
-    initials = extract_initials(name)
-    bg, fg   = palette_for(name)
+    parts    = name.to_s.split(/\s+/).reject(&:blank?)
+    initials = parts.empty? ? "?" : parts.first(2).map { |part| part[0] }.join.upcase
 
     svg = <<~SVG
-      <svg xmlns="http://www.w3.org/2000/svg" width="#{size}" height="#{size}" viewBox="0 0 #{size} #{size}" role="img" aria-label="#{ERB::Util.h(display_name)}">
-        <rect width="100%" height="100%" rx="#{(size * 0.18).round}" fill="#{bg}"/>
+      <svg xmlns="http://www.w3.org/2000/svg" width="#{size}" height="#{size}" viewBox="0 0 #{size} #{size}" role="img" aria-label="#{ERB::Util.h(name)}">
+        <rect width="100%" height="100%" rx="#{(size * 0.28).round}" fill="#ECECE9"/>
         <text x="50%" y="50%" font-size="#{(size * 0.42).round}" font-weight="700"
-              font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif"
-              fill="#{fg}" text-anchor="middle" dominant-baseline="central" letter-spacing="1">
+              font-family="Bricolage Grotesque, Geist, system-ui, sans-serif"
+              fill="#111110" text-anchor="middle" dominant-baseline="central" letter-spacing="1">
           #{ERB::Util.h(initials)}
         </text>
       </svg>
     SVG
 
     "data:image/svg+xml;utf8,#{ERB::Util.url_encode(svg)}"
-  end
-
-  def extract_initials(name)
-    parts = name.to_s.scan(/[A-Za-z0-9]+/)
-    return "?" if parts.empty?
-    (parts.first[0].to_s + parts[1].to_s[0].to_s).upcase
-  end
-
-  def palette_for(seed)
-    colors = %w[
-      #ef4444 #f59e0b #10b981 #3b82f6 #8b5cf6
-      #ec4899 #14b8a6 #22c55e #eab308 #6366f1
-    ]
-    idx = Digest::MD5.hexdigest(seed.to_s).hex % colors.size
-    [ colors[idx], "#ffffff" ]
   end
 end

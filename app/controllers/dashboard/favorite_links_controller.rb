@@ -22,7 +22,7 @@ class Dashboard::FavoriteLinksController < ApplicationController
         format.turbo_stream do
           form_html = helpers.render(Dashboard::LinkFormCardComponent.new(link: @link))
           render turbo_stream: turbo_stream.replace("new_favorite_link", form_html),
-                 status: :unprocessable_entity
+                 status: :unprocessable_content
         end
         format.html { redirect_to dashboard_path, alert: "You can only have up to 6 links." }
       end
@@ -58,9 +58,43 @@ class Dashboard::FavoriteLinksController < ApplicationController
         format.turbo_stream do
           form_html = helpers.render(Dashboard::LinkFormCardComponent.new(link: @link))
           render turbo_stream: turbo_stream.replace("new_favorite_link", form_html),
-                 status: :unprocessable_entity
+                 status: :unprocessable_content
         end
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
+      end
+    end
+  end
+
+  def edit
+    @link = current_user.favorite_links.find(params[:id])
+    if turbo_frame_request?
+      render html: helpers.render(Dashboard::LinkFormCardComponent.new(link: @link)), layout: false
+    else
+      redirect_to dashboard_path
+    end
+  end
+
+  def update
+    @link = current_user.favorite_links.find(params[:id])
+    if @link.update(link_params)
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            helpers.dom_id(@link),
+            helpers.render(Dashboard::LinkCardComponent.new(link: @link))
+          )
+        end
+        format.html { redirect_to dashboard_path, notice: "Link updated." }
+      end
+    else
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            helpers.dom_id(@link),
+            helpers.render(Dashboard::LinkFormCardComponent.new(link: @link))
+          ), status: :unprocessable_content
+        end
+        format.html { redirect_to dashboard_path, alert: "Please fix the link." }
       end
     end
   end
@@ -91,6 +125,6 @@ class Dashboard::FavoriteLinksController < ApplicationController
   private
 
   def link_params
-    params.require(:favorite_link).permit(:label, :url)
+    params.expect(favorite_link: [ :label, :url ])
   end
 end

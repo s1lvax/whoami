@@ -1,30 +1,49 @@
 <!DOCTYPE html>
-<html data-theme="dark" lang="en">
+<html lang="en">
   <head>
-    <title><%= content_for(:title) || "Who Am I – Create your profile, blog & links" %></title>
-    <meta name="description" content="<%= content_for(:description) || "Who Am I lets you build a minimal profile page with your bio, favorite links, and blog posts – all in one place." %>">
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          if (t !== "light" && t !== "dark") {
+            t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          }
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+    <title><%= content_for(:title) || "Whoami – one link for all of you" %></title>
+    <meta name="description" content="<%= content_for(:description) || "One page you own: name, work, links, writing. The link for your email signature, your bios, your slides." %>">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#F3F3F1" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0C0C0C" media="(prefers-color-scheme: dark)">
+    <% if content_for?(:canonical) %>
+      <link rel="canonical" href="<%= content_for(:canonical) %>">
+      <meta property="og:url" content="<%= content_for(:canonical) %>">
+    <% end %>
+    <meta property="og:title" content="<%= content_for(:title) || "Whoami – one link for all of you" %>">
+    <meta property="og:description" content="<%= content_for(:description) || "One page you own: name, work, links, writing. The link for your email signature, your bios, your slides." %>">
+    <meta property="og:type" content="<%= content_for(:og_type) || "website" %>">
+    <meta name="twitter:card" content="summary">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= yield :head %>
-
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/favicon.png" type="image/png">
-    <link rel="apple-touch-icon" href="/favicon.png">
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= render "shared/fonts" %>
+    <%= stylesheet_link_tag "tailwind", "lexxy", "theme_defaults", "theme_toggle", "actiontext", "profile", "landing", "gate", "workspace", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-
-  <body>
-    <!-- Flash messages -->
-    <%= render(FlashComponent.new(notice: notice, alert: alert)) %>
+  <body class="<%= content_for(:body_class) %>">
+    <!--
+      whoami · direction contract (Poster)
+      THESIS: A person's page is a poster — one name set huge, everything else in order beneath it. Refuses the button stack and the fixed grid; every section is exactly as tall as its content, so a thin page still reads as finished.
+      OWN-WORLD: The app's own canvas (soft grey, near-black in dark) and ink type; Bricolage Grotesque at 7rem for the name, Geist body, Geist Mono for handles/dates/hosts; links as a hairline index with brand-coloured glyph discs (the only colour besides the green current-role date in Work); Work and Writing as chapters with display headings and hairline rows. Landing, dashboard, gate and email share the same canvas and ink actions.
+      STORY: Visitor gets the name and the one-line bio in one glance, then scans the index to find the person elsewhere, then the ledger to see what they did and wrote. Owner edits in a workshop that previews the same page live, drafts included.
+      FIRST VIEWPORT: Name at 7rem, handle in mono under it, bio (photo at right on desktop, first and centred on mobile), then the first link rows. Primary action on landing: the claim form + "Create yours" in ink.
+      FORM: Poster; seed: none — direction pinned by the user from four content-height options after the mosaic proved weak on thin pages.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+    -->
+    <%= render FlashComponent.new(notice:, alert:) %>
     <%= yield %>
   </body>
 </html>

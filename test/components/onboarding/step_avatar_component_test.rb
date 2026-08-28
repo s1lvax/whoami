@@ -83,10 +83,7 @@ class Onboarding::StepAvatarComponentTest < ViewComponent::TestCase
     assert_equal "change->avatar-preview#pick", input["data-action"]
 
     # Basic class hooks (we don't assert the entire class string, just key tokens)
-    classes = input["class"].to_s
-    %w[bg-[var(--input-bg)] ring-1 ring-[var(--input-border)] rounded-md px-3 py-2].each do |cls|
-      assert_includes classes, cls
-    end
+    assert_includes input["class"].to_s, "file"
   end
 
   test "renders avatar validation error when present" do
@@ -94,7 +91,7 @@ class Onboarding::StepAvatarComponentTest < ViewComponent::TestCase
     user.errors.add(:avatar, "must be smaller than 5 MB")
 
     frag = fragment_for(user:)
-    error_p = frag.at_css('p.text-xs.text-\\[var\\(--danger\\)\\]')
+    error_p = frag.at_css("p.error")
     assert error_p, "error paragraph should render when user has avatar errors"
     assert_includes error_p.text, "must be smaller than 5 MB"
   end

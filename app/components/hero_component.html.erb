@@ -1,25 +1,50 @@
-<section class="py-24 text-center">
-  <div class="mx-auto max-w-3xl px-6">
-    <!-- Headline + text -->
-    <h1 class="text-3xl md:text-5xl font-extrabold mb-6">
-      Build your <span class="text-[var(--btn-bg)]">identity</span> online
-    </h1>
-    <p class="max-w-xl mx-auto text-lg text-[var(--muted)] mb-8">
-      Whoami helps you showcase your profile, share links, publish posts, and grow your personal brand — all in one place.
-    </p>
-    <%= link_to new_user_registration_path,
-          class: "inline-flex items-center px-6 py-3 rounded-lg bg-[var(--btn-bg)] text-[var(--btn-text)] font-semibold hover:bg-[var(--btn-hover-bg)] transition" do %>
-      Create Your Profile
+<nav class="landing-nav" aria-label="Primary">
+  <%= link_to "whoami", root_path, class: "wordmark" %>
+  <div class="landing-nav-actions">
+    <%= render ThemeToggleComponent.new(variant: :nav) %>
+    <% if signed_in %>
+      <%= link_to "Open your page", page_href.presence || dashboard_path, class: "btn btn-primary" %>
+    <% else %>
+      <%= link_to "Sign in", new_user_session_path, class: "btn btn-ghost landing-nav-signin" %>
+      <%= link_to "Create yours", new_user_registration_path, class: "btn btn-primary" %>
     <% end %>
   </div>
+</nav>
 
-  <!-- Big video below -->
-  <div class="mt-12 flex justify-center">
-    <%= video_tag "hero.mp4",
-          autoplay: true,
-          muted: true,
-          loop: true,
-          playsinline: true,
-          class: "w-full max-w-5xl rounded-2xl ring-1 ring-[var(--border)]" %>
+<section class="landing-hero">
+  <div class="landing-hero-copy">
+    <h1 class="display">One link.<br>All of you.</h1>
+    <p class="landing-lede">
+      The link in your email signature, your bios, your slides.
+      Name, work, links, writing — one page that is actually yours.
+    </p>
+    <% if signed_in %>
+      <p class="landing-url"><span class="url-pill">whoami.tech/<b>you</b></span></p>
+      <div class="landing-actions">
+        <%= link_to "Open your page", page_href.presence || dashboard_path, class: "btn btn-primary btn-lg" %>
+      </div>
+    <% else %>
+      <%= form_with url: new_user_registration_path, method: :get, class: "landing-claim",
+                    data: { controller: "username-check", turbo: false } do %>
+        <label class="landing-claim-field">
+          <span class="landing-claim-prefix mono">whoami.tech/</span>
+          <input type="text" name="username" class="landing-claim-input mono" placeholder="you"
+                 autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="30"
+                 aria-label="Pick your username"
+                 data-username-check-target="input" data-action="input->username-check#changed">
+          <svg class="landing-claim-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </label>
+        <button type="submit" class="btn btn-primary btn-lg landing-claim-btn" data-username-check-target="submit">Claim yours</button>
+      <% end %>
+      <p class="landing-claim-status">
+        <turbo-frame id="username_status"><span class="status">Pick a handle — letters and digits, 3–30. Free.</span></turbo-frame>
+        <% if page_href.present? %>
+          <%= link_to "See a live page", page_href %>
+        <% end %>
+      </p>
+    <% end %>
+  </div>
+  <div class="landing-hero-sample">
+    <%= render Landing::SampleComponent.new(user: sample) %>
   </div>
 </section>

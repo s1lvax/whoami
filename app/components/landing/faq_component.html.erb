@@ -1,0 +1,21 @@
+<section class="landing-faq" id="faq">
+  <h2 class="display">Questions</h2>
+  <div class="card landing-faq-list">
+    <% [
+      ["Is it free?", "Yes. The code is open source. You can run it yourself or use the hosted app."],
+      ["Do I need to write a blog?", "No. Writing is optional. Empty sections do not show. A page with a name, a bio, and two links is a finished page."],
+      ["What about LinkedIn?", "Keep it. This is the URL you own. LinkedIn is a feed other people design."],
+      ["Can I import from GitHub?", "Yes. Onboarding and the dashboard both pull name, bio, avatar, and public links from a GitHub username."],
+      ["Can I use my own domain?", "Yes. Save the hostname on the dashboard and point DNS at the app. SSL for that domain is part of launch, not the local editor."],
+      ["Is this Linktree?", "No. Linktree is a stack of buttons. This is a homepage: who you are, where you work, what you have written."]
+    ].each do |question, answer| %>
+      <details>
+        <summary>
+          <span><%= question %></span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </summary>
+        <p><%= answer %></p>
+      </details>
+    <% end %>
+  </div>
+</section>

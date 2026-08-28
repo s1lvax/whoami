@@ -66,7 +66,7 @@ class Dashboard::ExperiencesControllerTest < ActionDispatch::IntegrationTest
         }
       }, as: :turbo_stream
     end
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_match "new_experience", response.body
   end
 
@@ -82,10 +82,30 @@ class Dashboard::ExperiencesControllerTest < ActionDispatch::IntegrationTest
     # The controller will try to render :new but template doesn't exist
     # This will raise ActionView::MissingTemplate error
     # We should expect this behavior or handle it differently in controller
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   rescue ActionView::MissingTemplate
     # If template is missing, that's expected for this controller design
     assert true
+  end
+
+  test "should update experience with valid data" do
+    experience = @user.experiences.create!(company: "Old Co", role: "Dev", start_date: "2023-01-01")
+    patch dashboard_experience_path(experience), params: {
+      experience: { company: "New Co", role: "Lead", start_date: "2023-01-01" }
+    }
+    assert_redirected_to dashboard_path
+    experience.reload
+    assert_equal "New Co", experience.company
+    assert_equal "Lead", experience.role
+  end
+
+  test "should not update experience with invalid data" do
+    experience = @user.experiences.create!(company: "Keep Co", role: "Dev", start_date: "2023-01-01")
+    patch dashboard_experience_path(experience), params: {
+      experience: { company: "", role: "Dev", start_date: "2023-01-01" }
+    }, as: :turbo_stream
+    assert_response :unprocessable_content
+    assert_equal "Keep Co", experience.reload.company
   end
 
   test "should destroy experience (HTML)" do

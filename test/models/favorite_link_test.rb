@@ -69,4 +69,15 @@ class FavoriteLinkTest < ActiveSupport::TestCase
     assert_equal "MyLabel", link.label
     assert_equal "https://example.com", link.url
   end
+
+  test "user cannot have more than 6 links" do
+    @user.favorite_links.destroy_all
+    6.times do |i|
+      @user.favorite_links.create!(label: "L#{i}", url: "https://example.com/#{i}", position: i)
+    end
+
+    extra = build_link(label: "Seventh", url: "https://example.com/7")
+    assert_not extra.valid?
+    assert_includes extra.errors[:base].join, "6"
+  end
 end

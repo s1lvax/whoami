@@ -1,13 +1,16 @@
-<div class="min-h-screen flex items-center justify-center bg-[var(--bg)] px-4">
-  <div
-    class="
-      w-full max-w-md bg-[var(--card-bg)] rounded-xl shadow-md p-8 text-center
-    "
-  >
-    <h2 class="text-2xl font-semibold mb-4 text-[var(--text)]">Confirm your subscription</h2>
-    <p class="text-[var(--muted)]">
-      We’ve sent a confirmation link to your email. Click it to activate your
-      subscription to this user's newsletter.
-    </p>
+<div class="gate">
+  <div class="gate-top">
+    <%= link_to "whoami", root_path, class: "wordmark" %>
+    <%= render ThemeToggleComponent.new(variant: :gate) %>
   </div>
+
+  <section class="card card-pad">
+    <div class="gate-glyph" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3 8 9 6 9-6"/></svg>
+    </div>
+    <h1 class="display">One more step</h1>
+    <p class="intro" style="margin-bottom: 0">
+      We sent a confirmation link. Click it and new posts will land in your inbox.
+    </p>
+  </section>
 </div>

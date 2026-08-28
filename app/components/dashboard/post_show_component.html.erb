@@ -1,34 +1,33 @@
-<section class="p-12">
-  <div class="mx-auto max-w-3xl">
-    <!-- Title -->
-    <div class="text-center mb-4">
-      <h1 class="text-xl md:text-2xl font-semibold"><%= post.title %></h1>
-    </div>
-
-    <!-- Meta -->
-    <p class="text-xs text-[var(--muted)] text-center mb-4">
-      <%= status_text %> · <%= date_text %> · <%= views_text %>
-    </p>
-
-    <!-- Actions -->
-    <div class="flex items-center justify-center gap-2 mb-6">
-      <%= link_to "Edit",
-            edit_path,
-            class: "inline-flex items-center rounded-md px-4 py-2 text-sm ring-1 ring-[var(--border)]
-                     bg-[var(--surface)] hover:bg-[var(--surface-2)]" %>
-
-      <%= link_to "Delete",
-            delete_path,
+<section class="ws-editor ws-post-show">
+  <header class="ws-editor-bar">
+    <%= link_to helpers.dashboard_path(anchor: "writing"), class: "btn btn-ghost btn-sm" do %>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      Back
+    <% end %>
+    <div class="ws-editor-bar-tools">
+      <% if post.published? %>
+        <%= link_to "View live", helpers.public_post_path_for(post.user, post), class: "btn btn-ghost btn-sm", target: "_blank", rel: "noopener" %>
+      <% end %>
+      <%= link_to "Delete", delete_path,
             data: { turbo_method: :delete, turbo_confirm: "Delete this post?" },
-            class: "inline-flex items-center rounded-md px-4 py-2 text-sm ring-1 ring-[var(--border)]
-                     bg-[var(--surface)] hover:bg-[var(--surface-2)] text-[var(--danger)]" %>
+            class: "btn btn-danger btn-sm" %>
+      <%= link_to "Edit", edit_path, class: "btn btn-primary btn-sm" %>
     </div>
+  </header>
 
-    <!-- Body -->
-    <div class="trix-theme">
-      <div class="trix-content max-w-none">
-        <%= post.body %>
-      </div>
+  <p class="ws-post-meta-row mono">
+    <span class="chip <%= post.published? ? "chip-ok chip-dot" : "" %>"><%= status_text %></span>
+    <span><%= date_text %></span>
+    <span><%= views_text %></span>
+  </p>
+  <h1 class="ws-editor-title ws-post-title"><%= post.title %></h1>
+  <% if post.excerpt.present? %>
+    <p class="ws-editor-excerpt ws-post-excerpt"><%= post.excerpt %></p>
+  <% end %>
+
+  <div class="ws-editor-paper post-body">
+    <div class="prose">
+      <%= post.body %>
     </div>
   </div>
 </section>

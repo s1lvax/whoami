@@ -39,3 +39,5 @@
 /config/credentials/development.key
 
 /config/credentials/production.key
+/vendor/bundle
+/.impeccable

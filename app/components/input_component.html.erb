@@ -1,37 +1,19 @@
 <% error_text = error_text_for(@field) %>
 
-<div class="mb-4">
-  <%= @form.label @field,
-              @label,
-              class: "block text-sm font-medium text-[var(--muted)] mb-1" %>
-
-  <% base_class = [
-    "w-full rounded-md px-3 py-2 focus:outline-none",
-    "bg-[var(--input-bg)] text-[var(--input-text)] placeholder-[var(--input-placeholder)]",
-    "ring-1",
-  ].join(" ") %>
-
-  <% ring_class =
-    (
-      if error_text.present?
-        "ring-[var(--danger)] focus:ring-2 focus:ring-[var(--danger)]"
-      else
-        "ring-[var(--input-border)] focus:ring-2 focus:ring-[var(--btn-ring)]"
-      end
-    ) %>
+<div class="field <%= "is-invalid" if error_text.present? %>">
+  <% if @label.present? %>
+    <%= @form.label @field, @label %>
+  <% end %>
 
   <% extra_class = @input_options.delete(:class) %>
-  <% merged_class = [base_class, ring_class, extra_class].compact.join(" ") %>
-
   <% extra_data = @input_options.delete(:data) || {} %>
-  <% merged_data = {}.merge(extra_data) %>
 
   <% opts = {
     autocomplete: @autocomplete,
     autofocus: @autofocus,
     placeholder: @placeholder,
-    class: merged_class,
-    data: merged_data,
+    class: extra_class,
+    data: extra_data,
   }.merge(@input_options) %>
 
   <%# Only set value if explicitly provided %>
@@ -40,10 +22,10 @@
   <%= @form.send(form_method_name, @field, **opts) %>
 
   <% if @hint.present? %>
-    <p class="mt-1 text-xs text-[var(--muted)]"><%= @hint %></p>
+    <p class="hint"><%= @hint %></p>
   <% end %>
 
   <% if error_text.present? %>
-    <p class="mt-1 text-xs text-[var(--danger)]"><%= error_text %></p>
+    <p class="error"><%= error_text %></p>
   <% end %>
 </div>

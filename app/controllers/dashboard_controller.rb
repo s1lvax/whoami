@@ -1,19 +1,15 @@
 class DashboardController < ApplicationController
-  include Pagy::Backend
-
   before_action :authenticate_user!
   before_action :require_onboarded!
   before_action :set_user
 
   def show
     # Real data from onboarding
-    @favorite_links = @user.favorite_links.order(:position, :id)
-
-    # --- Live stats ---
-    visits      = @user.visits.to_i
-    link_clicks = @user.favorite_links.sum(:clicks) rescue 0      # assumes favorite_links has :clicks
-    blog_reads  = @user.posts.sum(:views)           rescue 0
-    subscribers  = @user.subscriptions.confirmed.count
+    @favorite_links = @user.favorite_links
+    visits = @user.visits.to_i
+    link_clicks = @user.favorite_links.sum(:clicks)
+    blog_reads = @user.posts.sum(:views)
+    subscribers = @user.subscriptions.confirmed.count
 
     @stats = [
       { label: "Profile Views", value: helpers.number_with_delimiter(visits),      delta: nil, up: nil },
@@ -22,8 +18,15 @@ class DashboardController < ApplicationController
       { label: "Newsletter Subscribers",    value: helpers.number_with_delimiter(subscribers),  delta: nil, up: nil }
     ]
 
-    @experiences    = @user.experiences.order(start_date: :desc)
+    @experiences = @user.experiences
     @pagy, @posts = pagy(@user.posts.latest, limit: 3)
+    @subscribers = @user.subscriptions.confirmed.order(:subscriber_email)
+  end
+
+  # "Your page is live — put it somewhere." Shown after onboarding and from the dashboard.
+  def share
+    @url = helpers.public_profile_url_for(@user)
+    @short = @url.sub(%r{\Ahttps?://}, "").delete_suffix("/")
   end
 
   def edit
@@ -59,10 +62,10 @@ class DashboardController < ApplicationController
               cancel_href: dashboard_path
             )
           )
-          render turbo_stream: turbo_stream.update("profile_header", form_html), status: :unprocessable_entity
+          render turbo_stream: turbo_stream.update("profile_header", form_html), status: :unprocessable_content
         end
 
-        format.html { render :edit, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
       end
     end
   end
@@ -74,7 +77,7 @@ class DashboardController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :family_name, :bio, :location, :avatar, :remove_avatar)
+    params.expect(user: [ :name, :family_name, :bio, :avatar, :remove_avatar, :custom_domain ])
   end
 
   def require_onboarded!

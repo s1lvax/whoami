@@ -3,7 +3,7 @@ class Dashboard::PostsController < ApplicationController
   before_action :set_post, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @posts = current_user.posts.latest
+    redirect_to dashboard_path(anchor: "writing")
   end
 
   def show
@@ -18,7 +18,7 @@ class Dashboard::PostsController < ApplicationController
     if @post.save
       redirect_to dashboard_post_path(@post), notice: "Post created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -29,7 +29,7 @@ class Dashboard::PostsController < ApplicationController
     if @post.update(post_params)
       redirect_to dashboard_post_path(@post), notice: "Post updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
@@ -45,6 +45,6 @@ class Dashboard::PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :send_to_newsletter, :excerpt, :status, :slug, :body)
+    params.expect(post: [ :title, :send_to_newsletter, :excerpt, :status, :slug, :body ])
   end
 end

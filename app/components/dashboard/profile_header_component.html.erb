@@ -1,40 +1,17 @@
-<section class="rounded-xl bg-[var(--surface)] ring-1 ring-[var(--border)] p-6">
-  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
-    <!-- avatar -->
-    <div class="shrink-0">
-      <%= avatar_tag %>
-    </div>
+<div class="ws-profile">
+  <%= avatar_tag %>
 
-    <!-- text -->
-    <div class="flex-1">
-      <h2 class="text-lg sm:text-xl font-semibold"><%= display_name %></h2>
-      <p class="text-sm text-[var(--muted)]"><%= handle %></p>
-
-      <% if bio.present? %>
-        <p class="mt-3 text-sm leading-relaxed">
-          <%= bio %>
-        </p>
-      <% end %>
-    </div>
-
-    <div class="sm:self-center sm:ml-auto w-full sm:w-auto flex flex-col sm:flex-row gap-2">
-      <!-- edit button -->
-      <% if edit_href.present? %>
-        <%= link_to edit_href,
-          data: {turbo_frame: "profile_header"},
-          class: "inline-flex w-full sm:w-auto justify-center items-center rounded-md px-4 py-2 text-sm font-medium
-                  bg-[var(--btn-bg)] text-[var(--btn-text)]
-                  hover:bg-[var(--btn-hover-bg)] focus:outline-none focus:ring-2 focus:ring-[var(--btn-bg)]" do %>
-          Edit profile
-        <% end %>
-      <% end %>
-
-      <%= button_to "Logout",
-        destroy_user_session_path,
-        method: :delete,
-        data: { turbo: false },
-        class: "inline-flex w-full sm:w-auto justify-center items-center rounded-md px-4 py-2 text-sm font-medium
-                bg-red-500 text-white hover:bg-red-600 cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500" %>
-    </div>
+  <div class="ws-profile-text">
+    <h3 class="ws-profile-name display"><%= display_name %></h3>
+    <p class="ws-profile-handle mono"><%= handle %></p>
+    <% if bio.present? %>
+      <p class="ws-profile-bio"><%= bio %></p>
+    <% end %>
   </div>
-</section>
+
+  <% if edit_href.present? %>
+    <div class="ws-profile-actions">
+      <%= link_to "Edit profile", edit_href, data: { turbo_frame: "profile_header" }, class: "btn btn-secondary btn-sm" %>
+    </div>
+  <% end %>
+</div>

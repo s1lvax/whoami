@@ -1,19 +1,11 @@
 class PublicPostsController < ApplicationController
-  include VisitTrackingHelper
+  include PublicPage
+
   def show
-    @user = User.find_by!(username: params[:username].downcase)
+    load_public_user
     @post = @user.posts.published.friendly.find(params[:id])
-
-    # Fetch more posts
-
-    @more_posts = @user.posts
-                    .where.not(id: @post.id)
-                    .published
-                    .order(published_at: :desc)
-                    .limit(2)
+    @more_posts = @user.posts.published.where.not(id: @post.id).latest.limit(2)
 
     track_post_view!(@post)
-
-    render :show
   end
 end

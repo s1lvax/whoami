@@ -1,54 +1,33 @@
-# frozen_string_literal: true
-
 require "test_helper"
-require "nokogiri"
 
 class ButtonComponentTest < ViewComponent::TestCase
-  test "renders with default options" do
-    html = render_inline(ButtonComponent.new) { "Submit" }.to_html
-    fragment = Nokogiri::HTML.fragment(html)
-    button = fragment.at_css("button")
-
-    assert_equal "Submit", button.text.strip
-    assert_equal "submit", button["type"]
-    # When @name is nil, template renders name=""
-    assert_equal "", button["name"]
-
-    # Check default classes
-    assert_includes button["class"], "w-full"                 # full width by default
-    assert_includes button["class"], "bg-[var(--btn-bg)]"     # primary style default
+  def button_for(**opts, &block)
+    render_inline(ButtonComponent.new(**opts), &block)
+    page.find("button")
   end
 
-  test "renders secondary style button" do
-    html = render_inline(ButtonComponent.new(style: :secondary)) { "Cancel" }.to_html
-    button = Nokogiri::HTML.fragment(html).at_css("button")
+  test "renders a full-width primary submit by default" do
+    button = button_for { "Submit" }
+    assert_equal "Submit", button.text.strip
+    assert_equal "submit", button["type"]
+    assert_includes button["class"], "btn"
+    assert_includes button["class"], "btn-primary"
+    assert_includes button["class"], "btn-block"
+  end
 
-    assert_equal "Cancel", button.text.strip
-    assert_includes button["class"], "bg-[var(--muted-bg)]"
-    refute_includes button["class"], "bg-[var(--btn-bg)]"
+  test "renders secondary style" do
+    button = button_for(style: :secondary) { "Cancel" }
+    assert_includes button["class"], "btn-secondary"
   end
 
   test "renders without full width" do
-    html = render_inline(ButtonComponent.new(full_width: false)) { "Click me" }.to_html
-    button = Nokogiri::HTML.fragment(html).at_css("button")
-
-    assert_equal "Click me", button.text.strip
-    refute_includes button["class"], "w-full"
+    button = button_for(full_width: false) { "Click me" }
+    refute_includes button["class"], "btn-block"
   end
 
-  test "renders with custom type" do
-    html = render_inline(ButtonComponent.new(type: :button)) { "Press" }.to_html
-    button = Nokogiri::HTML.fragment(html).at_css("button")
-
-    assert_equal "Press", button.text.strip
+  test "renders with custom type and name" do
+    button = button_for(type: :button, name: "confirm") { "Press" }
     assert_equal "button", button["type"]
-  end
-
-  test "renders with name attribute" do
-    html = render_inline(ButtonComponent.new(name: "confirm")) { "Confirm" }.to_html
-    button = Nokogiri::HTML.fragment(html).at_css("button")
-
-    assert_equal "Confirm", button.text.strip
     assert_equal "confirm", button["name"]
   end
 end

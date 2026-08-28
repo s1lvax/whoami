@@ -1,0 +1,7 @@
+<% if @subscription.persisted? %>
+  <%= turbo_stream.replace "subscribe-#{@variant}",
+        partial: "subscriptions/pending", locals: { subscription: @subscription, variant: @variant } %>
+<% else %>
+  <%= turbo_stream.replace "subscribe-#{@variant}",
+        render(PublicProfile::NewsletterSubscriptionComponent.new(user: @user, subscription: @subscription, variant: @variant)) %>
+<% end %>

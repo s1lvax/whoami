@@ -18,7 +18,8 @@ class Dashboard::ExperienceCardComponentTest < ViewComponent::TestCase
     render_inline(Dashboard::ExperienceCardComponent.new(experience: @experience))
 
     assert_text "Engineer"
-    assert_text "ACME Inc. — Luxembourg"
+    assert_text "Engineer · ACME Inc."
+    assert_text "Luxembourg"
     assert_text "Jan 2021 – Jan 2023"
   end
 

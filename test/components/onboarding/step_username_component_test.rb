@@ -51,16 +51,16 @@ class Onboarding::StepUsernameComponentTest < ViewComponent::TestCase
     assert wrapper, "wrapper should have data-controller=username-check"
 
     # Label text
-    label = wrapper.at_css("label.text-sm.font-medium.text-\\[var\\(--muted-contrast\\)\\]")
-    assert_equal "Username (letters & digits only)", label.text.strip
+    label = wrapper.at_css("label.label")
+    assert_equal "Username", label.text.strip
 
     # Turbo Frame default contents
     frame = wrapper.at_css("turbo-frame#username_status")
     assert frame
     span  = frame.at_css("span")
-    assert_equal "Type a username…", span.text.strip
-    assert_includes span["class"], "text-sm"
-    assert_includes span["class"], "text-[var(--muted)]"
+    # users(:one) already has a handle (claimed on sign-up), so the frame opens as available
+    assert_includes span.text, "Available"
+    assert_includes span["class"], "status is-ok"
   end
 
   test "renders InputComponent wired for Stimulus and ButtonComponent with Continue text" do

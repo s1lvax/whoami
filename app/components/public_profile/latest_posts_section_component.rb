@@ -5,20 +5,24 @@ class PublicProfile::LatestPostsSectionComponent < ViewComponent::Base
     @pagy  = pagy
   end
 
+  def render?
+    posts.any?
+  end
+
   private
 
   attr_reader :posts, :pagy
 
   def public_post_path_for(post)
-    helpers.public_post_path(username: post.user.username, id: post)
+    helpers.public_post_path_for(post.user, post)
   end
 
   def views_text(post)
-    "#{post.views} #{'view'.pluralize(post.views)}"
+    "#{post.views} #{'read'.pluralize(post.views)}"
   end
 
   def date_text(post)
-    (post.published_at || post.updated_at).to_date.to_fs(:long)
+    (post.published_at || post.updated_at).to_date.strftime("%b %Y")
   end
 
   def excerpt_text(post)

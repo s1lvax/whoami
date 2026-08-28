@@ -35,9 +35,16 @@ class ExperienceTest < ActiveSupport::TestCase
   end
 
   test "end_date cannot be before start_date" do
-    exp = build_experience(start_date: Date.today, end_date: Date.yesterday)
+    exp = build_experience(start_date: Date.new(2024, 6, 2), end_date: Date.new(2024, 6, 1))
     assert_not exp.valid?
     assert_includes exp.errors[:end_date], "can't be before start date"
+  end
+
+  test "on_profile lists current roles before ended ones" do
+    ended = @user.experiences.create!(company: "Past Co", role: "Dev", start_date: Date.new(2024, 1, 1), end_date: Date.new(2024, 6, 1))
+    current = @user.experiences.create!(company: "Now Co", role: "Dev", start_date: Date.new(2023, 1, 1), end_date: nil)
+
+    assert_equal [ current, ended ], @user.experiences.on_profile.where(id: [ current.id, ended.id ]).to_a
   end
 
   test "end_date can be equal to or after start_date" do

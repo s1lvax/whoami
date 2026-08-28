@@ -1,9 +1,14 @@
 class FavoriteLink < ApplicationRecord
+  MAX_PER_USER = 6
+
   belongs_to :user
+
+  scope :ordered, -> { order(:position, :id) }
 
   validates :label, presence: true, length: { maximum: 40 }, unless: -> { skip? }
   validates :url,   presence: true, unless: -> { skip? }
   validate  :url_must_be_http_like, unless: -> { skip? }
+  validate  :within_user_limit, on: :create
 
   before_validation :normalize
 
@@ -16,6 +21,13 @@ class FavoriteLink < ApplicationRecord
 
   def skip?
     label.blank? && url.blank?
+  end
+
+  def within_user_limit
+    return if user.nil? || skip?
+    return if user.favorite_links.count < MAX_PER_USER
+
+    errors.add(:base, "You can have at most #{MAX_PER_USER} links")
   end
 
   def url_must_be_http_like

@@ -1,0 +1,47 @@
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 160ms var(--ease-out), border-color 160ms var(--ease-out);
+}
+
+.theme-toggle:hover {
+  background: var(--card-2);
+  border-color: var(--line-2);
+}
+
+.theme-toggle:focus-visible { border-radius: 999px; }
+
+.theme-toggle-disk {
+  position: relative;
+  width: 1.05rem;
+  height: 1.05rem;
+  display: block;
+}
+
+.theme-icon {
+  position: absolute;
+  inset: 0;
+  width: 1.05rem;
+  height: 1.05rem;
+  transform-origin: center;
+  transition: transform 0.5s var(--ease-out), opacity 0.35s ease;
+}
+
+.theme-icon-sun { transform: rotate(90deg) scale(0.4); opacity: 0; }
+.theme-icon-moon { transform: rotate(0deg) scale(1); opacity: 1; }
+
+[data-theme="light"] .theme-icon-sun { transform: rotate(0deg) scale(1); opacity: 1; }
+[data-theme="light"] .theme-icon-moon { transform: rotate(-90deg) scale(0.4); opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-icon { transition: none; }
+}

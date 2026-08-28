@@ -1,0 +1,42 @@
+<section class="sample" aria-label="Example page">
+  <div class="sample-frame">
+    <div class="sample-bar" aria-hidden="true">
+      <span class="sample-address mono"><%= address %></span>
+    </div>
+    <div class="sample-body poster">
+      <div class="poster-body">
+        <% if live? %>
+          <%= render PublicProfile::HeaderComponent.new(user: user) %>
+        <% else %>
+          <section class="poster-hero b-id">
+            <div class="poster-hero-text">
+              <p class="page-name">Cesário Silva</p>
+              <p class="page-handle mono"><%= handle %></p>
+              <p class="page-bio">Builds software for people who have to live with it.</p>
+            </div>
+          </section>
+        <% end %>
+        <section class="poster-links">
+          <% links.each do |link| %>
+            <span class="b-link poster-link" style="--brand: <%= helpers.link_brand(link.url) %>">
+              <span class="tile-glyph"><%= helpers.link_icon(link.url) %></span>
+              <span class="tile-text">
+                <span class="tile-label"><%= link.label %></span>
+                <span class="tile-host"><%= helpers.link_host(link.url) %></span>
+              </span>
+              <svg class="tile-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+            </span>
+          <% end %>
+        </section>
+      </div>
+    </div>
+  </div>
+  <p class="sample-caption">
+    <% if live? %>
+      A real page.
+      <%= link_to "Open #{handle}", public_profile_path(user.username) %>.
+    <% else %>
+      What a page looks like. Yours takes a username.
+    <% end %>
+  </p>
+</section>

@@ -1,38 +1,28 @@
-<section class="rounded-2xl bg-[var(--card)] ring-1 ring-[var(--border)] p-6">
-  <div class="mb-3 flex items-center justify-between">
-    <h2 class="text-sm uppercase tracking-wide text-[var(--muted)]">Latest Posts</h2>
-    <%= link_to "Subscribe (RSS Feed)",
-                user_feed_path(username: @user.username, format: :rss),
-                class: "text-xs underline text-[var(--muted)] hover:text-[var(--fg)]",
-                rel: "alternate",
-                type: "application/rss+xml" %>
+<section class="poster-section b-writing" aria-labelledby="writing-heading">
+  <div class="card-head">
+    <h2 id="writing-heading">Writing</h2>
+    <span class="count"><%= pagy&.count || posts.size %></span>
   </div>
 
-  <% if posts.any? %>
-    <ul class="space-y-3">
-      <% posts.each do |post| %>
-        <li>
-          <%= link_to public_post_path_for(post),
-                      class: "block rounded-lg ring-1 ring-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] transition p-3 focus:outline-none focus:ring-2 focus:ring-[var(--btn-bg)]" do %>
-            <p class="text-sm font-medium"><%= post.title %></p>
-
-            <% if (ex = excerpt_text(post)) %>
-              <p class="text-xs text-[var(--muted)] mt-1"><%= ex %></p>
-            <% end %>
-
-            <p class="text-[10px] text-[var(--muted)] mt-2">
-              <%= date_text(post) %> · <%= views_text(post) %>
-            </p>
+  <ul class="rows">
+    <% posts.each do |post| %>
+      <li class="row">
+        <p class="row-when"><%= date_text(post) %></p>
+        <div class="row-body">
+          <h3 class="row-title"><%= link_to post.title, public_post_path_for(post) %></h3>
+          <% if (ex = excerpt_text(post)) %>
+            <p class="row-excerpt"><%= ex %></p>
           <% end %>
-        </li>
-      <% end %>
-    </ul>
+        </div>
+      </li>
+    <% end %>
+  </ul>
 
-    <!-- Pagination -->
-    <div class="mt-4">
+  <% if pagy.present? && pagy.pages > 1 %>
+    <div style="margin-top: 1.25rem">
       <%= render PaginationComponent.new(pagy: pagy) %>
     </div>
-  <% else %>
-    <p class="text-sm text-[var(--muted)]">No posts yet.</p>
   <% end %>
+
+  <%= render PublicProfile::NewsletterSubscriptionComponent.new(user: @user, variant: :inline) %>
 </section>

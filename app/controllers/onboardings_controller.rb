@@ -1,9 +1,9 @@
 class OnboardingsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_step
+  before_action :authenticate_user!, except: :check_username
+  before_action :redirect_if_onboarded, except: :check_username
+  before_action :set_step, except: :check_username
 
   def show
-    redirect_to dashboard_path and return if current_user.onboarded?
     @user = current_user
 
     # Seed one empty link row for nicer UX on the links step
@@ -21,7 +21,7 @@ class OnboardingsController < ApplicationController
         redirect_to onboarding_path(step: "username")
       else
         @step = "name"
-        render :show, status: :unprocessable_entity
+        render :show, status: :unprocessable_content
       end
 
     when "username"
@@ -29,7 +29,7 @@ class OnboardingsController < ApplicationController
         redirect_to onboarding_path(step: "bio")
       else
         @step = "username"
-        render :show, status: :unprocessable_entity
+        render :show, status: :unprocessable_content
       end
 
     when "bio"
@@ -39,7 +39,7 @@ class OnboardingsController < ApplicationController
         redirect_to onboarding_path(step: "links")
       else
         @step = "bio"
-        render :show, status: :unprocessable_entity
+        render :show, status: :unprocessable_content
       end
 
     when "links"
@@ -61,7 +61,7 @@ class OnboardingsController < ApplicationController
           redirect_to onboarding_path(step: "avatar")
         else
           @step = "links"
-          render :show, status: :unprocessable_entity
+          render :show, status: :unprocessable_content
         end
       end
 
@@ -73,16 +73,16 @@ class OnboardingsController < ApplicationController
 
       if user_params[:avatar].present?
         @user.avatar.attach(user_params[:avatar])
-        if @user.errors.any?
+        @user.validate
+        if @user.errors[:avatar].any?
+          @user.avatar.purge
           @step = "avatar"
-          render :show, status: :unprocessable_entity
-        else
-          finalize!
+          render :show, status: :unprocessable_content
+          return
         end
-      else
-        # No avatar uploaded, just continue
-        finalize!
       end
+
+      finalize!
 
     else
       redirect_to onboarding_path(step: "name")
@@ -96,7 +96,7 @@ class OnboardingsController < ApplicationController
     valid_format = @username.match?(User::USERNAME_REGEX)
     reserved     = User::RESERVED_USERNAMES.include?(@username)
     taken        = User.where("LOWER(username) = ?", @username)
-                      .where.not(id: current_user.id)
+                      .then { |scope| current_user ? scope.where.not(id: current_user.id) : scope }
                       .exists?
 
     @status =
@@ -107,9 +107,9 @@ class OnboardingsController < ApplicationController
       elsif reserved
         { text: "Not available", tone: :error }
       elsif taken
-        { text: "Taken", tone: :error }
+        { text: "Taken — try another", tone: :error }
       else
-        { text: "Available ✓", tone: :ok }
+        { text: "Available — it’s yours", tone: :ok }
       end
 
     render Onboarding::UsernameStatusComponent.new(status: @status)
@@ -118,31 +118,45 @@ class OnboardingsController < ApplicationController
   private
 
   def finalize!
-    # Mark user onboarded and send to dashboard
+    if (missing = next_required_step)
+      redirect_to onboarding_path(step: missing), alert: "Finish your name and username first."
+      return
+    end
+
     @user.favorite_links.where(label: [ nil, "" ], url: [ nil, "" ]).delete_all
     @user.update!(onboarded_at: Time.current, onboarded: true)
-    redirect_to dashboard_path, notice: "Welcome, #{display_name(@user)}!"
+    redirect_to share_dashboard_path, notice: "Your page is live."
+  end
+
+  def next_required_step
+    return "name" if @user.name.blank? || @user.family_name.blank?
+    return "username" if @user.username.blank?
+
+    nil
+  end
+
+  def redirect_if_onboarded
+    redirect_to dashboard_path if current_user.onboarded?
   end
 
   def set_step
     # Allowed steps in order
-    @step = params[:step].presence_in(%w[name username bio links avatar]) || "name"
+    # Resume where they left off: the first required step still missing, else the first optional one.
+    @user ||= current_user
+    steps = %w[name username bio links avatar]
+    remembered = session[:onboarding_step].presence_in(%w[bio links avatar]) # only optional steps are worth remembering
+    @step = params[:step].presence_in(steps) || next_required_step || remembered || "bio"
+    session[:onboarding_step] = @step
   end
 
   def user_params
     return {} if params[:skip].present? || params[:user].blank?
 
-    params.require(:user).permit(
-      :name,
-      :family_name,
-      :username,
-      :bio,
-      :avatar,
-      favorite_links_attributes: [ :id, :label, :url, :position, :_destroy ]
+    params.expect(
+      user: [ :name, :family_name, :username, :bio, :avatar,
+              { favorite_links_attributes: [ [ :id, :label, :url, :position, :_destroy ] ] } ]
     )
   end
 
-  def display_name(user)
-    [ user.name, user.family_name ].compact_blank.join(" ").presence || user.username
-  end
+  def display_name(user) = user.display_name
 end

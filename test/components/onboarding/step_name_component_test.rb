@@ -73,12 +73,12 @@ class Onboarding::StepNameComponentTest < ViewComponent::TestCase
     frag = fragment_for(user:)
     form = frag.at_css("form")
 
-    name_error = form.at_css('p.text-xs.text-\\[var\\(--danger\\)\\]')
+    name_error = form.at_css("p.error")
     assert name_error
     assert_includes name_error.text, "can't be blank"
 
     # There are two error <p> elements; grab all and check one includes family message
-    errors = form.css('p.text-xs.text-\\[var\\(--danger\\)\\]')
+    errors = form.css("p.error")
     assert errors.length >= 2, "should render an error for each field with errors"
     assert errors.any? { |p| p.text.include?("is too long (maximum is 80 characters)") }
   end

@@ -1,0 +1,106 @@
+/* Gate — auth, onboarding, confirmations. One column, one card, one job. */
+
+.gate {
+  max-width: 27rem;
+  margin: 0 auto;
+  padding: 3rem 1.25rem 4rem;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.gate-top {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 0 0.25rem;
+}
+
+.gate .card-pad { padding: 1.5rem; }
+@media (min-width: 480px) { .gate .card-pad { padding: 2rem; } }
+
+.gate h1 {
+  font-size: 1.75rem;
+  margin: 0 0 0.35rem;
+}
+.gate .intro { margin: 0 0 1.5rem; color: var(--muted); font-size: 0.95rem; }
+
+.gate form .field:last-of-type { margin-bottom: 1.25rem; }
+.gate .actions { display: grid; gap: 0.6rem; margin-top: 0.5rem; }
+.gate .actions-row { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1.25rem; }
+
+.gate-links {
+  display: grid; gap: 0.5rem;
+  margin: 1.5rem 0 0; padding: 1.25rem 0 0;
+  border-top: 1px solid var(--line);
+  font-size: 0.9rem;
+}
+.gate-links a { color: var(--muted); text-decoration: none; }
+.gate-links a:hover { color: var(--ink); }
+.gate-links p { margin: 0; color: var(--muted); }
+
+/* step rail */
+.rail { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+.rail-track { flex: 1; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.35rem; }
+.rail-track span {
+  height: 4px; border-radius: 999px; background: var(--line); overflow: hidden; position: relative;
+}
+.rail-track span::after {
+  content: ""; position: absolute; inset: 0; background: var(--ink); border-radius: inherit;
+  transform: scaleX(0); transform-origin: left; transition: transform 400ms var(--ease-out);
+}
+.rail-track span.is-done::after { transform: scaleX(1); }
+.rail-meta { margin: 0; font-size: 0.78rem; color: var(--muted); white-space: nowrap; }
+
+/* username */
+.gate-username-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+.gate-username-head .status { font-size: 0.8rem; color: var(--muted); }
+.gate-username-head .status[data-available="true"], .gate-username-head .status.is-ok { color: var(--ok); font-weight: 550; }
+.gate-username-head .status.is-error { color: var(--danger); font-weight: 550; }
+.gate .url-pill { margin: 0.25rem 0 1.25rem; }
+
+.gate .divider { margin: 1.5rem 0; }
+.gate h2 { font-size: 0.95rem; font-weight: 600; margin: 0 0 0.75rem; }
+
+/* links step */
+.gate-link-row {
+  position: relative;
+  border: 1px solid var(--line); border-radius: var(--r-lg);
+  padding: 1rem 1rem 0;
+  background: var(--card-2);
+}
+.gate-link-row .btn-ghost { position: absolute; top: 0.6rem; right: 0.6rem; }
+.gate-link-rows { display: grid; gap: 0.75rem; }
+.gate-link-tools { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin: 1rem 0 1.25rem; }
+.gate-link-tools span { font-size: 0.8rem; color: var(--muted); }
+
+/* avatar step */
+.gate-avatar { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; }
+.gate-avatar .avatar { width: 6rem; height: 6rem; flex: none; }
+.gate-avatar .hint { font-size: 0.8rem; color: var(--muted); margin: 0.4rem 0 0; }
+
+/* confirmation glyph */
+.gate-glyph {
+  width: 3rem; height: 3rem; border-radius: 1rem;
+  background: var(--accent-soft); color: var(--accent);
+  display: grid; place-items: center; margin-bottom: 1.25rem;
+}
+.gate-glyph svg { width: 1.4rem; height: 1.4rem; }
+
+/* legal docs */
+.gate-doc { max-width: 44rem; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
+.gate-doc h1 { font-size: clamp(2rem, 4vw, 2.75rem); margin: 1.5rem 0 0.5rem; }
+.gate-doc .updated { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); margin: 0 0 2rem; }
+.gate-doc .prose h2 { font-size: 1.25rem; }
+
+/* ---- share: put the link somewhere ---- */
+.gate--wide { max-width: 36rem; }
+.share-url { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.5rem 0 1.75rem; }
+.share-url-pill { flex: 1 1 14rem; min-width: 0; font-size: 1rem; padding: 0.6rem 1rem; justify-content: flex-start; }
+.share-url-pill.is-done { color: var(--ok); border-color: var(--ok); }
+.share-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.share-row { display: flex; align-items: center; gap: 0.9rem; padding: 0.85rem 0; border-bottom: 1px solid var(--line); }
+.share-glyph { width: 2.4rem; height: 2.4rem; border-radius: 0.75rem; background: var(--brand, var(--accent)); color: #fff; display: grid; place-items: center; flex: none; }
+.share-glyph .link-glyph, .share-glyph svg { width: 1.15rem; height: 1.15rem; }
+.share-row-text { flex: 1 1 auto; min-width: 0; display: grid; gap: 0.1rem; }
+.share-row-text strong { font-weight: 600; font-size: 0.95rem; }
+.share-row-text span { font-size: 0.82rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.share-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; margin: 1.5rem 0 0; }
+.share-foot .hint { font-size: 0.85rem; color: var(--muted); }
