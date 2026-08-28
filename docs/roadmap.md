@@ -3,19 +3,18 @@
 Whoami is the one link you put everywhere: signature, bios, slides.
 Not Linktree. Not LinkedIn. Not a blog platform.
 
-The look is **Mosaic**: the public page is a dense grid of tiles — avatar,
-identity, a green Now tile, every link drenched in its brand colour, Work
-with a timeline, Writing in ultramarine. Soft grey canvas, ink actions
-everywhere else. Bricolage Grotesque for headings, Geist for everything else,
-Geist Mono for handles, dates and URLs. Light or dark follows the system.
-One identity on every screen (see DESIGN.md).
+The look is **Poster**: the name set huge, handle and bio beneath it, links
+as a brand-coloured index, Work and Writing as chapters. Neutral canvas, ink
+type, colour only where it means something. Light or dark follows the system.
+Bricolage Grotesque for display, Geist for text, Geist Mono for handles, dates
+and URLs. Recorded in [DESIGN.md](../DESIGN.md); summarised in [design.md](design.md).
 
 ## Now — local, visual system
 
-1. Mosaic on the public page; the same tokens on landing, dashboard, onboarding, auth and email.
-2. Public page is the product. Keep the typeset sheet. Make it sit in space.
+1. Poster on the public page; the same tokens on landing, dashboard, onboarding, auth and email. (done)
+2. Public page is the product; every section content-height. (done)
 3. Landing tells the truth. Drop fake claims (CV download, “join creators”).
-4. Dashboard, onboarding, and Devise inherit the same tokens. No red.
+4. Dashboard, onboarding, and Devise inherit the same tokens. (done)
 
 ## Next — still local, still the same product
 
