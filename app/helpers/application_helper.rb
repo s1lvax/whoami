@@ -1,6 +1,4 @@
 module ApplicationHelper
-  include Pagy::Frontend
-
   def on_custom_domain?(user = @user)
     return false unless user.respond_to?(:custom_domain)
 

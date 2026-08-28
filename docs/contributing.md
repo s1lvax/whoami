@@ -15,10 +15,10 @@ feature/your-thing  →  dev  →  main
 ## Before you push
 
 ```bash
-bin/rails test
-bin/rubocop
-bin/brakeman --no-pager
+bin/ci            # rubocop + importmap audit + brakeman + tests + seeds, in one go
 ```
+
+Or the pieces: `bin/rails test`, `bin/rubocop`, `bin/brakeman --no-pager`.
 
 CI runs the same three on every PR.
 

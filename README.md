@@ -2,7 +2,7 @@
 
 **One link. All of you.** whoami is a self-hosted personal page — the link you put in your email signature, your bios and your slides. Name, work history, links, writing and a newsletter, on one page you own.
 
-Built with Rails 8, Hotwire and SQLite. No JavaScript framework, no build step, one server.
+Built with Rails 8.1, Hotwire and SQLite. No JavaScript framework, no build step, one server.
 
 - Live: [whoami.tech](https://whoami.tech) · example page: [whoami.tech/cfds](https://whoami.tech/cfds)
 - License: MIT
@@ -47,7 +47,7 @@ Open http://localhost:3000. Seeded demo account: `dev@localhost.test` / `passwor
 
 ## Tech stack
 
-Ruby 3.4 · Rails 8.0 · Hotwire (Turbo, Stimulus) · Tailwind CSS 4 (utilities only; the design lives in hand-written CSS with tokens) · SQLite via Solid Queue / Solid Cache / Solid Cable · ViewComponent · Devise · Lexxy (Action Text) · Postmark · Kamal + Thruster.
+Ruby 3.4.10 · Rails 8.1 · Hotwire (Turbo, Stimulus) · Tailwind CSS 4 (utilities only; the design lives in hand-written CSS with tokens) · SQLite via Solid Queue / Solid Cache / Solid Cable · ViewComponent · Devise · Lexxy (Action Text) · Postmark · Kamal + Thruster.
 
 ## Author
 

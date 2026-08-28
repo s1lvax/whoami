@@ -27,7 +27,7 @@ class PublicProfile::LatestPostsSectionComponentTest < ViewComponent::TestCase
   end
 
   test "renders nothing when there are no posts" do
-    pagy = Pagy.new(count: 0, page: 1, items: 10)
+    pagy = Pagy::Offset.new(count: 0, page: 1, limit: 10)
     html = render_inline(
       PublicProfile::LatestPostsSectionComponent.new(user: UserStub.new("tester"), posts: [], pagy: pagy)
     ).to_html
@@ -39,7 +39,7 @@ class PublicProfile::LatestPostsSectionComponentTest < ViewComponent::TestCase
     t1 = Date.new(2025, 9, 1)
     post1 = PostStub.new(title: "First Post", excerpt: "Short excerpt here", views: 1, published_at: t1, user: user)
     post2 = PostStub.new(title: "Second Post", excerpt: "", views: 2, updated_at: Time.new(2025, 9, 10, 10, 0, 0), user: user)
-    pagy = Pagy.new(count: 2, page: 1, items: 10)
+    pagy = Pagy::Offset.new(count: 2, page: 1, limit: 10)
 
     frag = render_fragment(user: user, posts: [ post1, post2 ], pagy: pagy)
     text = frag.text.gsub(/\s+/, " ")

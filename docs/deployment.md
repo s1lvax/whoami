@@ -56,6 +56,6 @@ The app answers on any host saved as a user's custom domain, but it does not obt
 
 ## Checklist before a release
 
-- `bin/rails test` green, `bin/rubocop`, `bin/brakeman --no-pager`
+- `bin/ci` green (rubocop, importmap audit, brakeman, tests, seeds)
 - `bin/rails tailwindcss:build` output committed? No — assets build in the Docker image (`assets:precompile`), nothing to commit.
 - Migrations run automatically on boot via `bin/docker-entrypoint` (`db:prepare`).
