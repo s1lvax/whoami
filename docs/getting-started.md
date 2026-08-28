@@ -2,9 +2,9 @@
 
 ## Requirements
 
-- Ruby **3.4.5** (see `.ruby-version`)
+- Ruby **3.4.10** (see `.ruby-version`; `mise install` picks it up)
 - SQLite 3 (bundled via the `sqlite3` gem)
-- libvips (for avatar variants via `image_processing`)
+- libvips (avatar variants via `image_processing` 2 + `ruby-vips`)
 - Chromium or Chrome, only if you want to run system tests or take screenshots
 
 No Node, no Yarn. JavaScript ships through importmap; Tailwind runs through the standalone binary in `tailwindcss-ruby`.
@@ -44,6 +44,7 @@ Jobs run in-process (`:async`) in development, so `deliver_later` is effectively
 | Rebuild Tailwind once | `bin/rails tailwindcss:build` (only needed when you add new utility classes) |
 | Console | `bin/rails console` |
 | Tests | `bin/rails test` — see [testing.md](testing.md) |
+| The whole gate in one go | `bin/ci` (rubocop, importmap audit, brakeman, tests, seeds) |
 | Lint | `bin/rubocop` (rubocop-rails-omakase) |
 | Security scan | `bin/brakeman --no-pager` |
 | Reset the DB | `bin/rails db:reset` |

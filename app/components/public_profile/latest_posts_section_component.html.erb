@@ -18,7 +18,7 @@
     <% end %>
   </ul>
 
-  <% if pagy.present? && pagy.pages > 1 %>
+  <% if pagy.present? && pagy.last > 1 %>
     <div style="margin-top: 1.25rem">
       <%= render PaginationComponent.new(pagy: pagy) %>
     </div>

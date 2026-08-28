@@ -6,14 +6,14 @@ whoami is a conventional Rails 8 monolith. There is one app, one process, one SQ
 
 | Layer | Choice | Notes |
 |---|---|---|
-| Framework | Rails 8.0, Ruby 3.4 | Propshaft assets, importmap JS, no bundler |
+| Framework | Rails 8.1, Ruby 3.4.10 | Propshaft assets, importmap JS, no bundler; `config.load_defaults 8.1` |
 | Frontend | Hotwire (Turbo + Stimulus), ViewComponent | Every UI unit is a component under `app/components` |
 | Styling | Tailwind CSS 4 utilities + hand-written CSS | Design tokens and themes in `theme_defaults.css`; Tailwind is used for spacing/flex utilities only |
 | Auth | Devise | `database_authenticatable, registerable, recoverable, rememberable, validatable, confirmable` |
-| Rich text | Action Text with Lexxy | Markdown shortcuts, code highlighting, attachments via Active Storage |
+| Rich text | Action Text with Lexxy; pagination with Pagy 43 | Markdown shortcuts, code highlighting, attachments via Active Storage |
 | Data | SQLite | Solid Queue (jobs), Solid Cache, Solid Cable (production); `:async` cable and jobs in development |
 | Email | Postmark (`postmark-rails`) | letter_opener in development |
-| Deploy | Kamal + Thruster | One server, Docker image, persistent volume for `storage/` |
+| Deploy | Kamal 2 + Thruster + Puma 8 | One server, Docker image, persistent volume for `storage/` |
 
 ## Directory map
 

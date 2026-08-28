@@ -1,12 +1,12 @@
-<% if pagy && pagy.pages > 1 %>
+<% if pagy && pagy.last > 1 %>
   <nav class="pager" aria-label="Pagination">
-    <% if pagy.prev %>
-      <%= link_to "← Previous", url_for(request.params.merge(page: pagy.prev)), class: "btn btn-ghost btn-sm" %>
+    <% if pagy.previous %>
+      <%= link_to "← Previous", url_for(request.params.merge(page: pagy.previous)), class: "btn btn-ghost btn-sm" %>
     <% else %>
       <span class="btn btn-ghost btn-sm" aria-disabled="true">← Previous</span>
     <% end %>
 
-    <span class="pager-info mono">page <%= pagy.page %> of <%= pagy.pages %></span>
+    <span class="pager-info mono">page <%= pagy.page %> of <%= pagy.last %></span>
 
     <% if pagy.next %>
       <%= link_to "Next →", url_for(request.params.merge(page: pagy.next)), class: "btn btn-ghost btn-sm" %>

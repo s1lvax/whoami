@@ -22,6 +22,8 @@ Fixtures: `test/fixtures/*.yml`. `users(:one)` is the onboarded user most tests 
 
 ## CI
 
+Locally, `bin/ci` runs the whole gate in order (`config/ci.rb`): rubocop, importmap audit, Brakeman, the test suite, and a seed replant. Run it before opening a PR.
+
 `.github/workflows/ci.yml` runs three jobs on pull requests and pushes to `main`: Brakeman, `bin/importmap audit`, and the test suite (`bin/rails db:test:prepare test test:system`).
 
 ## Lint and security

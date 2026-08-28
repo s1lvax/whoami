@@ -9,7 +9,11 @@ class Dashboard::DraftsController < ApplicationController
   end
 
   def experience
-    draft = current_user.experiences.build(params.permit(:role, :company, :location, :start_date, :end_date, :highlights, :tech))
+    draft = current_user.experiences.build(
+      role: params[:role], company: params[:company], location: params[:location],
+      start_date: params[:start_date], end_date: params[:end_date],
+      highlights: params[:highlights], tech: params[:tech]
+    )
     others = current_user.experiences.where.not(id: params[:except_id].presence)
     list = (others.to_a + [ draft ]).sort_by { |e| [ e.end_date ? 1 : 0, -(e.start_date&.jd || 0) ] }
     render html: helpers.render(PublicProfile::ExperienceSectionComponent.new(experiences: list)), layout: false
